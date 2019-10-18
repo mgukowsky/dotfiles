@@ -1,3 +1,5 @@
 [user]
 	name = Matt Gukowsky
 	email = mgukowsky@gmail.com
+[commit]
+	template = /home/mgukowsky/.gitmessage

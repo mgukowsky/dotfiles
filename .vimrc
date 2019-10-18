@@ -99,6 +99,7 @@ set hlsearch
 "File types for rare extensions
 au BufReadPost *.zsh-theme set syntax=sh
 au BufReadPost .clang-format set syntax=yaml
+au BufReadPost .gitmessage set syntax=gitcommit
 
 "Run clang-format before saving
 au BufWrite *.c,*.cpp,*.cxx,*.h,*.hpp,*.hxx %!clang-format
