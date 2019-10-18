@@ -150,3 +150,8 @@ bindkey '^R' history-incremental-search-backward
 
 # Enable vi-style bindings
 set -o vi
+
+# Start ssh-agent to cache the password for the RSA key
+eval $(ssh-agent -s)
+ssh-add ~/.ssh/id_rsa
+
