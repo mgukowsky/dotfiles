@@ -73,6 +73,10 @@ let g:gitgutter_sign_removed = '--'
 let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_modified_removed = '~-'
 
+"Set the timeout for keycode delays (i.e. for quick ESC responses)
+"See https://www.johnhawthorn.com/2012/09/vi-escape-delays/
+set timeoutlen=1000 ttimeoutlen=10
+
 "Have vim update buffers every second (allows GitGutter to refresh) 
 set updatetime=1000
 
