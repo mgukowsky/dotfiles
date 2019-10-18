@@ -10,11 +10,17 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+
+"Automatic completion for braces and other open/close characters
+Plugin 'townk/vim-autoclose'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ajh17/Spacegray.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'scrooloose/nerdtree'
+
+"Perform autocompletion with just TAB
+Plugin 'ervandew/supertab'
 Plugin 'tpope/vim-markdown'
 Plugin 'neui/cmakecache-syntax.vim'
 Plugin 'tpope/vim-surround'
@@ -26,12 +32,6 @@ filetype plugin indent on
 "N.B. use the command ':set list' to see these
 set list listchars=tab:>-,trail:·,eol:↲
 set nolist
-
-"Allow for basic brace completion
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
 
 "Color config
 set t_Co=256
