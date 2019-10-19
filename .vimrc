@@ -24,6 +24,7 @@ Plugin 'ervandew/supertab'
 Plugin 'tpope/vim-markdown'
 Plugin 'neui/cmakecache-syntax.vim'
 Plugin 'tpope/vim-surround'
+Plugin 'cespare/vim-toml'
 
 call vundle#end()
 filetype plugin indent on
