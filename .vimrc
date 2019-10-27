@@ -49,6 +49,10 @@ colorscheme spacegray
 let g:spacegray_underline_search=1
 let g:spacegray_italicize_comments=1
 
+"Needed to make spacegray colorscheme utilize transparent background
+hi Normal guibg=NONE ctermbg=NONE
+hi LineNr guibg=NONE ctermbg=NONE
+
 "Vim-airline config
 let g:airline#extensions#tabline#enabled=1
 let g:airline_powerline_fonts=1
