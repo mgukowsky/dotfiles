@@ -148,6 +148,13 @@ export PATH=$PATH:${HOME}/Tools/bin
 bindkey -v
 bindkey '^R' history-incremental-search-backward
 
+function mkcd {
+  if [[ ! -e $1 ]]; then
+    mkdir -p $1
+  fi
+  cd $1
+}
+
 # Enable vi-style bindings
 set -o vi
 
