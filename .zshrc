@@ -159,3 +159,6 @@ function mkcd {
 # Enable vi-style bindings
 set -o vi
 
+# Allow expected backspace behavior in vi insert mode
+bindkey "^?" backward-delete-char
+
