@@ -1,0 +1,17 @@
+# .inputrc configures the readline library, used by shells (i.e. bash),
+# REPLs (i.e. python), and others.
+
+# Include good stuff from the vanilla inputrc
+$include /etc/inputrc
+
+# No bell
+set bell-style none
+
+# vi everywhere
+set editing-mode vi
+
+# Indicate current mode in prompt
+set show-mode-in-prompt on
+set vi-cmd-mode-string ℕ\x20
+set vi-ins-mode-string ⅈ\x20 
+
