@@ -162,6 +162,21 @@ generate_time_taken() {
   fi
 }
 
+# Magic hook functions to detect whether we are in vi cmd or
+# vi insert mode, and set the cursor to block or beam as
+# appropriate (i.e. via the 'echo' commands)
+function zle-line-init zle-keymap-select {
+    case $KEYMAP in
+      vicmd)
+        echo -ne '\e[1 q';;
+      viins|main)
+        echo -ne '\e[5 q';;
+    esac
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
 # Status:
 # - was there an error
 # - am I root

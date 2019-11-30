@@ -149,6 +149,9 @@ export PATH=$PATH:${HOME}/Tools/bin
 bindkey -v
 bindkey '^R' history-incremental-search-backward
 
+# Scan for mode change every 50ms
+export KEYTIMEOUT=5
+
 function mkcd {
   if [[ ! -e $1 ]]; then
     mkdir -p $1
