@@ -141,7 +141,8 @@ export GROFF_NO_SGR=1
 export LESS="--RAW-CONTROL-CHARS"
 [[ -f ~/.LESS_TERMCAP ]] && . ~/.LESS_TERMCAP
 
-export EDITOR=$(which vim)
+export EDITOR=$(which nvim)
+alias vim='nvim'
 export PAGER=$(which less)
 export PATH=$PATH:${HOME}/Tools/bin
 
