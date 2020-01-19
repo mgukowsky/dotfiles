@@ -19,6 +19,9 @@ Plugin 'ajh17/Spacegray.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'scrooloose/nerdtree'
 
+"Tag browsing; assumes some flavor of ctags is installed
+Plugin 'majutsushi/tagbar'
+
 "Perform autocompletion with just TAB
 Plugin 'ervandew/supertab'
 Plugin 'tpope/vim-markdown'
@@ -69,6 +72,9 @@ set wildmenu
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
+"Tagbar configuration
+map <C-m> :TagbarToggle<CR>
+
 "GitGutter configuration
 highlight GitGutterAdd      guifg=#00ff00 ctermfg=10
 highlight GitGutterChange   guifg=#ffff00 ctermfg=11
@@ -78,6 +84,12 @@ let g:gitgutter_sign_modified = '~~'
 let g:gitgutter_sign_removed = '--'
 let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_modified_removed = '~-'
+
+"Use arrows to resize splits instead of for navigation
+nnoremap <Up>     :resize -2<CR>
+nnoremap <Down>   :resize +2<CR>
+nnoremap <Left>   :vertical resize -2<CR>
+nnoremap <Right>  :vertical resize +2<CR>
 
 "Set the timeout for keycode delays (i.e. for quick ESC responses)
 "See https://www.johnhawthorn.com/2012/09/vi-escape-delays/
