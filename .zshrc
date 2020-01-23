@@ -160,6 +160,10 @@ function mkcd {
   cd $1
 }
 
+function refresh_ctags  {
+  ctags -R --tag-relative=yes --exclude=.git --exclude=build .
+}
+
 # Enable vi-style bindings
 set -o vi
 

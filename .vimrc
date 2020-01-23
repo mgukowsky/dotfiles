@@ -15,12 +15,23 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'townk/vim-autoclose'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'airblade/vim-gitgutter'
+
+"Color schemes
+Plugin 'morhetz/gruvbox'
 Plugin 'ajh17/Spacegray.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'scrooloose/nerdtree'
 
+"Git support
+Plugin 'kablamo/vim-git-log'
+Plugin 'tpope/vim-fugitive'
+Plugin 'gregsexton/gitv'
+
 "Tag browsing; assumes some flavor of ctags is installed
 Plugin 'majutsushi/tagbar'
+
+"Adds :BufOnly to close all buffers except the current one
+Plugin 'schickling/vim-bufonly'
 
 "Perform autocompletion with just TAB
 Plugin 'ervandew/supertab'
@@ -48,7 +59,8 @@ endif
 
 let base16colorspace=256
 
-colorscheme spacegray
+"colorscheme spacegray
+colorscheme gruvbox
 
 let g:spacegray_underline_search=1
 let g:spacegray_italicize_comments=1
