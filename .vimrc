@@ -19,13 +19,12 @@ Plugin 'airblade/vim-gitgutter'
 "Color schemes
 Plugin 'morhetz/gruvbox'
 Plugin 'ajh17/Spacegray.vim'
+
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'scrooloose/nerdtree'
 
 "Git support
-Plugin 'kablamo/vim-git-log'
-Plugin 'tpope/vim-fugitive'
-Plugin 'gregsexton/gitv'
+Plugin  'jreybert/vimagit'
 
 "Tag browsing; assumes some flavor of ctags is installed
 Plugin 'majutsushi/tagbar'
@@ -33,13 +32,23 @@ Plugin 'majutsushi/tagbar'
 "Adds :BufOnly to close all buffers except the current one
 Plugin 'schickling/vim-bufonly'
 
-"Perform autocompletion with just TAB
-Plugin 'ervandew/supertab'
 Plugin 'tpope/vim-markdown'
 Plugin 'neui/cmakecache-syntax.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'cespare/vim-toml'
 Plugin 'dag/vim-fish'
+
+"Perform autocompletion with just TAB
+Plugin 'ervandew/supertab'
+
+"Autocompletion plugins
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'Shougo/neco-syntax'
+Plugin 'Shougo/deoplete-clangx'
+Plugin 'Shougo/neoinclude.vim'
+
+"Automatic linting
+Plugin  'neomake/neomake'
 
 call vundle#end()
 filetype plugin indent on
@@ -48,6 +57,16 @@ filetype plugin indent on
 "N.B. use the command ':set list' to see these
 set list listchars=tab:>-,trail:·,eol:↲
 set nolist
+
+"Makes y and p commands use the global copy/paster buffer
+set clipboard+=unnamed
+
+"Autocomplete configuration
+let g:deoplete#enable_at_startup = 1
+
+"Automatic lint configuration
+"This will invoke the linter on reads and writes
+call neomake#configure#automake('rw')
 
 "Color config
 set t_Co=256
@@ -66,8 +85,8 @@ let g:spacegray_underline_search=1
 let g:spacegray_italicize_comments=1
 
 "Needed to make spacegray colorscheme utilize transparent background
-hi Normal guibg=NONE ctermbg=NONE
-hi LineNr guibg=NONE ctermbg=NONE
+"hi Normal guibg=NONE ctermbg=NONE
+"hi LineNr guibg=NONE ctermbg=NONE
 
 "Vim-airline config
 let g:airline#extensions#tabline#enabled=1
@@ -136,5 +155,5 @@ au BufReadPost .clang-format set syntax=yaml
 au BufReadPost .gitmessage set syntax=gitcommit
 
 "Run clang-format before saving
-au BufWrite *.c,*.cpp,*.cxx,*.h,*.hpp,*.hxx %!clang-format
+"au BufWrite *.c,*.cpp,*.cxx,*.h,*.hpp,*.hxx %!clang-format
 
