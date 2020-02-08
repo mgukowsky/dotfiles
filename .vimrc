@@ -14,20 +14,22 @@ Plugin 'vim-airline/vim-airline-themes'
 "Automatic completion for braces and other open/close characters
 Plugin 'townk/vim-autoclose'
 Plugin 'ryanoasis/vim-devicons'
-Plugin 'airblade/vim-gitgutter'
 
 "Color schemes
 Plugin 'morhetz/gruvbox'
 Plugin 'ajh17/Spacegray.vim'
+Plugin 'theWildSushii/SweetCandy.vim'
 
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'scrooloose/nerdtree'
 
 "Git support
-Plugin  'jreybert/vimagit'
+Plugin 'jreybert/vimagit'
+Plugin 'airblade/vim-gitgutter'
 
 "Tag browsing; assumes some flavor of ctags is installed
-Plugin 'majutsushi/tagbar'
+"Underwhelmed by this rn...
+"Plugin 'majutsushi/tagbar'
 
 "Adds :BufOnly to close all buffers except the current one
 Plugin 'schickling/vim-bufonly'
@@ -42,10 +44,11 @@ Plugin 'dag/vim-fish'
 Plugin 'ervandew/supertab'
 
 "Autocompletion plugins
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'Shougo/neco-syntax'
-Plugin 'Shougo/deoplete-clangx'
-Plugin 'Shougo/neoinclude.vim'
+"This autocompletion is a little heavy for me; I'm commenting out for now...
+"Plugin 'Shougo/deoplete.nvim'
+"Plugin 'Shougo/neco-syntax'
+"Plugin 'Shougo/deoplete-clangx'
+"Plugin 'Shougo/neoinclude.vim'
 
 "Automatic linting
 Plugin  'neomake/neomake'
@@ -104,7 +107,7 @@ map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
 "Tagbar configuration
-map <C-m> :TagbarToggle<CR>
+"map <C-m> :TagbarToggle<CR>
 
 "GitGutter configuration
 highlight GitGutterAdd      guifg=#00ff00 ctermfg=10
