@@ -31,6 +31,9 @@ Plugin 'airblade/vim-gitgutter'
 "Underwhelmed by this rn...
 "Plugin 'majutsushi/tagbar'
 
+"Automatic ctags management in the background
+Plugin 'ludovicchabant/vim-gutentags'
+
 "Adds :BufOnly to close all buffers except the current one
 Plugin 'schickling/vim-bufonly'
 
@@ -111,6 +114,10 @@ let NERDTreeShowHidden=1
 
 "Tagbar configuration
 "map <C-m> :TagbarToggle<CR>
+
+"Have vim-gutentags print a message in the statusbar when it's working in the
+"background
+set statusline+=%{gutentags#statusline()}
 
 "GitGutter configuration
 highlight GitGutterAdd      guifg=#00ff00 ctermfg=10
