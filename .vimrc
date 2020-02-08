@@ -34,6 +34,9 @@ Plugin 'airblade/vim-gitgutter'
 "Adds :BufOnly to close all buffers except the current one
 Plugin 'schickling/vim-bufonly'
 
+"Makes <Leader>b display a listing of all buffers
+Plugin 'jeetsukumaran/vim-buffergator'
+
 Plugin 'tpope/vim-markdown'
 Plugin 'neui/cmakecache-syntax.vim'
 Plugin 'tpope/vim-surround'
