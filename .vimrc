@@ -34,6 +34,10 @@ Plugin 'airblade/vim-gitgutter'
 "Automatic ctags management in the background
 Plugin 'ludovicchabant/vim-gutentags'
 
+"fzf integration
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+
 "Adds :BufOnly to close all buffers except the current one
 Plugin 'schickling/vim-bufonly'
 
