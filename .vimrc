@@ -74,9 +74,22 @@ set clipboard+=unnamed
 "Autocomplete configuration
 let g:deoplete#enable_at_startup = 1
 
+"Neomake configuration
+
 "Automatic lint configuration
 "This will invoke the linter on reads and writes
 call neomake#configure#automake('rw')
+
+let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy']
+
+"Unfortunately we have to hard-code some include paths for this maker to
+"work...
+let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-I./include', '-I./third_party/spdlog/include']
+let g:neomake_cpp_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-std=c++1z', '-I./include', '-I./third_party/spdlog/include']
+
+"But on the bright side we can give clang-tidy a directory where it can read a
+"compile-commands.json
+let g:neomake_cpp_clangtidy_args =  ['-p', './build']
 
 "Color config
 set t_Co=256
