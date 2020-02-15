@@ -31,9 +31,6 @@ Plugin 'airblade/vim-gitgutter'
 "Underwhelmed by this rn...
 "Plugin 'majutsushi/tagbar'
 
-"Automatic ctags management in the background
-Plugin 'ludovicchabant/vim-gutentags'
-
 "fzf integration
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
