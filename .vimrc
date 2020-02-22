@@ -129,10 +129,6 @@ let NERDTreeShowHidden=1
 "Tagbar configuration
 "map <C-m> :TagbarToggle<CR>
 
-"Have vim-gutentags print a message in the statusbar when it's working in the
-"background
-set statusline+=%{gutentags#statusline()}
-
 "GitGutter configuration
 highlight GitGutterAdd      guifg=#00ff00 ctermfg=10
 highlight GitGutterChange   guifg=#ffff00 ctermfg=11
