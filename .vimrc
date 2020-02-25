@@ -27,6 +27,9 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'jreybert/vimagit'
 Plugin 'airblade/vim-gitgutter'
 
+"Rust support
+Plugin 'rust-lang/rust.vim'
+
 "Tag browsing; assumes some flavor of ctags is installed
 "Underwhelmed by this rn...
 "Plugin 'majutsushi/tagbar'
@@ -62,6 +65,10 @@ Plugin  'neomake/neomake'
 
 call vundle#end()
 filetype plugin indent on
+
+"Remove warnings when switching between buffers that have yet to be written
+"out
+set hidden
 
 "Characters used to represent whitespace
 "N.B. use the command ':set list' to see these
@@ -145,6 +152,9 @@ nnoremap <Down>   :resize +2<CR>
 nnoremap <Left>   :vertical resize -2<CR>
 nnoremap <Right>  :vertical resize +2<CR>
 
+"Shortcut for magit
+nnoremap <leader>m :Magit<CR>
+
 "Set the timeout for keycode delays (i.e. for quick ESC responses)
 "See https://www.johnhawthorn.com/2012/09/vi-escape-delays/
 set timeoutlen=1000 ttimeoutlen=10
@@ -176,6 +186,9 @@ set hlsearch
 au BufReadPost *.zsh-theme set syntax=sh
 au BufReadPost .clang-format set syntax=yaml
 au BufReadPost .gitmessage set syntax=gitcommit
+
+"Run the :RustFmt command on the buffer when its saved
+let g:rustfmt_autosave = 1
 
 "Run clang-format before saving
 "au BufWrite *.c,*.cpp,*.cxx,*.h,*.hpp,*.hxx %!clang-format
