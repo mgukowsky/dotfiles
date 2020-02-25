@@ -163,6 +163,9 @@ function refresh_ctags  {
   ctags -R --tag-relative=yes --exclude=.git --exclude=build .
 }
 
+# Enable a certain dirty word which can fix commands
+eval $(thefuck --alias)
+
 # Enable vi-style bindings
 set -o vi
 
