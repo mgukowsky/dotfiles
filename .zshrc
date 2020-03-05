@@ -8,7 +8,8 @@ export ZSH="/home/mgukowsky/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="mg"
+POWERLEVEL9K_MODE='nerdfont-complete'
+ZSH_THEME="powerlevel9k/powerlevel9k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -172,3 +173,42 @@ set -o vi
 # Allow expected backspace behavior in vi insert mode
 bindkey "^?" backward-delete-char
 
+MGPROMPT_HAPPY_EMOJIS=(😀 😁 😄 😆 😊 😍 🥰 😚 🤩 🤗 🐵 🐶 🐱 🐼 🐸 😇 🤓 🤠 🥳 🤑 👾 🤖)
+MGPROMPT_HAPPY_EMOJIS_LENGTH=${#MGPROMPT_HAPPY_EMOJIS[@]}
+MGPROMPT_SAD_EMOJIS=(😮 😯 😫 😓 😲 😖 😞 😢 😭 😧 😰 😱 😵 😡 😠 🤬 🤕 🤮 😈 ☠️  💩 🤢 😷)
+MGPROMPT_SAD_EMOJIS_LENGTH=${#MGPROMPT_SAD_EMOJIS[@]}
+
+# Emoji: generate an emoji based on current statuses
+# N.B we add 1 to the index to account for the fact that bash array indices start at 1...
+# Also N.B. we are assuming that the length of the emoji arrays is less than 256!
+generate_emoji() {
+  local emojis emojis_len
+  if [[ $RETVAL -eq 0 ]]; then
+    emojis=("${MGPROMPT_HAPPY_EMOJIS[@]}")
+    emojis_len=$MGPROMPT_HAPPY_EMOJIS_LENGTH
+  else
+    emojis=("${MGPROMPT_SAD_EMOJIS[@]}")
+    emojis_len=$MGPROMPT_SAD_EMOJIS_LENGTH
+  fi
+
+  echo -n ${emojis[$((($(od -A n -t d -N 1 /dev/urandom) % $emojis_len) + 1))]}
+}
+
+# Use the generate_emoji function to create a prompt segment
+POWERLEVEL9K_CUSTOM_EMOJI="generate_emoji"
+POWERLEVEL9K_CUSTOM_EMOJI_BACKGROUND='029'
+
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_emoji dir_writable dir vcs vi_mode)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs command_execution_time)
+
+# Always show time taken
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_PRECISION=3
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='238'
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='208'
+
+# Show the vi mode
+POWERLEVEL9K_VI_INSERT_MODE_STRING='I'
+POWERLEVEL9K_VI_COMMAND_MODE_STRING='N'
+POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='003'
+POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='054'

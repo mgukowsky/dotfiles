@@ -12,6 +12,6 @@ set editing-mode vi
 
 # Indicate current mode in prompt
 set show-mode-in-prompt on
-set vi-cmd-mode-string ✏️ \x20
-set vi-ins-mode-string 🕹️ \x20 
+set vi-cmd-mode-string N>\x20
+set vi-ins-mode-string I>\x20
 
