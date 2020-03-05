@@ -4,66 +4,64 @@ set encoding=utf8
 
 "Vundle stuff needs to go here
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin(stdpath('data') . '/plugged')
 
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 "Automatic completion for braces and other open/close characters
-Plugin 'townk/vim-autoclose'
-Plugin 'ryanoasis/vim-devicons'
+Plug 'townk/vim-autoclose'
+Plug 'ryanoasis/vim-devicons'
 
 "Color schemes
-Plugin 'morhetz/gruvbox'
-Plugin 'ajh17/Spacegray.vim'
-Plugin 'theWildSushii/SweetCandy.vim'
+Plug 'morhetz/gruvbox'
+Plug 'ajh17/Spacegray.vim'
+Plug 'theWildSushii/SweetCandy.vim'
 
-Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'scrooloose/nerdtree'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'scrooloose/nerdtree'
 
 "Git support
-Plugin 'jreybert/vimagit'
-Plugin 'airblade/vim-gitgutter'
+Plug 'jreybert/vimagit'
+Plug 'airblade/vim-gitgutter'
 
 "Rust support
-Plugin 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim'
 
 "Tag browsing; assumes some flavor of ctags is installed
 "Underwhelmed by this rn...
-"Plugin 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 
 "fzf integration
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 
 "Adds :BufOnly to close all buffers except the current one
-Plugin 'schickling/vim-bufonly'
+Plug 'schickling/vim-bufonly'
 
 "Makes <Leader>b display a listing of all buffers
-Plugin 'jeetsukumaran/vim-buffergator'
+Plug 'jeetsukumaran/vim-buffergator'
 
-Plugin 'tpope/vim-markdown'
-Plugin 'neui/cmakecache-syntax.vim'
-Plugin 'tpope/vim-surround'
-Plugin 'cespare/vim-toml'
-Plugin 'dag/vim-fish'
+Plug 'tpope/vim-markdown'
+Plug 'neui/cmakecache-syntax.vim'
+Plug 'tpope/vim-surround'
+Plug 'cespare/vim-toml'
+Plug 'dag/vim-fish'
 
 "Perform autocompletion with just TAB
-Plugin 'ervandew/supertab'
+Plug 'ervandew/supertab'
 
 "Autocompletion plugins
 "This autocompletion is a little heavy for me; I'm commenting out for now...
-"Plugin 'Shougo/deoplete.nvim'
-"Plugin 'Shougo/neco-syntax'
-"Plugin 'Shougo/deoplete-clangx'
-"Plugin 'Shougo/neoinclude.vim'
+"Plug 'Shougo/deoplete.nvim'
+"Plug 'Shougo/neco-syntax'
+"Plug 'Shougo/deoplete-clangx'
+"Plug 'Shougo/neoinclude.vim'
 
 "Automatic linting
-Plugin  'neomake/neomake'
+Plug  'neomake/neomake'
 
-call vundle#end()
+call plug#end()
 filetype plugin indent on
 
 "Remove warnings when switching between buffers that have yet to be written
