@@ -14,6 +14,7 @@ Plug 'townk/vim-autoclose'
 Plug 'ryanoasis/vim-devicons'
 
 "Color schemes
+Plug 'dracula/vim',{'as':'dracula'}
 Plug 'morhetz/gruvbox'
 Plug 'ajh17/Spacegray.vim'
 Plug 'theWildSushii/SweetCandy.vim'
@@ -42,11 +43,21 @@ Plug 'schickling/vim-bufonly'
 "Makes <Leader>b display a listing of all buffers
 Plug 'jeetsukumaran/vim-buffergator'
 
+"Comment/uncomment a line with 'gcc', or a selection with 'gc'
+Plug 'tpope/vim-commentary'
+
+"Minimize visual noise with :Goyo and :Limelight
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+
 Plug 'tpope/vim-markdown'
 Plug 'neui/cmakecache-syntax.vim'
 Plug 'tpope/vim-surround'
 Plug 'cespare/vim-toml'
 Plug 'dag/vim-fish'
+
+"Have vim insert a matching 'end', 'endif', 'endfunction', etc.
+Plug 'tpope/vim-endwise'
 
 "Perform autocompletion with just TAB
 Plug 'ervandew/supertab'
@@ -60,6 +71,9 @@ Plug 'ervandew/supertab'
 
 "Automatic linting
 Plug  'neomake/neomake'
+
+"Lightweight personal vim wiki
+Plug 'vimwiki/vimwiki'
 
 call plug#end()
 filetype plugin indent on
@@ -106,8 +120,7 @@ endif
 
 let base16colorspace=256
 
-"colorscheme spacegray
-colorscheme gruvbox
+colorscheme dracula
 
 let g:spacegray_underline_search=1
 let g:spacegray_italicize_comments=1
