@@ -78,6 +78,7 @@ source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -100,8 +101,8 @@ export LANG=en_US.UTF-8
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=10000
+SAVEHIST=10000
 setopt beep
 bindkey -v
 # End of lines configured by zsh-newuser-install
@@ -111,6 +112,19 @@ zstyle :compinstall filename '/home/mgukowsky/.zshrc'
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
+
+# Various bash options; mainly from https://github.com/tonylambiris/dotfiles/blob/master/dot.zshrc
+setopt extended_history         # Also record time and duration of commands.
+setopt hist_expire_dups_first   # Clear duplicates when trimming internal hist.
+setopt hist_find_no_dups        # Dont display duplicates during searches.
+setopt hist_ignore_dups         # Ignore consecutive duplicates.
+setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
+setopt hist_reduce_blanks       # Remove superfluous blanks.
+setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
+setopt share_history # Allow multiple sessions to share history file
+unsetopt HIST_VERIFY # Don't expand history entries (e.g. `!` characters) and require a second ENTER press.
+
+REPORTTIME=5 # Magic zsh variable to report stats for long-running commands (more than 5 secs)
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
