@@ -119,6 +119,8 @@ alias egrep='egrep --color=auto'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias lld='lsd -halF'
+alias treed='lsd --tree'
 alias adog='git log --all --decorate --oneline --graph'
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
@@ -144,7 +146,7 @@ export LESS="--RAW-CONTROL-CHARS"
 export EDITOR=$(which nvim)
 alias vim='nvim'
 export PAGER=$(which less)
-export PATH=$PATH:${HOME}/Tools/bin
+export PATH=$PATH:~/.local/bin:${HOME}/Tools/bin
 
 # Enable reverse search with Ctrl-R
 bindkey -v
@@ -212,3 +214,5 @@ POWERLEVEL9K_VI_INSERT_MODE_STRING='I'
 POWERLEVEL9K_VI_COMMAND_MODE_STRING='N'
 POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='003'
 POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='054'
+
+plugins=(zsh-syntax-highlighting)
