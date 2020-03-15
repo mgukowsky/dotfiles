@@ -90,8 +90,16 @@ set nolist
 "Makes y and p commands use the global copy/paster buffer
 set clipboard+=unnamed
 
+"Use `K` to split a line; i.e. opposite of `J`.
+"From https://gist.github.com/romainl/3b8cdc6c3748a363da07b1a625cfc666
+function! BreakHere()
+	s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
+	call histdel("/", -1)
+endfunction
+nnoremap K :<C-u>call BreakHere()<CR>
+
 "Autocomplete configuration
-let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_at_startup = 1
 
 "Neomake configuration
 
