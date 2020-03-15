@@ -75,6 +75,9 @@ Plug  'neomake/neomake'
 "Lightweight personal vim wiki
 Plug 'vimwiki/vimwiki'
 
+"Fuzzy file finder
+Plug 'ctrlpvim/ctrlp.vim'
+
 call plug#end()
 filetype plugin indent on
 
