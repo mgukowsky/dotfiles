@@ -18,6 +18,13 @@ Plug 'dracula/vim',{'as':'dracula'}
 Plug 'morhetz/gruvbox'
 Plug 'ajh17/Spacegray.vim'
 Plug 'theWildSushii/SweetCandy.vim'
+Plug 'junk-e/identity.vim'
+Plug 'Mizux/vim-colorschemes'
+Plug 'camgunz/amber'
+Plug 'kyoto-shift/film-noir'
+Plug 'pcostasgr/red_alert_vim_theme'
+Plug 'abnt713/vim-hashpunk'
+Plug 'TroyFletcher/vim-colors-synthwave'
 
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'scrooloose/nerdtree'
@@ -90,6 +97,9 @@ set hidden
 set list listchars=tab:>-,trail:·,eol:↲
 set nolist
 
+"Set the title of the window the the file being edited
+set title
+
 "Makes y and p commands use the global copy/paster buffer
 set clipboard+=unnamed
 
@@ -131,7 +141,7 @@ endif
 
 let base16colorspace=256
 
-colorscheme dracula
+colorscheme synthwave
 
 let g:spacegray_underline_search=1
 let g:spacegray_italicize_comments=1
@@ -150,6 +160,9 @@ let g:hybrid_reduced_contrast=1
 "Enable better searching and tab completion for files
 set path+=**
 set wildmenu
+
+"vimwiki configuration
+let g:vimwiki_list = [{'syntax': 'markdown'}]
 
 "NERDTree configuration
 map <C-n> :NERDTreeToggle<CR>
