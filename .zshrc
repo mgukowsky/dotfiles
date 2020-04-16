@@ -101,8 +101,9 @@ export LC_ALL=en_US.UTF-8
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+HISTFILESIZE=${HISTSIZE}
+SAVEHIST=${HISTSIZE}
 setopt beep
 bindkey -v
 # End of lines configured by zsh-newuser-install
@@ -121,7 +122,9 @@ setopt hist_ignore_dups         # Ignore consecutive duplicates.
 setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
 setopt hist_reduce_blanks       # Remove superfluous blanks.
 setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
-setopt share_history # Allow multiple sessions to share history file
+setopt share_history            # Allow multiple sessions to share history file
+setopt inc_append_history       # Append to history file
+setopt share_history            # Allow multiple shells to play nicely together with history file
 unsetopt HIST_VERIFY # Don't expand history entries (e.g. `!` characters) and require a second ENTER press.
 
 REPORTTIME=5 # Magic zsh variable to report stats for long-running commands (more than 5 secs)
@@ -161,6 +164,13 @@ export EDITOR=$(which nvim)
 alias vim='nvim'
 export PAGER=$(which less)
 export PATH=$PATH:~/.local/bin:${HOME}/Tools/bin
+
+# XDG directories
+export XDG_CONFIG_HOME=${HOME}/.config
+export XDG_CACHE_HOME=${HOME}/.cache
+export XDG_DATA_HOME=${HOME}/.local/share
+export XDG_DATA_DIRS=/usr/local/share:/usr/share
+export XDG_CONFIG_DIRS=/etc/xdg
 
 # Enable reverse search with Ctrl-R
 bindkey -v
