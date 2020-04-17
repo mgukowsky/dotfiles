@@ -576,6 +576,8 @@ font:
     family: Terminus 
     style: Bold Italic
 
+  size: 12
+
 # Colorscheme 'eighties dark' from https://terminal.sexy
 colors: 
   # Default colors 
