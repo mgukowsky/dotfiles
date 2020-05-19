@@ -82,9 +82,6 @@ Plug  'neomake/neomake'
 "Lightweight personal vim wiki
 Plug 'vimwiki/vimwiki'
 
-"Fuzzy file finder
-Plug 'ctrlpvim/ctrlp.vim'
-
 call plug#end()
 filetype plugin indent on
 
@@ -180,6 +177,9 @@ let g:gitgutter_sign_modified = 'Δ'
 let g:gitgutter_sign_removed = '✖'
 let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_modified_removed = '~-'
+
+"Shortcut for FZF file finder
+nnoremap <C-p>    :Files<CR>
 
 "Use arrows to resize splits instead of for navigation
 nnoremap <Up>     :resize -2<CR>
