@@ -186,6 +186,9 @@ bindkey '^R' history-incremental-search-backward
 # Scan for mode change every 50ms
 export KEYTIMEOUT=5
 
+# Use rg as the backend for fzf
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
+
 function mkcd {
   if [[ ! -e $1 ]]; then
     mkdir -p $1
@@ -195,6 +198,11 @@ function mkcd {
 
 function refresh_ctags  {
   ctags -R --tag-relative=yes --exclude=.git --exclude=build .
+}
+
+function wsl2-xforward {
+  export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+  export LIBGL_ALWAYS_INDIRECT=1
 }
 
 # Enable a certain dirty word which can fix commands

@@ -138,7 +138,7 @@ endif
 
 let base16colorspace=256
 
-colorscheme dracula
+colorscheme gruvbox
 
 let g:spacegray_underline_search=1
 let g:spacegray_italicize_comments=1
@@ -226,5 +226,5 @@ au BufReadPost .gitmessage set syntax=gitcommit
 let g:rustfmt_autosave = 1
 
 "Run clang-format before saving
-"au BufWrite *.c,*.cpp,*.cxx,*.h,*.hpp,*.hxx %!clang-format
+au BufWrite *.c,*.cpp,*.cxx,*.h,*.hpp,*.hxx %!clang-format
 
