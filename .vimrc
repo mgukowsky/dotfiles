@@ -36,6 +36,9 @@ Plug 'airblade/vim-gitgutter'
 "Rust support
 Plug 'rust-lang/rust.vim'
 
+"Julia support
+Plug 'JuliaEditorSupport/julia-vim'
+
 "Tag browsing; assumes some flavor of ctags is installed
 "Underwhelmed by this rn...
 "Plug 'majutsushi/tagbar'
@@ -225,6 +228,6 @@ au BufReadPost .gitmessage set syntax=gitcommit
 "Run the :RustFmt command on the buffer when its saved
 let g:rustfmt_autosave = 1
 
-"Run clang-format before saving
+"Run clang-format before saving (make sure you have clang-format installed!)
 au BufWrite *.c,*.cpp,*.cxx,*.h,*.hpp,*.hxx %!clang-format
 
