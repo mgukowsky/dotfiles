@@ -36,7 +36,7 @@ Plug 'airblade/vim-gitgutter'
 "Rust support
 Plug 'rust-lang/rust.vim'
 
-"Julia support
+"Julia support; also adds LaTex '\' completion with TAB to *.jl files
 Plug 'JuliaEditorSupport/julia-vim'
 
 "Tag browsing; assumes some flavor of ctags is installed
