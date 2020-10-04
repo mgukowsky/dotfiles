@@ -186,8 +186,17 @@ bindkey '^R' history-incremental-search-backward
 # Scan for mode change every 50ms
 export KEYTIMEOUT=5
 
-# Use rg as the backend for fzf
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
+# FZF integration (CTRL-T, CTRL-R, ALT-C). Also triggered in some
+# circumstances by the `**<TAB>` sequence.
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
+
+#export FZF_DEFAULT_OPTS='--preview "bat --style=numbers --color=always --line-range :500 {}"'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+
+# nvm setup from AUR package
+source /usr/share/nvm/init-nvm.sh
 
 function mkcd {
   if [[ ! -e $1 ]]; then
@@ -204,9 +213,6 @@ function wsl2-xforward {
   export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
   export LIBGL_ALWAYS_INDIRECT=1
 }
-
-# Enable a certain dirty word which can fix commands
-eval $(thefuck --alias)
 
 # Enable vi-style bindings
 set -o vi

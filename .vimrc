@@ -147,8 +147,8 @@ let g:spacegray_underline_search=1
 let g:spacegray_italicize_comments=1
 
 "Needed to make spacegray colorscheme utilize transparent background
-"hi Normal guibg=NONE ctermbg=NONE
-"hi LineNr guibg=NONE ctermbg=NONE
+hi Normal guibg=NONE ctermbg=NONE
+hi LineNr guibg=NONE ctermbg=NONE
 
 "Vim-airline config
 let g:airline#extensions#tabline#enabled=1
@@ -160,9 +160,6 @@ let g:hybrid_reduced_contrast=1
 "Enable better searching and tab completion for files
 set path+=**
 set wildmenu
-
-"vimwiki configuration
-let g:vimwiki_list = [{'syntax': 'markdown'}]
 
 "NERDTree configuration
 map <C-n> :NERDTreeToggle<CR>

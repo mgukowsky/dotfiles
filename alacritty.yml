@@ -576,7 +576,7 @@ font:
     family: Terminus 
     style: Bold Italic
 
-  size: 12
+  size: 10
 
 # Colorscheme 'eighties dark' from https://terminal.sexy
 colors: 
@@ -614,3 +614,4 @@ key_bindings:
   - { key: Home,      mods: Shift,   action: ScrollToTop    }
   - { key: End,       mods: Shift,   action: ScrollToBottom }
 
+background_opacity: 0.80
