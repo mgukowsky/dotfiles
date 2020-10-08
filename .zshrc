@@ -196,7 +196,9 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 # nvm setup from AUR package
-source /usr/share/nvm/init-nvm.sh
+if [[ -e /usr/share/nvm/init-nvm.sh ]]; then
+  source /usr/share/nvm/init-nvm.sh
+fi
 
 function mkcd {
   if [[ ! -e $1 ]]; then
