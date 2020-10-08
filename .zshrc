@@ -200,6 +200,36 @@ if [[ -e /usr/share/nvm/init-nvm.sh ]]; then
   source /usr/share/nvm/init-nvm.sh
 fi
 
+# Start the ssh-agent automatically, if needed.
+# From https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
+SSH_ENV="$HOME/.ssh/agent-environment"
+
+function start_agent {
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    # Powerlevel zsh scripts don't like IO during initialization, so we only print if 
+    # something goes wrong.
+    if [[ -v $SSH_AGENT_PID ]]; then
+      echo "Failed to start ssh-agent..."
+    fi
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    /usr/bin/ssh-add > /dev/null;
+    if [[ $? -ne 0 ]]; then
+      echo "Failed to add ssh key..."
+    fi
+}
+
+# Source SSH settings, if applicable
+if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    #ps ${SSH_AGENT_PID} doesn't work under cywgin
+    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+        start_agent;
+    }
+else
+    start_agent;
+fi
+
 function mkcd {
   if [[ ! -e $1 ]]; then
     mkdir -p $1
