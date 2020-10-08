@@ -213,7 +213,7 @@ function start_agent {
     fi
     chmod 600 "${SSH_ENV}"
     . "${SSH_ENV}" > /dev/null
-    /usr/bin/ssh-add > /dev/null;
+    /usr/bin/ssh-add &> /dev/null;
     if [[ $? -ne 0 ]]; then
       echo "Failed to add ssh key..."
     fi
