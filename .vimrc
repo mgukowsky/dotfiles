@@ -94,7 +94,7 @@ set hidden
 
 "Characters used to represent whitespace
 "N.B. use the command ':set list' to see these
-set list listchars=tab:>-,trail:·,eol:↲
+set list listchars=tab:>-,space:·,trail:○,eol:↲,nbsp:▯
 set nolist
 
 "Set the title of the window the the file being edited
