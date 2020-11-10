@@ -174,9 +174,9 @@ highlight GitGutterChange   guifg=#ffff00 ctermfg=11
 highlight GitGutterDelete   guifg=#ff0000 ctermfg=9
 let g:gitgutter_sign_added = '＋'
 let g:gitgutter_sign_modified = 'Δ'
-let g:gitgutter_sign_removed = '✖'
+let g:gitgutter_sign_removed = 'x'
 let g:gitgutter_sign_removed_first_line = '^^'
-let g:gitgutter_sign_modified_removed = '~-'
+let g:gitgutter_sign_modified_removed = '~x'
 
 "Shortcut for FZF file finder
 nnoremap <C-p>    :Files<CR>
