@@ -3,3 +3,5 @@
 	email = mgukowsky@gmail.com
 [commit]
 	template = /home/mgukowsky/.gitmessage
+[pull]
+	rebase = false
