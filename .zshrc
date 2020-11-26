@@ -241,9 +241,23 @@ function refresh_ctags  {
   ctags -R --tag-relative=yes --exclude=.git --exclude=build .
 }
 
+# N.B. This will only work if there is an X server running on Windows!
 function wsl2-xforward {
   export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
   export LIBGL_ALWAYS_INDIRECT=1
+}
+
+# Docker wrapper to start a container with X11-forwarding.
+# Also works from within WSL, provided a call to wsl2-xforward has been made.
+#
+# Windows and Mac may need to tweak xserver options to allow remote connections first.
+# Mac and Linux may need to run `xhost + 127.0.0.1` first to whitelist localhost connections to xserver.
+#
+# N.B. this command will also work when invoked directly from the Windows command prompt!
+#
+# Inspired by https://medium.com/@mreichelt/how-to-show-x11-windows-within-docker-on-mac-50759f4b65cb
+function xdocker {
+  docker run -e DISPLAY=host.docker.internal:0 -e LIBGL_ALWAYS_INDIRECT=1 $@
 }
 
 # Enable vi-style bindings
