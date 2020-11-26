@@ -257,6 +257,8 @@ function wsl2-xforward {
 #
 # Inspired by https://medium.com/@mreichelt/how-to-show-x11-windows-within-docker-on-mac-50759f4b65cb
 function xdocker {
+  # `host.docker.internal` is a magic DNS name courtesy of Docker Desktop on Windows and Mac;
+  # see https://docs.docker.com/docker-for-windows/networking/ for an explanation
   docker run -e DISPLAY=host.docker.internal:0 -e LIBGL_ALWAYS_INDIRECT=1 $@
 }
 
