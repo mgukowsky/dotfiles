@@ -124,8 +124,8 @@ let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy']
 
 "Unfortunately we have to hard-code some include paths for this maker to
 "work...
-let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-I./include', '-I./third_party/spdlog/include']
-let g:neomake_cpp_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-std=c++1z', '-I./include', '-I./third_party/spdlog/include']
+let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-I./include']
+let g:neomake_cpp_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-std=c++2a', '-I./include']
 
 "But on the bright side we can give clang-tidy a directory where it can read a
 "compile-commands.json
