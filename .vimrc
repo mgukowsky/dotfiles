@@ -33,6 +33,9 @@ Plug 'scrooloose/nerdtree'
 Plug 'jreybert/vimagit'
 Plug 'airblade/vim-gitgutter'
 
+"Go support
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
 "Rust support
 Plug 'rust-lang/rust.vim'
 
