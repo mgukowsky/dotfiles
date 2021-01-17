@@ -47,7 +47,7 @@ Plug 'JuliaEditorSupport/julia-vim'
 "Plug 'majutsushi/tagbar'
 
 "fzf integration
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 "Adds :BufOnly to close all buffers except the current one
