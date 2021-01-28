@@ -220,6 +220,9 @@ set showmatch
 set incsearch
 set hlsearch
 
+"Mouse support
+set mouse=a
+
 "File types for rare extensions
 au BufReadPost *.zsh-theme set syntax=sh
 au BufReadPost .clang-format set syntax=yaml
