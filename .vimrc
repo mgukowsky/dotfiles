@@ -17,7 +17,6 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'dracula/vim',{'as':'dracula'}
 Plug 'morhetz/gruvbox'
 Plug 'ajh17/Spacegray.vim'
-Plug 'theWildSushii/SweetCandy.vim'
 Plug 'junk-e/identity.vim'
 Plug 'Mizux/vim-colorschemes'
 Plug 'camgunz/amber'
@@ -34,7 +33,8 @@ Plug 'jreybert/vimagit'
 Plug 'airblade/vim-gitgutter'
 
 "Go support
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Use :GoUpdateBinaries to install/update local go tools if needed
+Plug 'fatih/vim-go'
 
 "Rust support
 Plug 'rust-lang/rust.vim'
@@ -83,7 +83,8 @@ Plug 'ervandew/supertab'
 "Plug 'Shougo/neoinclude.vim'
 
 "Automatic linting
-Plug  'neomake/neomake'
+"Plug  'neomake/neomake'
+Plug 'dense-analysis/ale'
 
 "Lightweight personal vim wiki
 Plug 'vimwiki/vimwiki'
@@ -117,22 +118,11 @@ nnoremap K :<C-u>call BreakHere()<CR>
 "Autocomplete configuration
 " let g:deoplete#enable_at_startup = 1
 
-"Neomake configuration
-
-"Automatic lint configuration
-"This will invoke the linter on reads and writes
-call neomake#configure#automake('rw')
-
-let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy']
-
-"Unfortunately we have to hard-code some include paths for this maker to
-"work...
-let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-I./include']
-let g:neomake_cpp_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-std=c++2a', '-I./include']
-
-"But on the bright side we can give clang-tidy a directory where it can read a
-"compile-commands.json
-let g:neomake_cpp_clangtidy_args =  ['-p', './build']
+"Automatic linting configuration
+let g:ale_sign_error='❌'
+let g:ale_sign_warning='!!'
+let g:ale_set_balloons=1
+let g:ale_floating_preview=1
 
 "Color config
 set t_Co=256
@@ -155,6 +145,7 @@ hi LineNr guibg=NONE ctermbg=NONE
 
 "Vim-airline config
 let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#ale#enabled=1
 let g:airline_powerline_fonts=1
 let g:airline_theme='hybrid'
 let g:hybrid_custom_term_colors=1
@@ -175,9 +166,9 @@ let NERDTreeShowHidden=1
 highlight GitGutterAdd      guifg=#00ff00 ctermfg=10
 highlight GitGutterChange   guifg=#ffff00 ctermfg=11
 highlight GitGutterDelete   guifg=#ff0000 ctermfg=9
-let g:gitgutter_sign_added = '＋'
-let g:gitgutter_sign_modified = 'Δ'
-let g:gitgutter_sign_removed = 'x'
+let g:gitgutter_sign_added = '++'
+let g:gitgutter_sign_modified = 'ΔΔ'
+let g:gitgutter_sign_removed = '--'
 let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_modified_removed = '~x'
 
@@ -230,7 +221,4 @@ au BufReadPost .gitmessage set syntax=gitcommit
 
 "Run the :RustFmt command on the buffer when its saved
 let g:rustfmt_autosave = 1
-
-"Run clang-format before saving (make sure you have clang-format installed!)
-au BufWrite *.c,*.cpp,*.cxx,*.h,*.hpp,*.hxx %!clang-format
 
