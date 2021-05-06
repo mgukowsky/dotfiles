@@ -136,6 +136,12 @@ let g:ale_fixers = {
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
+"Use ALE's symbol lookup instead of ctags
+nnoremap <C-]>  :ALEGoToDefinition<CR>
+
+nnoremap <leader>]  :ALEHover<CR>
+nnoremap <leader>i  :ALEDetail<CR>
+
 "Don't lint as we change text, but trigger on other events (inserts, saves, and file open)
 let g:ale_lint_on_text_changed = 'never'
 "let g:ale_lint_on_insert_leave = 0
