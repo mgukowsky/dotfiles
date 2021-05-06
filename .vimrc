@@ -141,6 +141,8 @@ nnoremap <C-]>  :ALEGoToDefinition<CR>
 
 nnoremap <leader>]  :ALEHover<CR>
 nnoremap <leader>i  :ALEDetail<CR>
+"N.B. use :lopen to view the loclist/quickfix list in a new window
+"i.e.: https://dmerej.info/blog/post/lets-have-a-pint-of-vim-ale/#the-location-list
 
 "Don't lint as we change text, but trigger on other events (inserts, saves, and file open)
 let g:ale_lint_on_text_changed = 'never'
