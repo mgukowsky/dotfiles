@@ -139,6 +139,7 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 "Use ALE's symbol lookup instead of ctags
 nnoremap <C-]>  :ALEGoToDefinition<CR>
 
+"TODO: make these automatically pop up when hovering the cursor
 nnoremap <leader>]  :ALEHover<CR>
 nnoremap <leader>i  :ALEDetail<CR>
 "N.B. use :lopen to view the loclist/quickfix list in a new window
