@@ -127,7 +127,7 @@ let g:ale_completion_enabled=1
 let g:ale_fix_on_save=1
 
 let g:ale_fixers = {
-\  '*': ['remove_trailing_lines', 'trim_whitespace'],
+\  '*': ['trim_whitespace'],
 \  'javascript': ['eslint'],
 \  'cpp': ['clang-format'],
 \}
@@ -214,7 +214,7 @@ nnoremap <leader>m :Magit<CR>
 "See https://www.johnhawthorn.com/2012/09/vi-escape-delays/
 set timeoutlen=1000 ttimeoutlen=10
 
-"Have vim update buffers every second (allows GitGutter to refresh) 
+"Have vim update buffers every second (allows GitGutter to refresh)
 set updatetime=1000
 
 "Tab configuration
