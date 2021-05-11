@@ -171,7 +171,7 @@ export LESS="--RAW-CONTROL-CHARS"
 export EDITOR=$(which nvim)
 alias vim='nvim'
 export PAGER=$(which less)
-export PATH=$PATH:~/.local/bin:${HOME}/Tools/bin
+export PATH=~/.local/bin:${HOME}/Tools/bin:$PATH
 
 # XDG directories
 export XDG_CONFIG_HOME=${HOME}/.config
