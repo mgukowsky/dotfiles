@@ -84,7 +84,7 @@ Plug 'ervandew/supertab'
 
 "Automatic linting
 "Plug  'neomake/neomake'
-" Plug 'dense-analysis/ale'
+Plug 'dense-analysis/ale'
 
 "Lightweight personal vim wiki
 Plug 'vimwiki/vimwiki'
@@ -119,36 +119,38 @@ nnoremap K :<C-u>call BreakHere()<CR>
 " let g:deoplete#enable_at_startup = 1
 
 "Automatic linting configuration
-" let g:ale_sign_error='!!'
-" let g:ale_sign_warning='??'
-" let g:ale_set_balloons=1
-" let g:ale_floating_preview=1
-" let g:ale_completion_enabled=1
-" let g:ale_fix_on_save=1
+let g:ale_sign_error='!!'
+let g:ale_sign_warning='??'
+let g:ale_set_balloons=1
+let g:ale_floating_preview=1
+let g:ale_completion_enabled=1
+let g:ale_fix_on_save=1
 
-" let g:ale_fixers = {
-" \  '*': ['trim_whitespace'],
-" \  'javascript': ['eslint'],
-" \  'cpp': ['clang-format'],
-" \}
+let g:ale_fixers = {
+\  '*': ['trim_whitespace'],
+\  'javascript': ['eslint'],
+\  'cpp': ['clang-format'],
+\}
 
 "Use C-k and C-j to navigate between ALE errors
 " nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 " nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 "Use ALE's symbol lookup instead of ctags
-" nnoremap <C-]>  :ALEGoToDefinition<CR>
+nnoremap <C-]>  :ALEGoToDefinition<CR>
 
 "TODO: make these automatically pop up when hovering the cursor
-" nnoremap <leader>]  :ALEHover<CR>
-" nnoremap <leader>i  :ALEDetail<CR>
+nnoremap <leader>]  :ALEHover<CR>
+nnoremap <leader>i  :ALEDetail<CR>
 "N.B. use :lopen to view the loclist/quickfix list in a new window
 "i.e.: https://dmerej.info/blog/post/lets-have-a-pint-of-vim-ale/#the-location-list
 
 "Don't lint as we change text, but trigger on other events (inserts, saves, and file open)
-" let g:ale_lint_on_text_changed = 'never'
-" let g:ale_lint_on_insert_leave = 0
-" let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_filetype_changed = 0
+let g:ale_lint_on_save = 0
 
 "Color config
 set t_Co=256
@@ -171,7 +173,7 @@ hi LineNr guibg=NONE ctermbg=NONE
 
 "Vim-airline config
 let g:airline#extensions#tabline#enabled=1
-" let g:airline#extensions#ale#enabled=1
+let g:airline#extensions#ale#enabled=1
 let g:airline_powerline_fonts=1
 let g:airline_theme='hybrid'
 let g:hybrid_custom_term_colors=1
