@@ -245,6 +245,7 @@ set secure
 set mouse=a
 
 "File types for rare extensions
+au BufReadPost *.manifest set syntax=xml
 au BufReadPost *.zsh-theme set syntax=sh
 au BufReadPost .clang-format set syntax=yaml
 au BufReadPost .gitmessage set syntax=gitcommit
