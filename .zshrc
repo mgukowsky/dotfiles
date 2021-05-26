@@ -199,6 +199,11 @@ export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 # nvm setup from AUR package
 if [[ -e /usr/share/nvm/init-nvm.sh ]]; then
   source /usr/share/nvm/init-nvm.sh
+# but the installer from GitHub does things a little differently...
+elif [[ -e $XDG_CONFIG_HOME/nvm/nvm.sh ]]; then
+  export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 
 # Start the ssh-agent automatically, if needed.
@@ -230,6 +235,13 @@ if [ -f "${SSH_ENV}" ]; then
 else
     start_agent;
 fi
+
+# Incantation to launch a Jupyter Lab server. Run `docker logs jupyterlab` to get the container
+# URL w/ the access token. N.B. we use --name to help enforce only running one instance of this
+# container at any given time.
+function launch-jupyter {
+  docker run --rm -d --user `id -u`:`id -g` -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ~/Workspace:/home/jovyan/Workspace --name=jupyterlab jupyter/all-spark-notebook
+}
 
 function mkcd {
   if [[ ! -e $1 ]]; then
