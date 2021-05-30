@@ -240,7 +240,7 @@ fi
 # URL w/ the access token. N.B. we use --name to help enforce only running one instance of this
 # container at any given time.
 function launch-jupyter {
-  docker run --rm -d --user `id -u`:`id -g` -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ~/Workspace:/home/jovyan/Workspace --name=jupyterlab jupyter/all-spark-notebook
+  docker run --rm -d --user `id -u`:`id -g` -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ~/Workspace:/home/jovyan/work --name=jupyterlab jupyter/all-spark-notebook
 }
 
 function mkcd {
