@@ -212,7 +212,7 @@ SSH_ENV="$HOME/.ssh/agent-environment"
 
 function start_agent {
     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-    # Powerlevel zsh scripts don't like IO during initialization, so we only print if 
+    # Powerlevel zsh scripts don't like IO during initialization, so we only print if
     # something goes wrong.
     if [[ -v $SSH_AGENT_PID ]]; then
       echo "Failed to start ssh-agent..."
@@ -252,6 +252,54 @@ function mkcd {
 
 function refresh_ctags  {
   ctags -R --tag-relative=yes --exclude=.git --exclude=build .
+}
+
+# Creates a proxy device that tunnels serial traffic from a WSL2 Windows host's COM port.
+# The proxy device can then be accessed as a normal serial device (e.g. with minicom,
+# screen, picocom, etc.). Requires that 'com2tcp' is accessible using the PATH on the Windows
+# host side. Binaries can be retrieved from https://sourceforge.net/projects/com0com/files/com2tcp/1.3.0.0/
+#
+# Based on https://gist.github.com/DraTeots/e0c669608466470baa6c
+function wsl2-com-proxy {
+  COMSPEC=$(wslpath $(wslvar COMSPEC))
+
+  if [[ $# -eq 1 && $1 == "kill" ]]; then
+    kill $(pgrep -f 'socat.*cfmakeraw')
+    kill -9 $(pgrep -f 'com2tcp')
+    # Unfortunately hub4com.exe forks on the Windows side and will not die even when
+    # the shell job that spawned it exits, so we have to go through the Windows shell to stop it.
+    $COMSPEC /C "TASKKILL /F /IM hub4com.exe" 2>/dev/null
+    echo "Removed COM proxy"
+  elif [[ $# -eq 1 && $1 =~ "^[0-9]*$" ]]; then
+    BAUD=115200
+    PORT=8765
+    VCOM=/tmp/comproxy/${1}
+
+    if [[ -h $VCOM ]]; then
+      echo "$VCOM already exists..."
+      return 1
+    fi
+
+    # Start up the TCP server on the Windows side. While the internet indicates that the
+    # 'com2tcp-rfc2217' variant is the best choice to tunnel serial traffic, that program seems
+    # unable to take a baud rate argument, whereas the com2tcp version seems to work fine.
+    $COMSPEC /C "com2tcp --baud $BAUD COM${1} $PORT" &
+
+    # Retrieve the host PC's IP for the WSL network, which hosts the COM port server.
+    WSL_HOST_IP=$($COMSPEC /C "ipconfig" 2>/dev/null | grep -A7 WSL | grep "IPv4 Address" | sed -r -e 's/.*\s(([0-9]{1,3}\.?){4}).*/\1/')
+
+    # Use socat to wire everything up. The net result here is that the traffic from WSL_HOST_IP will
+    # be sent to VCOM. We use a pty here rather than a /dev/ttyS* device, since those seem to be
+    # borked ATM. 'cfmakeraw' should allow socat to forward the serial traffic correctly; if this
+    # causes an issue, try replacing it with 'raw,echo=0'.
+    socat tcp-connect:${WSL_HOST_IP}:${PORT} pty,cfmakeraw,link=${VCOM} &
+
+    # If everything went according to plan, this symlink should have been created.
+    echo "Created virtual COM port as $VCOM"
+  else
+    echo "Usage: wsl2-com-proxy [kill|PORTNUMBER]"
+    return 1
+  fi
 }
 
 # N.B. This will only work if there is an X server running on Windows!
