@@ -115,6 +115,15 @@ function! BreakHere()
 endfunction
 nnoremap K :<C-u>call BreakHere()<CR>
 
+"Easy buffer navigation
+nnoremap <C-h>  :bp<CR>
+nnoremap <C-l>  :bn<CR>
+
+"Searches for the word under the cursor; requires FZF
+"Mappings are based on default vim bindings
+nnoremap <C-w>  yw:Rg <C-r>"<CR>
+nnoremap <C-a>  yW:Rg <C-r>"<CR>
+
 "Autocomplete configuration
 " let g:deoplete#enable_at_startup = 1
 
