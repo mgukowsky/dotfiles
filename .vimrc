@@ -154,12 +154,17 @@ nnoremap <leader>i  :ALEDetail<CR>
 "N.B. use :lopen to view the loclist/quickfix list in a new window
 "i.e.: https://dmerej.info/blog/post/lets-have-a-pint-of-vim-ale/#the-location-list
 
-"Don't lint as we change text, but trigger on other events (inserts, saves, and file open)
+"Don't run the linters at all; I find them too noisy.
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_filetype_changed = 0
 let g:ale_lint_on_save = 0
+
+"ALE will still have autocompletion, but it will take 5 seconds to kick in.
+"This prevents having to hit escape twice to return to normal mode from insert
+"mode while typing (i.e. once to exit autocompletion, again to exit insert mode).
+let g:ale_completion_delay = 5000
 
 "Color config
 set t_Co=256
