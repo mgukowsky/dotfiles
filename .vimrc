@@ -31,6 +31,7 @@ Plug 'Rigellute/rigel'
 Plug 'sainnhe/edge'
 Plug 'cocopon/iceberg.vim'
 Plug 'sainnhe/gruvbox-material'
+Plug 'sickill/vim-monokai'
 
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'scrooloose/nerdtree'

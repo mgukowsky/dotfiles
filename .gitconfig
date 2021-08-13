@@ -5,3 +5,5 @@
 	template = /home/mgukowsky/.gitmessage
 [pull]
 	rebase = false
+[difftool "nvimdiff"]
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
