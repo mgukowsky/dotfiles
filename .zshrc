@@ -372,6 +372,12 @@ POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='054'
 
 plugins=(zsh-syntax-highlighting)
 
+# Finally, execute any additional commands specific to the local installation
+EXRC=$XDG_DATA_HOME/.zshexrc
+if [[ -f $EXRC ]]; then
+  . $EXRC
+fi
+
 # Powerlevel10k stuff
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
