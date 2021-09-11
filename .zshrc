@@ -171,6 +171,14 @@ export LESS="--RAW-CONTROL-CHARS"
 export EDITOR=$(which nvim)
 alias vim='nvim'
 export PAGER=$(which less)
+export GIT_PAGER=$(which delta)
+export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat/bat.conf"
+
+# Make bat play nicely with man pages; see https://github.com/sharkdp/bat#man
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# Used by the delta diff tool; see https://github.com/dandavison/delta#environment
+export DELTA_PAGER="$(which bat) --style=plain"
 export PATH=~/.local/bin:${HOME}/Tools/bin:$PATH
 
 # XDG directories

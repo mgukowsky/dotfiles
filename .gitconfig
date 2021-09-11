@@ -5,5 +5,36 @@
 	template = /home/mgukowsky/.gitmessage
 [pull]
 	rebase = false
+[diff]
+  colorMoved = default
 [difftool "nvimdiff"]
   cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[pager]
+  diff = delta
+  log = delta
+  reflog = delta
+  show = delta
+
+[interactive]
+  diffFilter = delta --color-only --features=interactive
+
+[delta]
+  syntax-theme = Monokai Extended
+  line-numbers = true
+  features = decorations
+
+[delta "interactive"]
+  keep-plus-minus-markers = false
+
+[delta "decorations"]
+  commit-decoration-style = blue ol
+  commit-style = raw
+  file-style = omit
+  hunk-header-decoration-style = blue ul
+  hunk-header-file-style = yellow
+  hunk-header-line-number-style = blue
+  hunk-header-style = file line-number syntax
+  minus-emph-style = reverse red
+  plus-emph-style = reverse green
+  tabs = 2
+
