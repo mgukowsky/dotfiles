@@ -38,3 +38,6 @@
   plus-emph-style = reverse green
   tabs = 2
 
+[color "diff"]
+	newMoved = reverse cyan
+  oldMoved = reverse yellow

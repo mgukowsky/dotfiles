@@ -136,6 +136,15 @@ unsetopt HIST_VERIFY # Don't expand history entries (e.g. `!` characters) and re
 
 REPORTTIME=5 # Magic zsh variable to report stats for long-running commands (more than 5 secs)
 
+export PATH=~/.local/bin:${HOME}/Tools/bin:$PATH
+
+# XDG directories
+export XDG_CONFIG_HOME=${HOME}/.config
+export XDG_CACHE_HOME=${HOME}/.cache
+export XDG_DATA_HOME=${HOME}/.local/share
+export XDG_DATA_DIRS=/usr/local/share:/usr/share
+export XDG_CONFIG_DIRS=/etc/xdg
+
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -179,14 +188,6 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 # Used by the delta diff tool; see https://github.com/dandavison/delta#environment
 export DELTA_PAGER="$(which bat) --style=plain"
-export PATH=~/.local/bin:${HOME}/Tools/bin:$PATH
-
-# XDG directories
-export XDG_CONFIG_HOME=${HOME}/.config
-export XDG_CACHE_HOME=${HOME}/.cache
-export XDG_DATA_HOME=${HOME}/.local/share
-export XDG_DATA_DIRS=/usr/local/share:/usr/share
-export XDG_CONFIG_DIRS=/etc/xdg
 
 # Enable reverse search with Ctrl-R
 bindkey -v
