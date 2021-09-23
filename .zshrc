@@ -249,7 +249,11 @@ fi
 # URL w/ the access token. N.B. we use --name to help enforce only running one instance of this
 # container at any given time.
 function launch-jupyter {
-  docker run --rm -d --user `id -u`:`id -g` -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ~/Workspace:/home/jovyan/work --name=jupyterlab jupyter/all-spark-notebook
+  local JUPYTER_CTRNAME=jupyterlab
+
+  docker run --rm -d --user `id -u`:`id -g` -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ~/Workspace:/home/jovyan/work --name=$JUPYTER_CTRNAME jupyter/all-spark-notebook
+  echo "The Jupyter Lab instance can be accessed at the following URL:"
+  echo $(docker logs $JUPYTER_CTRNAME |& egrep '^\s*http://127.0.0.1' | sed -r -e 's/^\s*//g')
 }
 
 function mkcd {
