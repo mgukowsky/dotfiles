@@ -4,9 +4,6 @@
 # Include good stuff from the vanilla inputrc
 $include /etc/inputrc
 
-# No bell
-set bell-style none
-
 # vi everywhere
 set editing-mode vi
 

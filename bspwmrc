@@ -7,6 +7,9 @@ function startd {
 
 startd sxhkd
 
+# xsettings daemon; used by programs to detect things like dark mode
+startd xfsettingsd -D --replace
+
 # Compositor
 startd picom -bc --backend glx --vsync
 
@@ -31,6 +34,9 @@ bspc config gapless_monocle      true
 # bspc rule -a Kupfer.py focus=on
 # bspc rule -a Screenkey manage=off
 
+# Manipulate floating windows with the mouse + shift
+# shift + left click will move the window, shift + right click allows you to resize at the corners,
+# and shift + middle click resizes a single side
 bspc config pointer_modifier shift
 
 # $XDG_CONFIG_HOME/WALLPAPER should be a symlink to the default wallpaper
