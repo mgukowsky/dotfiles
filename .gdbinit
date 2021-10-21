@@ -13,15 +13,15 @@ set disassemble-next-line auto
 
 set disassembly-flavor intel
 
-# TUI styling
-set style tui-active-border foreground green
-set style tui-active-border background black
+# # TUI styling
+# set style tui-active-border foreground green
+# set style tui-active-border background black
 
-set style tui-border foreground green
-set style tui-border background none
+# set style tui-border foreground green
+# set style tui-border background none
 
-set tui compact-source on
-set tui tab-width 2
+# set tui compact-source on
+# set tui tab-width 2
 
-# Turn on TUI
-tui enable
+# # Turn on TUI
+# tui enable
