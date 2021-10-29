@@ -13,6 +13,9 @@ set disassemble-next-line auto
 
 set disassembly-flavor intel
 
+set backtrace past-entry on
+set backtrace past-main on
+
 # # TUI styling
 # set style tui-active-border foreground green
 # set style tui-active-border background black
