@@ -143,3 +143,7 @@ super + a
 
 super + shift + a
   dunstctl close
+
+# Screenshot selection with maim, based on the same Windows 10 shortcut
+super + shift + s
+  SSHOT_PATH=$(mktemp -u).png; maim -s -f png > $SSHOT_PATH; dunstify -I $SSHOT_PATH -u low 'Screen Capture' $SSHOT_PATH
