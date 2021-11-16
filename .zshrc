@@ -336,6 +336,31 @@ function xdocker {
   docker run -e DISPLAY=host.docker.internal:0 -e LIBGL_ALWAYS_INDIRECT=1 $@
 }
 
+# Lock the screen with a blurred screenshot as the background image.
+#
+# Enter your password to unlock.
+#
+# Requires running in an X session, and needs maim, convert, and i3lock installed
+#
+# From https://www.reddit.com/r/unixporn/comments/3eiulr/comment/ctfk7om/?utm_source=share&utm_medium=web2x&context=3
+function blur-and-lock-screen {
+  if [[ $XDG_SESSION_TYPE != "x11" ]]; then
+    echo "blur-and-lock-screen can only be used within an X11 session. If in a tty, consider the 'vlock' command instead"
+    return 1
+  fi
+
+  local SSHOT_PATH=/tmp/lockscreenshot
+
+  maim | convert - -blur 0x5 $SSHOT_PATH
+
+  if [[ ! -f $SSHOT_PATH ]]; then
+    echo "Could not lock screen because $SSHOT_PATH could not be found"
+    return 1
+  fi
+
+  i3lock -i $SSHOT_PATH
+}
+
 # Enable vi-style bindings
 set -o vi
 
