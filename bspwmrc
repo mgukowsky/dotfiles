@@ -42,6 +42,9 @@ bspc config pointer_modifier shift
 # $XDG_CONFIG_HOME/WALLPAPER should be a symlink to the default wallpaper
 feh --bg-scale $XDG_CONFIG_HOME/WALLPAPER
 
+# Don't use the ugly 'X' as the default X11 cursor
+xsetroot -cursor_name left_ptr
+
 # Finally, execute any additional commands specific to the local installation
 EXRC=$XDG_DATA_HOME/bspwmexrc
 if [[ -f $EXRC ]]; then
