@@ -51,7 +51,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'JuliaEditorSupport/julia-vim'
 
 "Tag browsing/code outlining
-Plug 'liuchengxu/vista.vim'
+" Plug 'liuchengxu/vista.vim'
 
 "fzf integration
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -146,6 +146,7 @@ let g:ale_fixers = {
 \  '*': ['trim_whitespace'],
 \  'javascript': ['eslint'],
 \  'cpp': ['clang-format'],
+\  'rust': ['rustfmt'],
 \}
 
 "Use C-k and C-j to navigate between ALE errors
@@ -183,7 +184,7 @@ endif
 
 let base16colorspace=256
 
-colorscheme gruvbox-material
+colorscheme dracula
 
 let g:spacegray_underline_search=1
 let g:spacegray_italicize_comments=1
@@ -209,12 +210,12 @@ map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
 "Outline configuration
-map <C-m> :Vista!!<CR>
-"Prefer ale integration over ctags
-let g:vista_default_executive = 'ale'
-let g:vista#renderer#enable_icon = 1
-let g:vista_sidebar_width = 60
-let g:vista_echo_cursor_strategy = 'both'
+"map <C-m> :Vista!!<CR>
+""Prefer ale integration over ctags
+"let g:vista_default_executive = 'ale'
+"let g:vista#renderer#enable_icon = 1
+"let g:vista_sidebar_width = 60
+"let g:vista_echo_cursor_strategy = 'both'
 
 "GitGutter configuration
 highlight GitGutterAdd      guifg=#00ff00 ctermfg=10
