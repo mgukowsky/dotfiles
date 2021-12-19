@@ -148,3 +148,7 @@ super + shift + a
 # Screenshot selection with maim, based on the same Windows 10 shortcut
 super + shift + s
   SSHOT_PATH=$(mktemp -u).png; maim -s -f png > $SSHOT_PATH; dunstify -I $SSHOT_PATH -u low 'Screen Capture' $SSHOT_PATH
+
+# Windows 10-style super menu
+super + x
+  rofi -show power-menu -modi power-menu:rofi-power-menu
