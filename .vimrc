@@ -193,6 +193,14 @@ let g:spacegray_italicize_comments=1
 hi Normal guibg=NONE ctermbg=NONE
 hi LineNr guibg=NONE ctermbg=NONE
 
+"Make limelight OK with our transparent background
+let g:limelight_conceal_ctermfg="DarkGray"
+let g:limelight_conceal_guifg="DarkGray"
+
+"Invoke Limelight as part of Goyo
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+
 "Vim-airline config
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#ale#enabled=1
