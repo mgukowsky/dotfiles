@@ -361,6 +361,79 @@ function blur-and-lock-screen {
   i3lock -i $SSHOT_PATH
 }
 
+# Map a device type to an xinput ID. N.B. that only the first matching device ID will be returned
+# (i.e. may not work properly in the event of multiple touchpads, etc.).
+# Expects an argument that can be matched against the output of udevadm, e.g "TOUCHPAD" as in "ID_INPUT_TOUCHPAD".
+# Inspired by https://unix.stackexchange.com/questions/671817/how-to-get-xinput-device-id-of-touchscreen-without-using-manufacturer-string
+function get_xinput_id {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: get_xinput_id DEVICE_TYPE"
+    echo "\te.g. get_xinput_id TOUCHSCREEN"
+    echo "\te.g. get_xinput_id TOUCHPAD"
+    return -1
+  fi
+
+  for input_event in $(ls /dev/input/event*); do
+    if udevadm info --query=property --name=$input_event | grep $1 >& /dev/null; then
+      local devpath=$(udevadm info --query=property --name=$input_event | grep DEVNAME | sed -r -e 's/.*\=(.*)/\1/')
+
+      # N.B. if you omit the "; do ... done" pieces bash will consider your for loop to be a one-liner and will silently
+      # discard any commands after the first line in the block you provide it...
+      for xinput_id in $(xinput list --id-only); do
+        local devnode=$(xinput list-props $xinput_id | grep "Device Node" | sed -r -e 's/.*\"(.*)\"/\1/')
+        if [[ $devnode == $devpath ]]; then
+          return $xinput_id
+        fi
+      done
+    fi
+  done
+}
+
+# Rotate the screen as well as relevant peripherals
+function tablet-mode {
+  local xrandr_arg
+  local xinput_matrix
+
+  get_xinput_id "TOUCHPAD"
+  local touchpad_id=$?
+
+  get_xinput_id "TOUCHSCREEN"
+  local touchscreen_id=$?
+
+  local ON="on"
+  local OFF="off"
+
+  if [[ $# -eq 1 && $1 == $ON ]]; then
+    xrandr_arg="left"
+
+    # N.B. we have to use a matrix here, as xinput expects each element of the matrix as a separate argument, therefore
+    # we need to expand the array in order to pass each element distinctly; using a string would cause
+    # the matrix to only be passed as a single argument, which xinput wouldn't understand.
+    xinput_matrix=(0 -1 1 1 0 0 0 0 1)
+  elif [[ $# -eq 1 && $1 == $OFF ]]; then
+    xrandr_arg="normal"
+    xinput_matrix=(0 0 0 0 0 0 0 0 0)
+  else
+    echo "Usage: tablet-mode $ON|$OFF"
+    return 1
+  fi
+
+  # Rotate the screen...
+  xrandr -o $xrandr_arg
+
+  # Then rotate the touchpad and touchscreen (if present) to reflect the new orientation
+  if [[ $touchpad_id -ne -1 ]]; then
+    xinput set-prop $touchpad_id --type=float 'Coordinate Transformation Matrix' ${xinput_matrix[@]}
+    echo "rotated touchpad with xinput id $touchpad_id"
+  fi
+
+  # TODO: gross duplication
+  if [[ $touchscreen_id -ne -1 ]]; then
+    xinput set-prop $touchscreen_id --type=float 'Coordinate Transformation Matrix' ${xinput_matrix[@]}
+    echo "rotated touchscreen with xinput id $touchscreen_id"
+  fi
+}
+
 # Enable vi-style bindings
 set -o vi
 
