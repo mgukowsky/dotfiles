@@ -377,8 +377,8 @@ function get_xinput_id {
     if udevadm info --query=property --name=$input_event | grep $1 >& /dev/null; then
       local devpath=$(udevadm info --query=property --name=$input_event | grep DEVNAME | sed -r -e 's/.*\=(.*)/\1/')
 
-      # N.B. if you omit the "; do ... done" pieces bash will consider your for loop to be a one-liner and will silently
-      # discard any commands after the first line in the block you provide it...
+      # N.B. if you omit the "; do ... done" pieces bash will consider your for loop to be a one-liner and will only
+      # execute any commands after the first line once, even if they're indented ;)
       for xinput_id in $(xinput list --id-only); do
         local devnode=$(xinput list-props $xinput_id | grep "Device Node" | sed -r -e 's/.*\"(.*)\"/\1/')
         if [[ $devnode == $devpath ]]; then
