@@ -329,11 +329,24 @@ function wsl2-xforward {
 #
 # N.B. this command will also work when invoked directly from the Windows command prompt!
 #
+# N.B. this command does NOT provide network isolation when running on Linux, and should NOT be
+# used to provide a sandbox!
+#
 # Inspired by https://medium.com/@mreichelt/how-to-show-x11-windows-within-docker-on-mac-50759f4b65cb
 function xdocker {
-  # `host.docker.internal` is a magic DNS name courtesy of Docker Desktop on Windows and Mac;
-  # see https://docs.docker.com/docker-for-windows/networking/ for an explanation
-  docker run -e DISPLAY=host.docker.internal:0 -e LIBGL_ALWAYS_INDIRECT=1 $@
+  # Detect if we're running in a WSL instance, as the command will be a little different.
+  # From https://stackoverflow.com/a/38859331
+  if grep -qi microsoft /proc/version; then
+    # `host.docker.internal` is a magic DNS name courtesy of Docker Desktop on Windows and Mac;
+    # see https://docs.docker.com/docker-for-windows/networking/ for an explanation
+    docker run -e DISPLAY=host.docker.internal:0 -e LIBGL_ALWAYS_INDIRECT=1 $@
+  else
+    # From https://dzone.com/articles/docker-x11-client-via-ssh
+    # N.B. we are NOT providing network isolation!
+    echo "Entering X-forwarded container; note that network isolation is NOT provided!"
+    echo "DO NOT use this container as a sandbox!"
+    docker run --net=host -e LIBGL_ALWAYS_INDIRECT=1 --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" $@
+  fi
 }
 
 # Lock the screen with a blurred screenshot as the background image.
