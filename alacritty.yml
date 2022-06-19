@@ -559,53 +559,53 @@
   # Print all received window events.
   #print_events: false
 
-font: 
-  normal: 
-    family: Terminus 
-    style: Regular 
+font:
+  normal:
+    family: Terminus
+    style: Regular
 
-  bold: 
-    family: Terminus 
-    style: Bold 
+  bold:
+    family: Terminus
+    style: Bold
 
-  italic: 
-    family: Terminus 
-    style: Italic 
+  italic:
+    family: Terminus
+    style: Italic
 
-  bold_italic: 
-    family: Terminus 
+  bold_italic:
+    family: Terminus
     style: Bold Italic
 
   size: 10
 
 # Colorscheme 'eighties dark' from https://terminal.sexy
-colors: 
-  # Default colors 
-  primary: 
-    background: '0x2d2d2d' 
-    foreground: '0xd3d0c8' 
+colors:
+  # Default colors
+  primary:
+    background: '0x2d2d2d'
+    foreground: '0xd3d0c8'
 
-  # Normal colors 
-  normal: 
-    black:   '0x2d2d2d' 
-    red:     '0xf2777a' 
-    green:   '0x99cc99' 
-    yellow:  '0xffcc66' 
-    blue:    '0x6699cc' 
-    magenta: '0xcc99cc' 
-    cyan:    '0x66cccc' 
-    white:   '0xd3d0c8' 
+  # Normal colors
+  normal:
+    black:   '0x2d2d2d'
+    red:     '0xf2777a'
+    green:   '0x99cc99'
+    yellow:  '0xffcc66'
+    blue:    '0x6699cc'
+    magenta: '0xcc99cc'
+    cyan:    '0x66cccc'
+    white:   '0xd3d0c8'
 
-  # Bright colors 
-  bright: 
-    black:   '0x747369' 
-    red:     '0xf2777a' 
-    green:   '0x99cc99' 
-    yellow:  '0xffcc66' 
-    blue:    '0x6699cc' 
-    magenta: '0xcc99cc' 
-    cyan:    '0x66cccc' 
-    white:   '0xf2f0ec' 
+  # Bright colors
+  bright:
+    black:   '0x747369'
+    red:     '0xf2777a'
+    green:   '0x99cc99'
+    yellow:  '0xffcc66'
+    blue:    '0x6699cc'
+    magenta: '0xcc99cc'
+    cyan:    '0x66cccc'
+    white:   '0xf2f0ec'
 
 key_bindings:
   # Buffer scrollback
@@ -614,4 +614,5 @@ key_bindings:
   - { key: Home,      mods: Shift,   action: ScrollToTop    }
   - { key: End,       mods: Shift,   action: ScrollToBottom }
 
-background_opacity: 0.80
+window:
+  opacity: 0.80
