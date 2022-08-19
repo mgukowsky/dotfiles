@@ -77,6 +77,7 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 
+plugins=(zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -500,8 +501,6 @@ POWERLEVEL9K_VI_INSERT_MODE_STRING='I'
 POWERLEVEL9K_VI_COMMAND_MODE_STRING='N'
 POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='003'
 POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='054'
-
-plugins=(zsh-syntax-highlighting)
 
 # Finally, execute any additional commands specific to the local installation
 EXRC=$XDG_DATA_HOME/.zshexrc
