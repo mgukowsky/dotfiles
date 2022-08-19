@@ -362,6 +362,13 @@ function blur-and-lock-screen {
     return 1
   fi
 
+  for dep in "maim" "convert" "i3lock"; do
+    if ! command -v $dep &>/dev/null; then
+      echo "Could not lock screen because $dep could not be found"
+      return 1
+    fi
+  done
+
   local SSHOT_PATH=/tmp/lockscreenshot
 
   maim | convert - -blur 0x5 $SSHOT_PATH
