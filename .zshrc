@@ -139,6 +139,12 @@ REPORTTIME=5 # Magic zsh variable to report stats for long-running commands (mor
 
 export PATH=~/.local/bin:${HOME}/Tools/bin:$PATH
 
+# Add ruby gems to path; from https://guides.rubygems.org/faqs/
+if which ruby >/dev/null && which gem >/dev/null; then
+    PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+fi
+
+
 # XDG directories
 export XDG_CONFIG_HOME=${HOME}/.config
 export XDG_CACHE_HOME=${HOME}/.cache
