@@ -152,3 +152,11 @@ super + shift + s
 # Windows 10-style super menu
 super + x
   rofi -show power-menu -modi power-menu:rofi-power-menu
+
+# Windows 10-style emoji picker
+# Per https://github.com/fdw/rofimoji:
+# - 'Enter' to type emoji into active window
+# - 'Alt+Shift+1' to copy to clipboard
+# - 'Alt+[1-9]' to select recently used emojis
+super + @period
+  rofimoji
