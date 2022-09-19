@@ -461,6 +461,47 @@ function tablet-mode {
   fi
 }
 
+# Put a laptop into low-power mode by stopping unneeded programs and putting hardware into low-power mode
+function power-saver-mode {
+  # Non-mission critical programs and services that we can safely stop to save power
+  local POWPROGS=(picom dunst gitstatusd)
+  local POWSERVICES=(docker expressvpn ntpd)
+  local AMDDPMFILE=/sys/class/drm/card0/device/power_dpm_force_performance_level
+  local AMDPOWPROFFILE=/sys/class/drm/card0/device/pp_power_profile_mode
+
+  # Put CPU in low power mode
+  echo "Putting CPU in low power mode..."
+  sudo cpupower frequency-set -g powersave
+
+  for prog in $POWPROGS; do
+    if [[ -n "`pgrep $prog`" ]]; then
+      echo "Killing $prog..."
+      pkill $prog
+    else
+      echo "Not killing $prog because it isn't running"
+    fi
+  done
+
+  for serv in $POWSERVICES; do
+    echo "Stopping the $serv service..."
+    sudo systemctl stop $serv
+  done
+
+  # If using an AMD gpu, put it in low power mode
+  if [[ -n "`lsmod | grep amdgpu`" ]]; then
+    echo "AMD GPU detected; putting it into power saving mode..."
+
+    echo "manual" | sudo tee $AMDDPMFILE >/dev/null
+
+    # Extract the ID of the power saver profile
+    local AMDPOWPROFILEID=`cat $AMDPOWPROFFILE | grep POWER_SAVING | sed -re 's/^\s*([0-9]*).*/\1/'`
+    echo "$AMDPOWPROFILEID" | sudo tee $AMDPOWPROFFILE >/dev/null
+  fi
+
+  echo 'Disabling radios (`rfkill unblock all` to unblock)...'
+  rfkill block all
+}
+
 # Enable vi-style bindings
 set -o vi
 
