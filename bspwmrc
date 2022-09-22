@@ -1,23 +1,27 @@
 #! /bin/sh
 
-# Launch a daemon w/ arguments if it's not already running
-function startd {
-  pgrep -x $1 > /dev/null || $1 ${@:2} &
+# Launch a transient user service tied to the bspwm session (--collect ensures they are cleaned up
+# when the X server exits)
+# A list of these bspwm services can be retrieved with `systemctl --user list-units | grep bspwm`
+# Status can be queried with `systemctl --user status bspwm-<program>.service`
+# Logs can be inspected with `journalctl --user-unit=bspwm-<program>.service`
+function startserv {
+  systemd-run --collect --no-block --unit="bspwm-${1}" --description="BSPWM child service: $1" --user $1 ${@:2}
 }
 
-startd sxhkd
+startserv sxhkd
 
 # xsettings daemon; used by programs to detect things like dark mode
-startd xfsettingsd -D --replace
+startserv xfsettingsd --replace
 
 # Compositor
-startd picom -bc --backend glx --vsync
+startserv picom -c --backend glx
 
 # Notification manager
-startd dunst
+startserv dunst
 
 # Battery notifications
-startd batsignal -w 20 -c 10 -d 5 -I /usr/share/icons/Papirus/128x128/devices/battery.svg -b
+startserv batsignal -w 20 -c 10 -d 5 -I /usr/share/icons/Papirus/128x128/devices/battery.svg
 
 bspc monitor -d I II III IV V VI VII VIII IX X
 
