@@ -111,8 +111,13 @@ set nolist
 "Set the title of the window the the file being edited
 set title
 
-"Makes y and p commands use the global copy/paster buffer
-set clipboard+=unnamed
+"Makes y and p commands use the global copy/paster buffer.
+"
+"N.B. this probably won't play well with vim sessions over SSH. To copy in
+"such scenarios, either X11 forward hold SHIFT while click-dragging the mouse
+"to select and then copy-paste (can also enter `:set nonumber` to remove line
+"numbers first)
+set clipboard+=unnamedplus
 
 "Use `K` to split a line; i.e. opposite of `J`.
 "From https://gist.github.com/romainl/3b8cdc6c3748a363da07b1a625cfc666

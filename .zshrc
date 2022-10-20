@@ -133,6 +133,7 @@ setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
 setopt share_history            # Allow multiple sessions to share history file
 setopt inc_append_history       # Append to history file
 setopt share_history            # Allow multiple shells to play nicely together with history file
+setopt globdots                 # Have autocomplete to enumerate hidden files
 unsetopt HIST_VERIFY # Don't expand history entries (e.g. `!` characters) and require a second ENTER press.
 
 REPORTTIME=5 # Magic zsh variable to report stats for long-running commands (more than 5 secs)
