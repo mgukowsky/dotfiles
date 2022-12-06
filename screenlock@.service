@@ -1,0 +1,12 @@
+[Unit]
+Description=Lock X session for user %i
+Before=sleep.target
+
+[Service]
+User=%i
+Type=forking
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/blur-and-lock-screen
+
+[Install]
+WantedBy=sleep.target

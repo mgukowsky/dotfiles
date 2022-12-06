@@ -357,38 +357,6 @@ function xdocker {
   fi
 }
 
-# Lock the screen with a blurred screenshot as the background image.
-#
-# Enter your password to unlock.
-#
-# Requires running in an X session, and needs maim, convert, and i3lock installed
-#
-# From https://www.reddit.com/r/unixporn/comments/3eiulr/comment/ctfk7om/?utm_source=share&utm_medium=web2x&context=3
-function blur-and-lock-screen {
-  if [[ $XDG_SESSION_TYPE != "x11" ]]; then
-    echo "blur-and-lock-screen can only be used within an X11 session. If in a tty, consider the 'vlock' command instead"
-    return 1
-  fi
-
-  for dep in "maim" "convert" "i3lock"; do
-    if ! command -v $dep &>/dev/null; then
-      echo "Could not lock screen because $dep could not be found"
-      return 1
-    fi
-  done
-
-  local SSHOT_PATH=/tmp/lockscreenshot
-
-  maim | convert - -blur 0x5 $SSHOT_PATH
-
-  if [[ ! -f $SSHOT_PATH ]]; then
-    echo "Could not lock screen because $SSHOT_PATH could not be found"
-    return 1
-  fi
-
-  i3lock -i $SSHOT_PATH
-}
-
 # Map a device type to an xinput ID. N.B. that only the first matching device ID will be returned
 # (i.e. may not work properly in the event of multiple touchpads, etc.).
 # Expects an argument that can be matched against the output of udevadm, e.g "TOUCHPAD" as in "ID_INPUT_TOUCHPAD".
@@ -549,6 +517,10 @@ POWERLEVEL9K_VI_INSERT_MODE_STRING='I'
 POWERLEVEL9K_VI_COMMAND_MODE_STRING='N'
 POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='003'
 POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='054'
+
+# Pull in additional shell modules; these will need to be setup with symlinks in the
+# appropriate location.
+. $XDG_DATA_HOME/bin/blur-and-lock-screen.sh
 
 # Finally, execute any additional commands specific to the local installation
 EXRC=$XDG_DATA_HOME/.zshexrc
