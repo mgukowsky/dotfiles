@@ -42,7 +42,7 @@ function blur-and-lock-screen {
     return 1
   fi
 
-  i3lock -i $SSHOT_PATH
+  i3lock -efi $SSHOT_PATH
 }
 
 if [[ sourced -eq 0 ]]; then

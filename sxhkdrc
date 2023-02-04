@@ -145,9 +145,16 @@ super + a
 super + shift + a
   dunstctl close
 
-# Screenshot selection with maim, based on the same Windows 10 shortcut
+# Screenshot selection with maim, based on the same Windows 10 shortcut.
+# Writes the screenshot to a temporary file while simultaneously copying it to the clipboard.
 super + shift + s
-  SSHOT_PATH=$(mktemp -u).png; maim -s -f png > $SSHOT_PATH; dunstify -I $SSHOT_PATH -u low 'Screen Capture' $SSHOT_PATH
+  SSHOT_PATH=$(mktemp -u).png; maim -s -f png -c 0.0,1.0,0.0,1.0 -q | tee $SSHOT_PATH | xclip -selection clipboard -t image/png; dunstify -I $SSHOT_PATH -u low 'Screen Capture' $SSHOT_PATH
+
+# Alternate version which uses OCR to copy text from an image to the clipboard.
+# Uses a purple selection box as a hint to the user that this isn't the normal screen snip shortcut.
+# Inspired by the Text Extractor from Windows Powertoys.
+super + shift + alt + s
+  maim -s -f png -c 1.0,0.0,1.0,1.0 -q | tesseract - - 2>/dev/null | xclip -selection clipboard
 
 # Windows 10-style super menu
 super + x
@@ -160,3 +167,7 @@ super + x
 # - 'Alt+[1-9]' to select recently used emojis
 super + @period
   rofimoji
+
+# Debug
+super + shift + alt + d
+  echo "sxkhd debug; env is: $(env | tr '\n' ';')"
