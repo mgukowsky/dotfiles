@@ -519,15 +519,24 @@ POWERLEVEL9K_VI_COMMAND_MODE_STRING='N'
 POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='003'
 POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='054'
 
+# Source a given script if present
+function source_if_present {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: source_if_present <path_to_script>"
+    return -1
+  fi
+
+  if [[ -f $1 ]]; then
+    . $1
+  fi
+}
+
 # Pull in additional shell modules; these will need to be setup with symlinks in the
 # appropriate location.
-. $XDG_DATA_HOME/bin/blur-and-lock-screen.sh
+source_if_present $XDG_DATA_HOME/bin/blur-and-lock-screen.sh
 
 # Finally, execute any additional commands specific to the local installation
-EXRC=$XDG_DATA_HOME/.zshexrc
-if [[ -f $EXRC ]]; then
-  . $EXRC
-fi
+source_if_present $XDG_DATA_HOME/.zshexrc
 
 # Powerlevel10k stuff
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
