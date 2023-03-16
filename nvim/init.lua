@@ -1,6 +1,7 @@
-require("0_prelude")
+require("00_prelude")
 require("10_plugins")
 require("20_opts")
 require("30_mappings")
 require("40_autocommands")
+require("50_lsp")
 require("99_postlude")

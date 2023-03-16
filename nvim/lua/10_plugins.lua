@@ -5,6 +5,10 @@
 local Plug = vim.fn["plug#"]
 vim.call("plug#begin", vim.fn.stdpath("data").."/plugged")
 
+-- Recommended LSP configs
+Plug 'neovim/nvim-lspconfig'
+
+-- Vim-airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
