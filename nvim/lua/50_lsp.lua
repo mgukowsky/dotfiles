@@ -8,7 +8,7 @@ local function on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   -- TODO: can/should these go in the opts file?
-  vim.g.SuperTabDefaultCompletionType = "<c-x><c-o>" -- Make SuperTab use omnifunc
+  vim.b.SuperTabDefaultCompletionType = "<c-x><c-o>" -- Make SuperTab use omnifunc
   vim.opt.completeopt:remove("preview") -- Don't show the stupid Scratch window
 
   local bufopts = {noremap = true, silent = true, buffer=bufnr}
@@ -36,9 +36,34 @@ local function on_attach(client, bufnr)
     buffer = bufnr,
     callback = vim.lsp.buf.formatting_sync -- Prob no harm in this being sync...
   })
+
+  --[[
+  -- Create a custom popup menu for various LSP-based actions we can take. I prefer this to
+  -- having to create and memorize a shortcut for each of these, most of which I will rarely use
+  --]]
+  local LSPMenu = "]LSPMenu" -- The leading ']' is a vim-ism for "hidden" menus like this one
+  local function add_menu_entry(methodname)
+    vim.cmd.amenu({
+      LSPMenu.."."..methodname,
+      -- TODO: can we provide a lua function as the callback instead of the vim cmd string?
+      ":lua vim.lsp.buf."..string.lower(methodname).."({noremap=true, silent=true, buffer="..bufnr.."})<cr>"
+    })
+    -- TODO: Use vim.cmd.tmenu to add a tooltip for each entry
+  end
+
+  for _, entry in pairs({
+    "Declaration", "Definition", "Implementation", "Type_Definition", "Code_Action", "Rename",
+    "Signature_Help", "References", "Document_Symbol", "Workspace_Symbol"
+  }) do
+    add_menu_entry(entry)
+  end
+
+  -- I like this mapping, since C-] will be set to the LSP tagfunc (usually definition), and this
+  -- <leader> version can be used for all other less-frequently-used options
+  vim.keymap.set("n", "<leader>]", function() vim.cmd.popup(LSPMenu) end)
 end
 
+-- Language Server configurations
 -- From nvim-lspconfig plugin
 local lspconfigs = require("lspconfig")
-
 lspconfigs.clangd.setup({ on_attach = on_attach })
