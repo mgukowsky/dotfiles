@@ -69,7 +69,9 @@ end
 -- Language Server configurations
 -- From nvim-lspconfig plugin
 local lspconfigs = require("lspconfig")
+
 lspconfigs.clangd.setup({ on_attach = on_attach })
+
 lspconfigs.lua_ls.setup({
   on_attach = on_attach,
   settings = {

@@ -3,7 +3,7 @@
 -- Lua adapter for vim-plug
 -- Adapted from https://www.reddit.com/r/neovim/comments/xvbhs2/how_to_use_vim_plug_with_initlua/
 local Plug = vim.fn["plug#"]
-vim.call("plug#begin", vim.fn.stdpath("data").."/plugged")
+vim.call("plug#begin", vim.fn.stdpath("data") .. "/plugged")
 
 -- Recommended LSP configs
 Plug 'neovim/nvim-lspconfig'
@@ -40,7 +40,6 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'scrooloose/nerdtree'
 
 -- Git support
-Plug 'jreybert/vimagit'
 Plug 'airblade/vim-gitgutter'
 
 -- fzf integration
@@ -74,5 +73,11 @@ Plug 'ervandew/supertab'
 
 -- Lightweight personal vim wiki
 Plug 'vimwiki/vimwiki'
+
+-- Animate cursor jumps
+Plug 'danilamihailov/beacon.nvim'
+
+-- Show vertical lines for each indent level
+Plug 'Yggdroot/indentLine'
 
 vim.call("plug#end")
