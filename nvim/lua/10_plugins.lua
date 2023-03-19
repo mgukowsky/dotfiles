@@ -19,7 +19,6 @@ Plug 'ryanoasis/vim-devicons'
 -- Color schemes
 vim.cmd("Plug 'dracula/vim',{'as':'dracula'}") -- TODO: handle plugs with additional options in lua
 Plug 'morhetz/gruvbox'
-Plug 'ajh17/Spacegray.vim'
 Plug 'junk-e/identity.vim'
 Plug 'Mizux/vim-colorschemes'
 Plug 'camgunz/amber'
