@@ -52,6 +52,8 @@ local function on_attach(client, bufnr)
     -- TODO: Use vim.cmd.tmenu to add a tooltip for each entry
   end
 
+  local SEP = "Sep" -- Arbitrary string to represent a menu separator
+  local numSep = 1  -- Each separator must have a unique identifier
   for _, entry in pairs({
     -- General info
     "Hover",
@@ -59,16 +61,26 @@ local function on_attach(client, bufnr)
     "Definition",
     "Implementation",
     "Type_Definition",
+    SEP,
     -- Refactoring actions
     "Code_Action",
     "Rename",
     "Signature_Help",
+    SEP,
     -- Code structure info
     "References",
     "Document_Symbol",
     "Workspace_Symbol"
   }) do
-    add_menu_entry(entry)
+    if entry == SEP then
+      -- In order to be parsed as a separator, the identifier must be surrounded by -minuses-
+      -- The command cannot be empty and must have something other than just whitespace,
+      -- so we give it a no-op
+      vim.cmd.amenu({ LSPMenu .. ".-" .. SEP .. numSep .. "-", "echo ''" })
+      numSep = numSep + 1
+    else
+      add_menu_entry(entry)
+    end
   end
 
   -- I like this mapping, since C-] will be set to the LSP tagfunc (usually definition), and this
