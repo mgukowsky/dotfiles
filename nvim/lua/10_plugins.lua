@@ -39,7 +39,7 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'scrooloose/nerdtree'
 
 -- Git support
-Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim'
 
 -- fzf integration
 vim.cmd("Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }") -- TODO: ditto
@@ -78,5 +78,11 @@ Plug 'danilamihailov/beacon.nvim'
 
 -- Show vertical lines for each indent level
 Plug 'Yggdroot/indentLine'
+
+-- Underline the word under the cursor
+Plug 'yamatsum/nvim-cursorline'
+
+-- Show marks in the sign column
+Plug 'chentoast/marks.nvim'
 
 vim.call("plug#end")
