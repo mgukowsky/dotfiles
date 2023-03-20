@@ -11,22 +11,25 @@ local function on_attach(client, bufnr)
 
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
 
+  -- EDIT: Disabled this as I found it to be too noisy
   -- This will trigger according to the interval set in `vim.opt.updatetime`
   -- TODO: consider power needs...
-  vim.api.nvim_create_autocmd("CursorHold", {
-    buffer = bufnr,
-    callback = function()
-      -- Display any diagnostic(s) for the current line, otherwise show generic hover information
-      local current_line = vim.api.nvim_win_get_cursor(0)[1]
+  if false then
+    vim.api.nvim_create_autocmd("CursorHold", {
+      buffer = bufnr,
+      callback = function()
+        -- Display any diagnostic(s) for the current line, otherwise show generic hover information
+        local current_line = vim.api.nvim_win_get_cursor(0)[1]
 
-      -- N.B. lnum starts at 0, so it will be one less than the current line
-      if #(vim.diagnostic.get(bufnr, { lnum = current_line - 1 })) > 0 then
-        vim.diagnostic.open_float({ noremap = true, silent = true })
-      else
-        vim.lsp.buf.hover(bufopts)
+        -- N.B. lnum starts at 0, so it will be one less than the current line
+        if #(vim.diagnostic.get(bufnr, { lnum = current_line - 1 })) > 0 then
+          vim.diagnostic.open_float({ noremap = true, silent = true })
+        else
+          vim.lsp.buf.hover(bufopts)
+        end
       end
-    end
-  })
+    })
+  end
 
   -- Autoformat on save
   -- Per https://www.jvt.me/posts/2022/03/01/neovim-format-on-save/
@@ -50,8 +53,20 @@ local function on_attach(client, bufnr)
   end
 
   for _, entry in pairs({
-    "Declaration", "Definition", "Implementation", "Type_Definition", "Code_Action", "Rename",
-    "Signature_Help", "References", "Document_Symbol", "Workspace_Symbol"
+    -- General info
+    "Hover",
+    "Declaration",
+    "Definition",
+    "Implementation",
+    "Type_Definition",
+    -- Refactoring actions
+    "Code_Action",
+    "Rename",
+    "Signature_Help",
+    -- Code structure info
+    "References",
+    "Document_Symbol",
+    "Workspace_Symbol"
   }) do
     add_menu_entry(entry)
   end
