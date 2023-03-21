@@ -148,3 +148,20 @@ require('marks').setup({
   --]]
   builtin_marks = { ".", "'", "^" }
 })
+
+--- nvim-treesitter
+require("nvim-treesitter.configs").setup({
+  ensure_installed = { "c", "cpp", "lua", "vim" },
+  highlight = {
+    enable = true
+  }
+})
+
+-- vscode.nvim
+local vscodeColors = require("vscode.colors").get_colors();
+require('vscode').setup({
+  style = "dark",
+  transparent = true,
+  italic_comments = true
+})
+require("vscode").load()

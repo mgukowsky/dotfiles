@@ -34,8 +34,8 @@ Plug 'sainnhe/edge'
 Plug 'cocopon/iceberg.vim'
 Plug 'sainnhe/gruvbox-material'
 Plug 'sickill/vim-monokai'
+Plug 'Mofiqul/vscode.nvim'
 
-Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'scrooloose/nerdtree'
 
 -- Git support
@@ -84,5 +84,8 @@ Plug 'yamatsum/nvim-cursorline'
 
 -- Show marks in the sign column
 Plug 'chentoast/marks.nvim'
+
+-- nvim-treesitter for better syntax highlighting
+vim.cmd("Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}") -- TODO: ditto
 
 vim.call("plug#end")
