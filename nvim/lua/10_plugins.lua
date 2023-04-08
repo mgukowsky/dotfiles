@@ -80,9 +80,6 @@ Plug('Yggdroot/indentLine')
 -- Underline the word under the cursor
 Plug('yamatsum/nvim-cursorline')
 
--- Show marks in the sign column
-Plug('chentoast/marks.nvim')
-
 -- nvim-treesitter for better syntax highlighting
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = function() vim.cmd('TSUpdate') end })
 

@@ -137,18 +137,6 @@ require('nvim-cursorline').setup({
   }
 })
 
--- marks.nvim
-require('marks').setup({
-  -- Don't install mappings from the plugin
-  default_mappings = true,
-  --[[
-  -- . is the position of the last change
-  -- ' is the is the position of the cursor prior to the last jump
-  -- ^ is the position of the cursor when it last exited Insert mode
-  --]]
-  builtin_marks = { ".", "'", "^" }
-})
-
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
   ensure_installed = { "c", "cpp", "lua", "vim" },

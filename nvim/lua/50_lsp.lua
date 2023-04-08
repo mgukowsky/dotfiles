@@ -32,10 +32,11 @@ local function on_attach(client, bufnr)
   end
 
   -- Autoformat on save
-  -- Per https://www.jvt.me/posts/2022/03/01/neovim-format-on-save/
+  -- Per https://www.jvt.me/posts/2022/03/01/neovim-format-on-save/, but updated to use
+  -- vim.lsp.buf.format instead of the deprecated (and removed) vim.lsp.buf.formatting_sync
   vim.api.nvim_create_autocmd("BufWritePre", {
     buffer = bufnr,
-    callback = vim.lsp.buf.formatting_sync -- Prob no harm in this being sync...
+    callback = function() vim.lsp.buf.format({ bufnr = bufnr, async = false }) end
   })
 
   --[[
