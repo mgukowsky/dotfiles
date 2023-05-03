@@ -19,13 +19,13 @@ opt.clipboard:append("unnamedplus")
 
 opt.completeopt = { 'menu', 'menuone', 'noselect' } -- Trigger menu for a single entry
 
-opt.colorcolumn = { 100 }                         -- Rulers
-opt.cursorline = true                             -- Highlight the current line as needed
-opt.expandtab = true                              -- Use spaces instead of tabs
-opt.exrc = true                                   -- Load external rc files, if present
-opt.hidden = true                                 -- Remove warnings when switching btwn buffers that haven't yet been written out
-opt.hlsearch = true                               -- Highlight search match
-opt.incsearch = true                              -- Match search as you type
+opt.colorcolumn = { 100 }                           -- Rulers
+opt.cursorline = true                               -- Highlight the current line as needed
+opt.expandtab = true                                -- Use spaces instead of tabs
+opt.exrc = true                                     -- Load external rc files, if present
+opt.hidden = true                                   -- Remove warnings when switching btwn buffers that haven't yet been written out
+opt.hlsearch = true                                 -- Highlight search match
+opt.incsearch = true                                -- Match search as you type
 
 -- Characters used to represent whitespace
 -- N.B. use the command `:set list` or `vim.opt.list = true` to see these
@@ -212,13 +212,13 @@ cmp.setup({
     }),
   }),
   sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' },
-      { name = 'nvim_lsp_signature_help' }
-    },
-    {
-      { name = 'buffer' },
-    })
+    { name = 'nvim_lsp',               keyword_length = 1 },
+    { name = 'buffer',                 keyword_length = 2 },
+    { name = 'luasnip',                keyword_length = 3 },
+    { name = 'nvim_lsp_signature_help' },
+  }
+
+  )
 })
 
 -- vscode.nvim
