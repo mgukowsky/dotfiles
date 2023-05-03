@@ -6,8 +6,7 @@ local function on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   -- TODO: can/should these go in the opts file?
-  vim.b.SuperTabDefaultCompletionType = "<c-x><c-o>" -- Make SuperTab use omnifunc
-  vim.opt.completeopt:remove("preview")              -- Don't show the stupid Scratch window
+  vim.opt.completeopt:remove("preview") -- Don't show the stupid Scratch window
 
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
 
@@ -98,10 +97,14 @@ end
 -- From nvim-lspconfig plugin
 local lspconfigs = require("lspconfig")
 
-lspconfigs.clangd.setup({ on_attach = on_attach })
+-- nvim-cmp; needs to be set as the "capabilities for each lsp"
+local nvimCmpCapabilities = require('cmp_nvim_lsp').default_capabilities()
+
+lspconfigs.clangd.setup({ on_attach = on_attach, capabilities = nvimCmpCapabilities })
 
 lspconfigs.lua_ls.setup({
   on_attach = on_attach,
+  capabilities = nvimCmpCapabilities,
   settings = {
     Lua = {
       runtime = { version = "LuaJIT" },

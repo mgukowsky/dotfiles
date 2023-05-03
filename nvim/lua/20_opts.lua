@@ -17,13 +17,15 @@ opt.cindent = false   -- Don't use C indentation rules
 --]]
 opt.clipboard:append("unnamedplus")
 
-opt.colorcolumn = { 100 } -- Rulers
-opt.cursorline = true     -- Highlight the current line as needed
-opt.expandtab = true      -- Use spaces instead of tabs
-opt.exrc = true           -- Load external rc files, if present
-opt.hidden = true         -- Remove warnings when switching btwn buffers that haven't yet been written out
-opt.hlsearch = true       -- Highlight search match
-opt.incsearch = true      -- Match search as you type
+opt.completeopt = { 'menu', 'menuone', 'noselect' } -- Trigger menu for a single entry
+
+opt.colorcolumn = { 100 }                         -- Rulers
+opt.cursorline = true                             -- Highlight the current line as needed
+opt.expandtab = true                              -- Use spaces instead of tabs
+opt.exrc = true                                   -- Load external rc files, if present
+opt.hidden = true                                 -- Remove warnings when switching btwn buffers that haven't yet been written out
+opt.hlsearch = true                               -- Highlight search match
+opt.incsearch = true                              -- Match search as you type
 
 -- Characters used to represent whitespace
 -- N.B. use the command `:set list` or `vim.opt.list = true` to see these
@@ -146,6 +148,77 @@ require("nvim-treesitter.configs").setup({
   highlight = {
     enable = true
   }
+})
+
+-- nvim-cmp configuration; from https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#safely-select-entries-with-cr
+local has_words_before = function()
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local cmp = require("cmp")
+local luasnip = require("luasnip")
+local lspkind = require('lspkind')
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end
+  },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
+  formatting = {
+    format = lspkind.cmp_format(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-e>"] = cmp.mapping.abort(),
+    -- Supertab-like config, from the nvim-cmp wiki
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    -- Make <CR> complete the entry if one is selected, otherwise make a newline like normal; also from the nvim-cmp wiki
+    ["<CR>"] = cmp.mapping({
+      i = function(fallback)
+        if cmp.visible() and cmp.get_active_entry() then
+          cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+        else
+          fallback()
+        end
+      end,
+      s = cmp.mapping.confirm({ select = true }),
+      c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+    }),
+  }),
+  sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'luasnip' },
+      { name = 'nvim_lsp_signature_help' }
+    },
+    {
+      { name = 'buffer' },
+    })
 })
 
 -- vscode.nvim

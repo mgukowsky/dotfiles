@@ -68,9 +68,6 @@ Plug('dag/vim-fish')
 -- Have vim insert a matching 'end', 'endif', 'endfunction', etc.
 Plug('tpope/vim-endwise')
 
--- Perform autocompletion with just TAB
-Plug('ervandew/supertab')
-
 -- Animate cursor jumps
 Plug('danilamihailov/beacon.nvim')
 
@@ -82,5 +79,20 @@ Plug('yamatsum/nvim-cursorline')
 
 -- nvim-treesitter for better syntax highlighting
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = function() vim.cmd('TSUpdate') end })
+
+-- nvim-cmp plugins
+Plug('hrsh7th/cmp-nvim-lsp')
+Plug('hrsh7th/cmp-buffer')
+Plug('hrsh7th/cmp-path')
+Plug('hrsh7th/cmp-cmdline')
+Plug('hrsh7th/nvim-cmp')
+Plug('hrsh7th/cmp-nvim-lsp-signature-help')
+
+-- LuaSnip, to support nvim-cmp
+Plug('L3MON4D3/LuaSnip')
+Plug('saadparwaiz1/cmp_luasnip')
+
+-- Icons in completion menu
+Plug('onsails/lspkind.nvim')
 
 vim.call("plug#end")
