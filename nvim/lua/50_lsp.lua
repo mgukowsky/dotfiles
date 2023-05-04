@@ -1,5 +1,22 @@
 -- Language Server Protocol Configuration
 
+-- Change the icon that precedes diagnostics, per
+-- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-prefixcharacter-preceding-the-diagnostics-virtual-text
+
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = '🤯',
+  }
+})
+
+-- Configuration for vim diagnostics. The nvim-lspconfig wiki has a way to do this
+-- programmatically, however using `vim.cmd` seems to be the only way to make nvim accept the
+-- emojis as text
+vim.cmd("sign define DiagnosticSignError text=🤬 texthl=DiagnosticSignError linehl= numhl=")
+vim.cmd("sign define DiagnosticSignWarn text=😬 texthl=DiagnosticSignWarn linehl= numhl=")
+vim.cmd("sign define DiagnosticSignInfo text=👀 texthl=DiagnosticSignInfo linehl= numhl=")
+vim.cmd("sign define DiagnosticSignHint text=🤔 texthl=DiagnosticSignHint linehl= numhl=")
+
 -- Recommended LSP configuration per https://github.com/neovim/nvim-lspconfig
 local function on_attach(client, bufnr)
   -- Enable completion recommendations from the LSP

@@ -55,12 +55,6 @@ opt.title = true      -- Set the title of the window to the file being edited
 opt.updatetime = 1000 -- Update buffers every second
 opt.wildmenu = true   -- Better searching and tab completion for files
 
--- Configuration for vim diagnostics
-vim.cmd("sign define DiagnosticSignError text=🤬 texthl=DiagnosticSignError linehl= numhl=")
-vim.cmd("sign define DiagnosticSignWarn text=😬 texthl=DiagnosticSignWarn linehl= numhl=")
-vim.cmd("sign define DiagnosticSignInfo text=👀 texthl=DiagnosticSignInfo linehl= numhl=")
-vim.cmd("sign define DiagnosticSignHint text=🤔 texthl=DiagnosticSignHint linehl= numhl=")
-
 -- A few options are managed through global variables
 local g = vim.g -- Corresponds to "g:" variables
 g.t_co = 256    -- Corresponds to vim's `t_Co`
