@@ -198,9 +198,18 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }),
-    -- The wiki also includes a snippet to make <CR> complete the entry if one is selected and
-    -- otherwise make a newline like normal. I've chosen to omit this, however, since this seems to
-    -- break <CR> functionality in some, such as the LSPMenu I create in 50_lua.lsp
+    -- Make <CR> complete the entry if one is selected, otherwise make a newline like normal; also from the nvim-cmp wiki
+    ["<CR>"] = cmp.mapping({
+      i = function(fallback)
+        if cmp.visible() and cmp.get_active_entry() then
+          cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+        else
+          fallback()
+        end
+      end,
+      s = cmp.mapping.confirm({ select = true }),
+      c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+    }),
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp',               keyword_length = 1 },
