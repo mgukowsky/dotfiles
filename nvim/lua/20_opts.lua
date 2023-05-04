@@ -198,7 +198,8 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }),
-    -- Make <CR> complete the entry if one is selected, otherwise make a newline like normal; also from the nvim-cmp wiki
+    -- Make <CR> complete the entry if one is selected, otherwise make a newline like normal;
+    -- also from the nvim-cmp wiki
     ["<CR>"] = cmp.mapping({
       i = function(fallback)
         if cmp.visible() and cmp.get_active_entry() then
@@ -208,7 +209,9 @@ cmp.setup({
         end
       end,
       s = cmp.mapping.confirm({ select = true }),
-      c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+      -- This mapping seems to break <CR> functionality in other menus, such as the LSPMenu I
+      -- create in 50_lsp.lua. Setting this to a function with a fallback doesn't seem to help...
+      -- c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
     }),
   }),
   sources = cmp.config.sources({
