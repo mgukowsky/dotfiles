@@ -7,8 +7,8 @@ local map = vim.keymap.set
 map("n", "<C-h>", vim.cmd.bp)
 map("n", "<C-l>", vim.cmd.bn)
 
--- NERDTree
-map("", "<C-n>", vim.cmd.NERDTreeToggle)
+-- File browser
+map("", "<C-n>", vim.cmd.NvimTreeToggle)
 
 -- Shortcut for FZF file finder
 map("n", "<C-p>", vim.cmd.Files)
@@ -25,5 +25,5 @@ map("n", "<Up>", function() vim.cmd.resize(-2) end)
 -- '+2' needs to be passed as a string, otherwise the vim side will interpret this as setting
 -- the size to 2
 map("n", "<Down>", function() vim.cmd.resize("+2") end)
-map("n", "<Left>", '<cmd>vertical resize -2<cr>') -- TODO: vim.cmd.vertical doesn't want to behave...
+map("n", "<Left>", '<cmd>vertical resize -2<cr>')  -- TODO: vim.cmd.vertical doesn't want to behave...
 map("n", "<Right>", '<cmd>vertical resize +2<cr>') -- TODO: ditto...

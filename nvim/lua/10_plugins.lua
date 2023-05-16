@@ -37,7 +37,9 @@ Plug('sainnhe/gruvbox-material')
 Plug('sickill/vim-monokai')
 Plug('Mofiqul/vscode.nvim')
 
-Plug('scrooloose/nerdtree')
+-- File browser
+Plug('nvim-tree/nvim-tree.lua')
+Plug('nvim-tree/nvim-web-devicons')
 
 -- Git support
 Plug('lewis6991/gitsigns.nvim')

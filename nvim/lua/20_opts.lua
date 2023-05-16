@@ -69,9 +69,6 @@ g.airline_theme = "hybrid"
 g.hybrid_custom_term_colors = 1
 g.hybrid_reduced_contrast = 1
 
--- NERDTree
-g.NERDTreeShowHidden = 1
-
 -- Make limelight OK with our transparent background
 g.limelight_conceal_ctermfg = "DarkGray"
 g.limelight_conceal_guifg = "DarkGray"
@@ -216,6 +213,20 @@ cmp.setup({
   }
 
   )
+})
+
+-- nvim-tree.lua
+g.loaded_netrw = 1
+g.loaded_netrwPlugin = 1
+require("nvim-tree").setup({
+  filters = {
+    dotfiles = true,
+  },
+  view = {
+    float = {
+      enable = true
+    }
+  }
 })
 
 -- vscode.nvim
