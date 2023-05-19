@@ -32,14 +32,14 @@ opt.incsearch = true                                -- Match search as you type
 opt.list = false -- Don't show these whitespace characters
 opt.listchars = { tab = ">-", space = "·", trail = "○", eol = "↲", nbsp = "▯" }
 
-opt.mouse = "a"         -- Mouse support
-opt.number = true       -- Show line numbers
-opt.path:append("**")   -- Better searching and tab completion for files
-opt.scrolloff = 4       -- Min # of lines to keep around the cursor
-opt.secure = true       -- Don't allow untrusted scripts to execute
-opt.signcolumn = "auto" -- Show the sign column (used by the marks.nvim plugin, for example)
-opt.shiftwidth = 2      -- tab config
-opt.showcmd = true      -- Show previous command
+opt.mouse = "a"          -- Mouse support
+opt.number = true        -- Show line numbers
+opt.path:append("**")    -- Better searching and tab completion for files
+opt.scrolloff = 4        -- Min # of lines to keep around the cursor
+opt.secure = true        -- Don't allow untrusted scripts to execute
+opt.signcolumn = "yes:1" -- Always show the sign column and set the width to 1 character
+opt.shiftwidth = 2       -- tab config
+opt.showcmd = true       -- Show previous command
 opt.showmatch = true
 opt.smartindent = false
 opt.softtabstop = 2      -- # of tab spaces in insert mode
