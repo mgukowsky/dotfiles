@@ -60,11 +60,34 @@ local function on_attach(client, bufnr)
   -- having to create and memorize a shortcut for each of these, most of which I will rarely use
   --]]
   local LSPMenu = "]LSPMenu" -- The leading ']' is a vim-ism for "hidden" menus like this one
-  local function add_menu_entry(methodname)
+
+  -- Some commands are in the vim.lsp.buf namespace, and some are in the telescope namespace
+  local LSP = 0  -- Identifier for LSP functions
+  local TEL = 1  -- Identifier for Telescope functions
+  local DIAG = 2 -- Special case for telescope.builtin.diagnostics
+
+  local function add_menu_entry(entry)
+    local namespace = entry[1]
+    local methodname = entry[2]
+
+    local cmdstring
+
+    if namespace == LSP then
+      cmdstring = ":lua vim.lsp.buf." ..
+          string.lower(methodname) .. "({noremap=true, silent=true, buffer=" .. bufnr .. "})<cr>"
+    elseif namespace == TEL then
+      cmdstring = ":lua require('telescope.builtin').lsp_" .. string.lower(methodname) .. "()<cr>"
+    elseif namespace == DIAG then
+      -- Diagnostics doesn't have the lsp_ prefix like the other telescope LSP methods, and needs
+      -- an additional argument to only search diagnostics for the current buffer
+      -- TODO: this works but throws a weird error, but not when invoked directly as a command...
+      cmdstring = ":lua require('telescope.builtin').diagnostics({bufnr=0})<cr>"
+    end
+
     vim.cmd.amenu({
       LSPMenu .. "." .. methodname,
       -- TODO: can we provide a lua function as the callback instead of the vim cmd string?
-      ":lua vim.lsp.buf." .. string.lower(methodname) .. "({noremap=true, silent=true, buffer=" .. bufnr .. "})<cr>"
+      cmdstring
     })
     -- TODO: Use vim.cmd.tmenu to add a tooltip for each entry
   end
@@ -73,21 +96,24 @@ local function on_attach(client, bufnr)
   local numSep = 1  -- Each separator must have a unique identifier
   for _, entry in pairs({
     -- General info
-    "Hover",
-    "Declaration",
-    "Definition",
-    "Implementation",
-    "Type_Definition",
-    SEP,
-    -- Refactoring actions
-    "Code_Action",
-    "Rename",
-    "Signature_Help",
+    { LSP,  "Hover" },
+    { DIAG, "Diagnostics" },
+    { LSP,  "Declaration" },
+    { TEL,  "Definitions" },
+    { TEL,  "Implementations" },
+    { TEL,  "Type_Definitions" },
     SEP,
     -- Code structure info
-    "References",
-    "Document_Symbol",
-    "Workspace_Symbol"
+    { TEL, "References" },
+    { TEL, "Incoming_Calls" },
+    { TEL, "Outgoing_Calls" },
+    { TEL, "Document_Symbols" },
+    { TEL, "Workspace_Symbols" },
+    SEP,
+    -- Refactoring actions
+    { LSP, "Code_Action" },
+    { LSP, "Rename" },
+    { LSP, "Signature_Help" },
   }) do
     if entry == SEP then
       -- In order to be parsed as a separator, the identifier must be surrounded by -minuses-

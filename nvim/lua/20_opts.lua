@@ -229,6 +229,42 @@ require("nvim-tree").setup({
   }
 })
 
+-- telescope.nvim
+
+-- Make telescope search hidden directories and files, but not .git/
+-- From https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#pickers
+local telescope = require("telescope")
+local telescopeConfig = require("telescope.config")
+local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+
+local HIDDEN = "--hidden"
+local GLOB = "--glob"
+local GIT_DIR_REGEX = "!**/.git/*"
+
+-- I want to search in hidden/dot files.
+table.insert(vimgrep_arguments, HIDDEN)
+-- I don't want to search in the `.git` directory.
+table.insert(vimgrep_arguments, GLOB)
+table.insert(vimgrep_arguments, GIT_DIR_REGEX)
+
+telescope.setup({
+  defaults = {
+    vimgrep_arguments = vimgrep_arguments,
+    mappings = {
+      i = {
+        ["<esc>"] = "close", -- Close the popup instead of first going to normal mode
+        ["<C-j>"] = "move_selection_next",
+        ["<C-k>"] = "move_selection_previous",
+      }
+    },
+  },
+  pickers = {
+    find_files = {
+      find_command = { "rg", "--files", HIDDEN, GLOB, GIT_DIR_REGEX },
+    }
+  }
+})
+
 -- vscode.nvim
 local vscodeColors = require("vscode.colors").get_colors();
 require('vscode').setup({

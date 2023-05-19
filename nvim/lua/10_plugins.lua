@@ -44,15 +44,12 @@ Plug('nvim-tree/nvim-web-devicons')
 -- Git support
 Plug('lewis6991/gitsigns.nvim')
 
--- fzf integration; `[]` syntax is needed for `do`, since it's a reserved keyword
-Plug('junegunn/fzf', { ['do'] = function() vim.call('fzf#install') end })
-Plug('junegunn/fzf.vim')
+-- Fuzzy finder
+Plug('nvim-lua/plenary.nvim')
+Plug('nvim-telescope/telescope.nvim')
 
 -- Adds :BufOnly to close all buffers except the current one
 Plug('schickling/vim-bufonly')
-
--- Makes <Leader>b display a listing of all buffers
-Plug('jeetsukumaran/vim-buffergator')
 
 -- Comment/uncomment a line with 'gcc', or a selection with 'gc'
 Plug('tpope/vim-commentary')

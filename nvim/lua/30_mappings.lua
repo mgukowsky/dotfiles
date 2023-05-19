@@ -10,14 +10,16 @@ map("n", "<C-l>", vim.cmd.bn)
 -- File browser
 map("", "<C-n>", vim.cmd.NvimTreeToggle)
 
--- Shortcut for FZF file finder
-map("n", "<C-p>", vim.cmd.Files)
+-- Telescope shortcuts
+local telescope = require('telescope.builtin')
+map("n", "<C-p>", telescope.find_files, {})
+map("n", "<C-r>", telescope.command_history, {}) -- Same as the bash shortcut
 
--- Searches for the word under the cursor; requires FZF
--- Mappings are based on default vim bindings
-map("n", "<leader>w", 'yw:Rg <C-r>"<cr>')
--- Same as above, except matches all characters till the next whitespace
-map("n", "<leader>a", 'yW:Rg <C-r>"<cr>')
+map("n", "<leader>b", telescope.buffers, {})
+map("n", "<leader>w", telescope.live_grep, {})
+map("n", "<leader>a", telescope.grep_string, {})  -- greps for the word under the cursor
+map("n", "<leader>q", telescope.commands, {})
+map("n", "<leader><leader>", telescope.builtin, {}) -- meta finder which lists all picker functions
 
 -- Use arrows for resizing splits instead of navigation; vim "hard mode" ;)
 map("n", "<Up>", function() vim.cmd.resize(-2) end)
