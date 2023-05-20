@@ -162,7 +162,15 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
   formatting = {
-    format = lspkind.cmp_format(),
+    format = lspkind.cmp_format({
+      mode = "symbol_text",
+      menu = ({
+        buffer = "🔠",
+        nvim_lsp = "🐲",
+        luasnip = "🤓",
+        dictionary = "📕",
+      })
+    }),
   },
   mapping = cmp.mapping.preset.insert({
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -209,10 +217,29 @@ cmp.setup({
     { name = 'nvim_lsp',               keyword_length = 1 },
     { name = 'buffer',                 keyword_length = 2 },
     { name = 'luasnip',                keyword_length = 3 },
+    { name = 'dictionary',             keyword_length = 6 },
     { name = 'nvim_lsp_signature_help' },
-  }
+  })
+})
 
-  )
+local dict = require("cmp_dictionary")
+
+dict.setup({})
+
+local DICTFILEPATH = vim.fn.stdpath("data") .. "/en.dict"
+
+-- Create the dictionary if it doesn't exist
+-- Beware Lua falsy value rules (only `false` and `nil` are falsy 🙃)
+if vim.fn.filereadable(DICTFILEPATH) == 0 and vim.fn.executable("aspell") == 1 then
+  print("Creating dictionary file '" .. DICTFILEPATH .. "' with aspell")
+  os.execute("aspell -d en dump master | aspell -l en expand > " .. DICTFILEPATH)
+end
+
+dict.switcher({
+  -- N.B. that given my locale, vim.opt.spelllang defaults to "en"
+  spelllang = {
+    en = DICTFILEPATH
+  }
 })
 
 -- nvim-tree.lua
