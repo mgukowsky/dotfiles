@@ -13,11 +13,11 @@ map("", "<C-n>", vim.cmd.NvimTreeToggle)
 -- Telescope shortcuts
 local telescope = require('telescope.builtin')
 map("n", "<C-p>", telescope.find_files, {})
-map("n", "<C-r>", telescope.command_history, {}) -- Same as the bash shortcut
 
+map("n", "<leader>r", telescope.command_history, {}) -- Similar to the bash shortcut
 map("n", "<leader>b", telescope.buffers, {})
 map("n", "<leader>w", telescope.live_grep, {})
-map("n", "<leader>a", telescope.grep_string, {})  -- greps for the word under the cursor
+map("n", "<leader>a", telescope.grep_string, {})    -- greps for the word under the cursor
 map("n", "<leader>q", telescope.commands, {})
 map("n", "<leader><leader>", telescope.builtin, {}) -- meta finder which lists all picker functions
 
