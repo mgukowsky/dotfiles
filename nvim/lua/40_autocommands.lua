@@ -13,10 +13,19 @@ au("User", {
   command = "Limelight!"
 })
 
+-- Enable spellchecking for specific filetypes
+au("FileType", {
+  pattern = "markdown,text",
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = "en_us"
+  end
+})
+
 -- File types for rare extensions
 local function setft(ext, syntax) -- Set syntax association for a given filetype
   au("BufReadPost", {
-    pattern = {ext},
+    pattern = { ext },
     callback = function() vim.opt.syntax = syntax end
   })
 end
