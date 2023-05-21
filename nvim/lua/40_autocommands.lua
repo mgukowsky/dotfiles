@@ -14,11 +14,18 @@ au("User", {
 })
 
 -- Enable spellchecking for specific filetypes
+-- First, though, we have to create the directory for any custom words (e.g. any we add with `zg`)
+local SPELLDIR = vim.fn.stdpath("data") .. "/spell"
+if vim.fn.isdirectory(SPELLDIR) == 0 then
+  vim.fn.mkdir(SPELLDIR)
+end
+
 au("FileType", {
   pattern = "markdown,text",
   callback = function()
     vim.opt_local.spell = true
     vim.opt_local.spelllang = "en_us"
+    vim.opt_local.spellfile = SPELLDIR .. "/en.utf-8.add"
   end
 })
 

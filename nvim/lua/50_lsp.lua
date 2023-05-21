@@ -157,3 +157,22 @@ lspconfigs.lua_ls.setup({
     },
   }
 })
+
+-- Server for LanguageTool. The bin `ltex-ls` needs to be present; see
+-- https://www.reddit.com/r/neovim/comments/sdvfwr/comment/hughrfi/
+lspconfigs.ltex.setup({
+  on_attach = on_attach,
+  -- Settings documented at https://valentjn.github.io/ltex/settings.html
+  settings = {
+    ltex = {
+      language = "en-US",
+      additionalRules = {
+        -- Use ngrams for powerful grammar checking; see
+        -- https://dev.languagetool.org/finding-errors-using-n-gram-data.html
+        -- for more info. N.B. that the ngram data NEEDS to be unzipped and
+        -- MANUALLY placed into the directory specified here!!!
+        languageModel = vim.fn.stdpath("data") .. "/ngrams",
+      }
+    }
+  }
+})
