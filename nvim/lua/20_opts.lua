@@ -292,6 +292,9 @@ telescope.setup({
   }
 })
 
+-- nvim-osc52
+require('osc52').setup({})
+
 -- vscode.nvim
 local vscodeColors = require("vscode.colors").get_colors();
 require('vscode').setup({

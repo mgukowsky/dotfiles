@@ -97,4 +97,7 @@ Plug('saadparwaiz1/cmp_luasnip')
 -- Icons in completion menu
 Plug('onsails/lspkind.nvim')
 
+-- Better text copying in tmux and/or remote hosts
+Plug('ojroques/nvim-osc52')
+
 vim.call("plug#end")
