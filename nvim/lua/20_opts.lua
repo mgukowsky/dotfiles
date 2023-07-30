@@ -76,6 +76,9 @@ g.limelight_conceal_guifg = "DarkGray"
 -- Prevent vim-markdown from hiding characters
 g.markdown_syntax_conceal = 0
 
+-- Show quote characters in JSON files
+g.vim_json_conceal = 0
+
 -- gitsigns.nvim (replaces GitGutter)
 require('gitsigns').setup({
   numhl = true,
