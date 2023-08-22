@@ -16,15 +16,5 @@ set disassembly-flavor intel
 set backtrace past-entry on
 set backtrace past-main on
 
-# # TUI styling
-# set style tui-active-border foreground green
-# set style tui-active-border background black
-
-# set style tui-border foreground green
-# set style tui-border background none
-
-# set tui compact-source on
-# set tui tab-width 2
-
-# # Turn on TUI
-# tui enable
+# Turn on GEF; assumes that the script has been appropriately symlinked
+source ~/.local/bin/gef.py
