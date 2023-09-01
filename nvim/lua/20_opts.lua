@@ -299,6 +299,11 @@ telescope.setup({
 require('osc52').setup({})
 
 -- vscode.nvim
+local customPalette = {
+  brightGreen = "#3AF514", -- I use #00FF00 in visual studio, but I like this shade more
+  visualStudioDarkPurple = "#BEB7FF"
+}
+
 local vscPalette = require("vscode.colors").get_colors();
 require('vscode').setup({
   style = "dark",
@@ -324,15 +329,16 @@ require('vscode').setup({
     ["@operator.cpp"] = { link = "@type.builtin" },                -- Includes `&` and `*`
     -- LSP semantic tokens (these are specific to clangd; no idea if other LSPs will provide these same values)
     ["@lsp.mod.functionScope.cpp"] = { fg = vscPalette.vscFront }, -- regular function scope variables should be white
-    ["@lsp.mod.static.cpp"] = { fg = "#3AF514" },                  -- Use bright green for statics
+    ["@lsp.mod.static.cpp"] = { fg = customPalette.brightGreen },  -- Use bright green for statics
     ["@lsp.type.comment.cpp"] = { fg = vscPalette.vscGray },       -- Inactive #ifdefs, etc.
     ["@lsp.type.enum.cpp"] = { fg = vscPalette.vscOrange },        -- Name of an enum...
     ["@lsp.type.enumMember.cpp"] = { link = "@constant" },         -- ...and the enum values
-    ["@lsp.type.macro.cpp"] = { fg = vscPalette.vscPink },
+    ["@lsp.type.macro.cpp"] = { fg = customPalette.visualStudioDarkPurple },
     ["@lsp.type.namespace.cpp"] = { link = "@namespace.cpp" },
     ["@lsp.typemod.class.deduced.cpp"] = { link = "@type.builtin" },                          -- `auto` type, etc.
     ["@lsp.typemod.parameter.functionScope.cpp"] = { link = "Identifier" },                   -- Parameters should have a little highlighting
     ["@lsp.typemod.property.classScope.cpp"] = { fg = vscPalette.vscLightBlue, bold = true }, -- Member variables should be bold identifiers
+    ["@lsp.typemod.type.deduced.cpp"] = { link = "@type.builtin" },                           -- Other uses of `auto`
     ["@lsp.typemod.type.defaultLibrary.cpp"] = { link = "@type" },                            -- Types from the standard library shouldn't have special highlighing
     ["@lsp.typemod.type.functionScope.cpp"] = { link = "@type" },                             -- Type aliases
     ["@lsp.typemod.typeParameter.functionScope.cpp"] = { link = "@type" },                    -- Type parameters
