@@ -9,13 +9,13 @@ vim.diagnostic.config({
   }
 })
 
--- Configuration for vim diagnostics. The nvim-lspconfig wiki has a way to do this
--- programmatically, however using `vim.cmd` seems to be the only way to make nvim accept the
--- emojis as text
-vim.cmd("sign define DiagnosticSignError text=🤬 texthl=DiagnosticSignError linehl= numhl=")
-vim.cmd("sign define DiagnosticSignWarn text=😬 texthl=DiagnosticSignWarn linehl= numhl=")
-vim.cmd("sign define DiagnosticSignInfo text=👀 texthl=DiagnosticSignInfo linehl= numhl=")
-vim.cmd("sign define DiagnosticSignHint text=🤔 texthl=DiagnosticSignHint linehl= numhl=")
+-- Configuration for vim diagnostics; per
+-- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-diagnostic-symbols-in-the-sign-column-gutter
+local signs = { Error = "🤬", Warn = "😬", Hint = "🤔", Info = "👀" }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
 
 -- Recommended LSP configuration per https://github.com/neovim/nvim-lspconfig
 local function on_attach(client, bufnr)
