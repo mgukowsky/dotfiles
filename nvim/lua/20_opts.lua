@@ -303,48 +303,61 @@ local customPalette = {
   lime = "#3AF514", -- I use #00FF00 in visual studio, but I like this shade more
   visualStudioDarkPurple = "#BEB7FF"
 }
-
 local vscPalette = require("vscode.colors").get_colors();
+
+-- Leverage Treesitter and LSP semantic tokens for even more powerful highlighting.
+-- Based on https://github.com/nvim-treesitter/nvim-treesitter#highlight
+-- and https://github.com/theHamsta/nvim-semantic-tokens
+--
+-- You can use :Inspect to view highlight info under the cursor and :InspectTree
+-- to view Treesitter nodes, both of which I used to figure out the mappings below.
+-- In general, more specific qualifications for a group will take precedence, but
+-- these priorities can be queried using the aforementioned functions.
+--
+-- N.B. these get fed into `vim.api.nvim_set_hl(0, <key>, <valueobject>)` under
+-- the hood. So if something breaks, these color tweaks can also be set up
+-- manually.
+local group_overrides = {
+  -- Treesitter nodes
+  ["@attribute.cpp"] = { link = "@type.qualifier" }, -- C++ [[attributes]]
+  ["@label.cpp"] = { fg = vscPalette.vscRed },       -- `goto` labels
+  ["@namespace.cpp"] = { fg = vscPalette.vscDarkYellow },
+  ["@operator.cpp"] = { link = "@keyword.cpp" },     -- Includes `&` and `*`
+  -- ["@punctuation.bracket.cpp"] = { fg = vscPalette.vscDarkYellow }, -- `{}`, `[]`, `()`
+
+  -- LSP semantic tokens (these are specific to clangd; no idea if other LSPs will provide these same values)
+  ["@lsp.mod.functionScope.cpp"] = { fg = vscPalette.vscFront }, -- regular function scope variables should be white
+  ["@lsp.mod.static.cpp"] = { fg = customPalette.lime },         -- Use bright green for statics
+  ["@lsp.type.comment.cpp"] = { fg = vscPalette.vscGray },       -- Inactive #ifdefs, etc.
+  ["@lsp.type.enum.cpp"] = { fg = vscPalette.vscOrange },        -- Name of an enum...
+  ["@lsp.type.enumMember.cpp"] = { link = "@constant.cpp" },     -- ...and the enum values
+  ["@lsp.type.macro.cpp"] = { fg = customPalette.visualStudioDarkPurple },
+  ["@lsp.type.namespace.cpp"] = { link = "@namespace.cpp" },
+  ["@lsp.typemod.class.deduced.cpp"] = { link = "@type.builtin.cpp" },                      -- `auto` type, etc. N.B. that `auto` may be highlighted differently if it resolves to a type with more specific highlighting rules!
+  ["@lsp.typemod.parameter.functionScope.cpp"] = { link = "Identifier" },                   -- Parameters should have a little highlighting
+  ["@lsp.typemod.property.classScope.cpp"] = { fg = vscPalette.vscLightBlue, bold = true }, -- Member variables should be bold identifiers
+  ["@lsp.typemod.type.deduced.cpp"] = { link = "@type.builtin.cpp" },                       -- Other uses of `auto`
+  ["@lsp.typemod.type.defaultLibrary.cpp"] = { link = "@type.cpp" },                        -- Types from the standard library shouldn't have special highlighing
+  ["@lsp.typemod.type.functionScope.cpp"] = { link = "@type.cpp" },                         -- Type aliases
+  ["@lsp.typemod.typeParameter.functionScope.cpp"] = { link = "@type.cpp" },                -- Type parameters
+  ["@lsp.typemod.variable.readonly.cpp"] = { link = "@constant.cpp" },                      -- const variables
+}
+
+-- Link certain C highlight groups to their C++ equivalents
+local c_cpp_overrides = { "label", "operator", "lsp.mod.functionScope", "lsp.mod.static",
+  "lsp.type.comment", "lsp.type.enum", "lsp.type.enumMember", "lsp.type.macro",
+  "lsp.typemod.parameter.functionScope", "lsp.typemod.type.defaultLibrary",
+  "lsp.typemod.type.functionScope", "lsp.typemod.variable.readonly",
+}
+for _, attr in ipairs(c_cpp_overrides) do
+  local cattr = "@" .. attr .. ".c"
+  group_overrides[cattr] = { link = cattr .. "pp" }
+end
+
 require('vscode').setup({
   style = "dark",
   transparent = true,
   italic_comments = true,
-  -- Leverage Treesitter and LSP semantic tokens for even more powerful highlighting.
-  -- Based on https://github.com/nvim-treesitter/nvim-treesitter#highlight
-  -- and https://github.com/theHamsta/nvim-semantic-tokens
-  --
-  -- You can use :Inspect to view highlight info under the cursor and :InspectTree
-  -- to view Treesitter nodes, both of which I used to figure out the mappings below.
-  -- In general, more specific qualifications for a group will take precedence, but
-  -- these priorities can be queried using the aforementioned functions.
-  --
-  -- N.B. these get fed into `vim.api.nvim_set_hl(0, <key>, <valueobject>)` under
-  -- the hood. So if something breaks, these color tweaks can also be set up
-  -- manually.
-  group_overrides = {
-    -- Treesitter nodes
-    ["@attribute.cpp"] = { link = "@type.qualifier" }, -- C++ [[attributes]]
-    ["@label.cpp"] = { fg = vscPalette.vscRed },       -- `goto` labels
-    ["@namespace.cpp"] = { fg = vscPalette.vscDarkYellow },
-    ["@operator.cpp"] = { link = "@keyword.cpp" },     -- Includes `&` and `*`
-    -- ["@punctuation.bracket.cpp"] = { fg = vscPalette.vscDarkYellow }, -- `{}`, `[]`, `()`
-
-    -- LSP semantic tokens (these are specific to clangd; no idea if other LSPs will provide these same values)
-    ["@lsp.mod.functionScope.cpp"] = { fg = vscPalette.vscFront }, -- regular function scope variables should be white
-    ["@lsp.mod.static.cpp"] = { fg = customPalette.lime },         -- Use bright green for statics
-    ["@lsp.type.comment.cpp"] = { fg = vscPalette.vscGray },       -- Inactive #ifdefs, etc.
-    ["@lsp.type.enum.cpp"] = { fg = vscPalette.vscOrange },        -- Name of an enum...
-    ["@lsp.type.enumMember.cpp"] = { link = "@constant.cpp" },     -- ...and the enum values
-    ["@lsp.type.macro.cpp"] = { fg = customPalette.visualStudioDarkPurple },
-    ["@lsp.type.namespace.cpp"] = { link = "@namespace.cpp" },
-    ["@lsp.typemod.class.deduced.cpp"] = { link = "@type.builtin.cpp" },                      -- `auto` type, etc. N.B. that `auto` may be highlighted differently if it resolves to a type with more specific highlighting rules!
-    ["@lsp.typemod.parameter.functionScope.cpp"] = { link = "Identifier" },                   -- Parameters should have a little highlighting
-    ["@lsp.typemod.property.classScope.cpp"] = { fg = vscPalette.vscLightBlue, bold = true }, -- Member variables should be bold identifiers
-    ["@lsp.typemod.type.deduced.cpp"] = { link = "@type.builtin.cpp" },                       -- Other uses of `auto`
-    ["@lsp.typemod.type.defaultLibrary.cpp"] = { link = "@type.cpp" },                        -- Types from the standard library shouldn't have special highlighing
-    ["@lsp.typemod.type.functionScope.cpp"] = { link = "@type.cpp" },                         -- Type aliases
-    ["@lsp.typemod.typeParameter.functionScope.cpp"] = { link = "@type.cpp" },                -- Type parameters
-    ["@lsp.typemod.variable.readonly.cpp"] = { link = "@constant.cpp" },                      -- const variables
-  }
+  group_overrides = group_overrides,
 })
 require("vscode").load()
