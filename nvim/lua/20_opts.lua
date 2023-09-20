@@ -138,7 +138,7 @@ require('nvim-cursorline').setup({
 
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "c", "cpp", "lua", "vim" },
+  ensure_installed = { "c", "cpp", "lua", "python", "vim" },
   highlight = {
     enable = true
   }
