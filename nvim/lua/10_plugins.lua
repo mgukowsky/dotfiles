@@ -63,6 +63,7 @@ Plug('neui/cmakecache-syntax.vim')
 Plug('tpope/vim-surround')
 Plug('cespare/vim-toml')
 Plug('dag/vim-fish')
+Plug('tpope/vim-fugitive')
 
 -- Have vim insert a matching 'end', 'endif', 'endfunction', etc.
 Plug('tpope/vim-endwise')
