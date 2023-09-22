@@ -101,4 +101,7 @@ Plug('onsails/lspkind.nvim')
 -- Better text copying in tmux and/or remote hosts
 Plug('ojroques/nvim-osc52')
 
+-- Highlight certain characters that can be navigated to with f|F|t|T motions
+Plug('jinh0/eyeliner.nvim')
+
 vim.call("plug#end")

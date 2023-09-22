@@ -301,6 +301,12 @@ telescope.setup({
 -- nvim-osc52
 require('osc52').setup({})
 
+-- eyeliner.nvim
+require('eyeliner').setup({
+  highlight_on_key = true, -- Only highlight characters after pressing f|F|t|T
+  dim = true,              -- Dim all charcters that can't be jumped to
+})
+
 -- vscode.nvim
 local customPalette = {
   lime = "#3AF514", -- I use #00FF00 in visual studio, but I like this shade more
