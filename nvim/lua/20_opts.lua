@@ -134,7 +134,7 @@ require('nvim-cursorline').setup({
 
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "c", "cpp", "lua", "python", "vim" },
+  ensure_installed = { "c", "cmake", "cpp", "lua", "python", "vim" },
   highlight = {
     enable = true
   }
@@ -168,6 +168,7 @@ cmp.setup({
         nvim_lsp = "🐲",
         luasnip = "🤓",
         dictionary = "📕",
+        treesitter = "🎄"
       })
     }),
   },
@@ -214,6 +215,7 @@ cmp.setup({
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp',               keyword_length = 1 },
+    { name = 'treesitter',             keyword_length = 2 },
     { name = 'buffer',                 keyword_length = 2 },
     { name = 'luasnip',                keyword_length = 3 },
     { name = 'dictionary',             keyword_length = 6 },
@@ -290,6 +292,7 @@ telescope.setup({
     }
   }
 })
+telescope.load_extension("luasnip")
 
 -- nvim-osc52
 require('osc52').setup({})
@@ -301,7 +304,7 @@ require('eyeliner').setup({
 })
 
 -- Comment.nvim
-require("Comment").setup({})
+require("Comment").setup()
 
 -- nvim-surround
 require("nvim-surround").setup()
@@ -313,7 +316,10 @@ require("nvim-surround").setup()
 -- Also adds hooks in normal mode: will show marks when ` is pressed, and
 -- registers when " is pressed, and will also show a menu for spelling suggestions
 -- when z= is pressed
-require("which-key").setup({})
+require("which-key").setup()
+
+-- fidget.nvim
+require("fidget").setup();
 
 -- vscode.nvim
 local customPalette = {

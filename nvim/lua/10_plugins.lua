@@ -46,6 +46,8 @@ Plug('lewis6991/gitsigns.nvim')
 -- Fuzzy finder
 Plug('nvim-lua/plenary.nvim')
 Plug('nvim-telescope/telescope.nvim')
+Plug('nvim-telescope/telescope-symbols.nvim')
+Plug('benfowler/telescope-luasnip.nvim')
 
 -- Adds :BufOnly to close all buffers except the current one
 Plug('schickling/vim-bufonly')
@@ -86,12 +88,13 @@ Plug('hrsh7th/cmp-path')
 Plug('hrsh7th/cmp-cmdline')
 Plug('hrsh7th/nvim-cmp')
 Plug('hrsh7th/cmp-nvim-lsp-signature-help')
+Plug('ray-x/cmp-treesitter')
 
 -- Spellchecking for nvim-cmp
 Plug('uga-rosa/cmp-dictionary')
 
 -- LuaSnip, to support nvim-cmp
-Plug('L3MON4D3/LuaSnip')
+Plug('L3MON4D3/LuaSnip', { ['do'] = "make install_jsregexp" })
 Plug('saadparwaiz1/cmp_luasnip')
 
 -- Icons in completion menu
@@ -109,5 +112,8 @@ Plug('folke/which-key.nvim')
 -- Better navigation
 Plug('tpope/vim-repeat')
 Plug('ggandor/leap.nvim')
+
+-- Show LSP progress
+Plug('j-hui/fidget.nvim', { tag = 'legacy' })
 
 vim.call("plug#end")

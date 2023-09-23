@@ -24,6 +24,7 @@ wk.register({
     w = { function() telescope.live_grep() end, "Live grep" },
     a = { function() telescope.grep_string() end, "Grep word under cursor" },
     q = { function() telescope.commands() end, "Vim command search" },
+    ["."] = { function() telescope.symbols() end, "Symbol/emoji search" },
     ["<leader>"] = { function() telescope.builtin() end, "Telescope picker search" },
   },
   -- From gitsigns.nvim; we only add the documentation here
