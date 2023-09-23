@@ -14,12 +14,26 @@ map("", "<C-n>", vim.cmd.NvimTreeToggle)
 local telescope = require('telescope.builtin')
 map("n", "<C-p>", telescope.find_files, {})
 
-map("n", "<leader>r", telescope.command_history, {}) -- Similar to the bash shortcut
-map("n", "<leader>b", telescope.buffers, {})
-map("n", "<leader>w", telescope.live_grep, {})
-map("n", "<leader>a", telescope.grep_string, {})    -- greps for the word under the cursor
-map("n", "<leader>q", telescope.commands, {})
-map("n", "<leader><leader>", telescope.builtin, {}) -- meta finder which lists all picker functions
+-- whick-key.nvim can create mappings and document them
+local wk = require("which-key")
+wk.register({
+  ["<leader>"] = {
+    -- Similar to the bash shortcut
+    r = { function() telescope.command_history() end, "Command history" },
+    b = { function() telescope.buffers() end, "Show buffers" },
+    w = { function() telescope.live_grep() end, "Live grep" },
+    a = { function() telescope.grep_string() end, "Grep word under cursor" },
+    q = { function() telescope.commands() end, "Vim command search" },
+    ["<leader>"] = { function() telescope.builtin() end, "Telescope picker search" },
+  },
+  -- From gitsigns.nvim; we only add the documentation here
+  ["["] = {
+    c = { "Prev Git change" }
+  },
+  ["]"] = {
+    c = { "Next Git change" }
+  },
+})
 
 -- Use arrows for resizing splits instead of navigation; vim "hard mode" ;)
 map("n", "<Up>", function() vim.cmd.resize(-2) end)

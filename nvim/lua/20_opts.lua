@@ -300,6 +300,18 @@ require('eyeliner').setup({
   dim = true,              -- Dim all charcters that can't be jumped to
 })
 
+-- Comment.nvim
+require("Comment").setup({})
+
+-- whick-key.nvim
+-- Shows completions for a command as characters are entered
+-- (after vim.o.timeoutlen); can also be manually invoked with
+-- :WhichKey <partial command...>
+-- Also adds hooks in normal mode: will show marks when ` is pressed, and
+-- registers when " is pressed, and will also show a menu for spelling suggestions
+-- when z= is pressed
+require("which-key").setup({})
+
 -- vscode.nvim
 local customPalette = {
   lime = "#3AF514", -- I use #00FF00 in visual studio, but I like this shade more

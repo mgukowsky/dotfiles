@@ -50,9 +50,6 @@ Plug('nvim-telescope/telescope.nvim')
 -- Adds :BufOnly to close all buffers except the current one
 Plug('schickling/vim-bufonly')
 
--- Comment/uncomment a line with 'gcc', or a selection with 'gc'
-Plug('tpope/vim-commentary')
-
 -- Minimize visual noise with :Goyo and :Limelight
 Plug('junegunn/goyo.vim')
 Plug('junegunn/limelight.vim')
@@ -66,6 +63,9 @@ Plug('tpope/vim-fugitive')
 
 -- Have vim insert a matching 'end', 'endif', 'endfunction', etc.
 Plug('tpope/vim-endwise')
+
+-- Commenting support
+Plug('numToStr/Comment.nvim')
 
 -- Animate cursor jumps
 Plug('danilamihailov/beacon.nvim')
@@ -102,5 +102,8 @@ Plug('ojroques/nvim-osc52')
 
 -- Highlight certain characters that can be navigated to with f|F|t|T motions
 Plug('jinh0/eyeliner.nvim')
+
+-- Show completions for command
+Plug('folke/which-key.nvim')
 
 vim.call("plug#end")

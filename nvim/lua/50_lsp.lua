@@ -1,5 +1,7 @@
 -- Language Server Protocol Configuration
 
+local wk = require("which-key")
+
 -- Change the icon that precedes diagnostics, per
 -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-prefixcharacter-preceding-the-diagnostics-virtual-text
 
@@ -126,14 +128,19 @@ local function on_attach(client, bufnr)
     end
   end
 
-  -- I like this mapping, since C-] will be set to the LSP tagfunc (usually definition), and this
-  -- <leader> version can be used for all other less-frequently-used options
-  vim.keymap.set("n", "<leader>]", function() vim.cmd.popup(LSPMenu) end)
-
-  -- Also add the ability to move between diagnostics
-  local opts = { noremap = true, silent = true }
-  vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-  vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+  wk.register({
+    -- I like this mapping, since C-] will be set to the LSP tagfunc (usually definition), and this
+    -- <leader> version can be used for all other less-frequently-used options
+    ["<leader>"] = {
+      ["]"] = { function() vim.cmd.popup(LSPMenu) end, "LSP Popup menu" },
+    },
+    ["["] = {
+      d = { function() vim.diagnostic.goto_prev() end, "Prev LSP diagnostic" }
+    },
+    ["]"] = {
+      d = { function() vim.diagnostic.goto_prev() end, "Next LSP diagnostic" }
+    },
+  })
 end
 
 -- Language Server configurations
