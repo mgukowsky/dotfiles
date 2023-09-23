@@ -303,6 +303,9 @@ require('eyeliner').setup({
 -- Comment.nvim
 require("Comment").setup({})
 
+-- nvim-surround
+require("nvim-surround").setup({})
+
 -- whick-key.nvim
 -- Shows completions for a command as characters are entered
 -- (after vim.o.timeoutlen); can also be manually invoked with

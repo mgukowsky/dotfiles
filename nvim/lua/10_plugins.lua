@@ -56,13 +56,13 @@ Plug('junegunn/limelight.vim')
 
 Plug('tpope/vim-markdown')
 Plug('neui/cmakecache-syntax.vim')
-Plug('tpope/vim-surround')
+Plug('kylechui/nvim-surround')
 Plug('cespare/vim-toml')
 Plug('dag/vim-fish')
 Plug('tpope/vim-fugitive')
 
 -- Have vim insert a matching 'end', 'endif', 'endfunction', etc.
-Plug('tpope/vim-endwise')
+Plug('tpope/vim-endwise') -- TODO: checkout nvim-autopairs...
 
 -- Commenting support
 Plug('numToStr/Comment.nvim')
