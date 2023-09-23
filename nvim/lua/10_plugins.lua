@@ -106,4 +106,8 @@ Plug('jinh0/eyeliner.nvim')
 -- Show completions for command
 Plug('folke/which-key.nvim')
 
+-- Better navigation
+Plug('tpope/vim-repeat')
+Plug('ggandor/leap.nvim')
+
 vim.call("plug#end")

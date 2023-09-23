@@ -304,9 +304,9 @@ require('eyeliner').setup({
 require("Comment").setup({})
 
 -- nvim-surround
-require("nvim-surround").setup({})
+require("nvim-surround").setup()
 
--- whick-key.nvim
+-- which-key.nvim
 -- Shows completions for a command as characters are entered
 -- (after vim.o.timeoutlen); can also be manually invoked with
 -- :WhichKey <partial command...>

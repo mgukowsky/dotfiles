@@ -14,7 +14,7 @@ map("", "<C-n>", vim.cmd.NvimTreeToggle)
 local telescope = require('telescope.builtin')
 map("n", "<C-p>", telescope.find_files, {})
 
--- whick-key.nvim can create mappings and document them
+-- which-key.nvim can create mappings and document them
 local wk = require("which-key")
 wk.register({
   ["<leader>"] = {
@@ -43,6 +43,14 @@ map("n", "<Up>", function() vim.cmd.resize(-2) end)
 map("n", "<Down>", function() vim.cmd.resize("+2") end)
 map("n", "<Left>", '<cmd>vertical resize -2<cr>')  -- TODO: vim.cmd.vertical doesn't want to behave...
 map("n", "<Right>", '<cmd>vertical resize +2<cr>') -- TODO: ditto...
+
+-- Search using `s|S` (e.g. `svi` will highlight all matches after the cursor
+-- on the window for 'vi', which will be highlighted in yellow with a character,
+-- then you can jump to it by pressing that character)
+require("leap").add_default_mappings()
+-- Highlight the leap search area
+local vscPalette = require("vscode.colors").get_colors();
+vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = vscPalette.vscUiOrange })
 
 -- Prefer osc52 as the default clipboard (g:clipboard gets the highest precedence)
 -- Per https://github.com/ojroques/nvim-osc52#using-nvim-osc52-as-clipboard-provider
