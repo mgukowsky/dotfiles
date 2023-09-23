@@ -65,13 +65,6 @@ g.base16colorspace = 256
 
 -- Configuration for plugins; mainly managed through global variables
 
--- Vim-airline config
-g["airline#extensions#tabline#enabled"] = 1 -- [] are necessary for fields containing '#'
-g.airline_powerline_fonts = 1
-g.airline_theme = "hybrid"
-g.hybrid_custom_term_colors = 1
-g.hybrid_reduced_contrast = 1
-
 -- Make limelight OK with our transparent background
 g.limelight_conceal_ctermfg = "DarkGray"
 g.limelight_conceal_guifg = "DarkGray"
@@ -370,3 +363,59 @@ require('vscode').setup({
   group_overrides = group_overrides,
 })
 require("vscode").load()
+
+local lualine_theme = require("lualine.themes.vscode")
+lualine_theme.insert.a.bg = vscPalette.vscRed
+lualine_theme.insert.b.fg = vscPalette.vscRed
+require("lualine").setup({
+  extensions = {
+    "fugitive", "fzf", "man", "nvim-tree", "nvim-dap-ui", "quickfix", "trouble"
+  },
+  options = {
+    theme = lualine_theme,
+  },
+  sections = {
+    lualine_b = {
+      "branch",
+      "diff",
+      {
+        "diagnostics",
+        sources = { "nvim_lsp", "nvim_diagnostic", "nvim_workspace_diagnostic" },
+        symbols = { error = "E", warn = "W", info = "I", hint = "H" },
+        -- update_in_insert = true,
+      },
+    },
+    lualine_c = {
+      {
+        "filename",
+        file_status = true,
+        newfile_status = true,
+        path = 1,
+        symbols = {
+          modified = "[+]",
+          readonly = "",
+          unnamed = "[No Name]",
+          newfile = "[New]"
+        },
+      }
+    },
+  },
+  tabline = {
+    lualine_a = {
+      {
+        "buffers",
+        show_filename_only = true,
+        hide_filename_extension = false,
+        show_modified_status = true,
+        mode = 2, -- show buffer name + index
+        max_length = vim.o.columns,
+        filetype_names = {
+          fugitiveblame = " ",
+          NvimTree = "🌲",
+          TelescopePrompt = "🔭",
+        },
+        use_mode_colors = true,
+      }
+    },
+  },
+})
