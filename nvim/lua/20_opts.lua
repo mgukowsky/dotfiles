@@ -134,10 +134,11 @@ require('nvim-cursorline').setup({
 
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "c", "cmake", "cpp", "lua", "python", "vim" },
+  ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "json", "lua", "python", "vim" },
   highlight = {
-    enable = true
-  }
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
 })
 
 -- nvim-cmp configuration; from https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#safely-select-entries-with-cr
@@ -256,6 +257,7 @@ require("nvim-tree").setup({
     }
   }
 })
+require("nvim-web-devicons").setup();
 
 -- telescope.nvim
 
