@@ -2,6 +2,7 @@
 
 -- Corresponds to ":noremap"
 local map = vim.keymap.set
+local del = vim.keymap.del
 
 -- Easy buffer navigation
 map("n", "<C-h>", vim.cmd.bp)
@@ -50,9 +51,16 @@ map("n", "<Right>", '<cmd>vertical resize +2<cr>') -- TODO: ditto...
 -- then you can jump to it by pressing that character)
 local leap = require("leap")
 leap.add_default_mappings()
-leap.add_repeat_mappings(";", ",", {
-  relative_directions = true,
-})
+-- This allows ";" and "," to repeat motions within leap, but seems to break the functionality of
+-- the keys outside of leap
+-- leap.add_repeat_mappings(";", ",", {
+--   relative_directions = true,
+-- })
+-- Remove the x/X mappings that change the behavior the key in visual mode
+for _, key in pairs({ "x", "X" }) do
+  del({ "o", "x" }, key)
+end
+
 -- Highlight the leap search area
 local vscPalette = require("vscode.colors").get_colors();
 vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = vscPalette.vscUiOrange })
