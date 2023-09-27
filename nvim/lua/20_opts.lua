@@ -32,16 +32,21 @@ opt.incsearch = true                                -- Match search as you type
 opt.list = false -- Don't show these whitespace characters
 opt.listchars = { tab = ">-", space = "·", trail = "○", eol = "↲", nbsp = "▯" }
 
-opt.mouse = "a"           -- Mouse support
-opt.number = true         -- Show line numbers
-opt.path:append("**")     -- Better searching and tab completion for files
+opt.mouse = "a"       -- Mouse support
+opt.number = true     -- Show line numbers
+opt.path:append("**") -- Better searching and tab completion for files
+
+-- Commenting this out as it appears to screw with certain popups like the LSP menu
 --opt.pumblend = 15         -- Transparent menus
-opt.relativenumber = true -- Show line numbers relative to the current line number (useful for quick vertical navigation, e.g. 5j)
-opt.scrolloff = 4         -- Min # of lines to keep around the cursor
-opt.secure = true         -- Don't allow untrusted scripts to execute
-opt.signcolumn = "yes:1"  -- Always show the sign column and set the width to 1 character
-opt.shiftwidth = 2        -- tab config
-opt.showcmd = true        -- Show previous command
+
+-- Useful for quickly navigating up and down (e.g. 10j to go to the 10th line down), but somewhat
+-- redundant with leap.nvim
+-- opt.relativenumber = true -- Show line numbers relative to the current line number (useful for quick vertical navigation, e.g. 5j)
+opt.scrolloff = 4        -- Min # of lines to keep around the cursor
+opt.secure = true        -- Don't allow untrusted scripts to execute
+opt.signcolumn = "yes:1" -- Always show the sign column and set the width to 1 character
+opt.shiftwidth = 2       -- tab config
+opt.showcmd = true       -- Show previous command
 opt.showmatch = true
 opt.smartindent = false
 opt.softtabstop = 2      -- # of tab spaces in insert mode
