@@ -48,7 +48,11 @@ map("n", "<Right>", '<cmd>vertical resize +2<cr>') -- TODO: ditto...
 -- Search using `s|S` (e.g. `svi` will highlight all matches after the cursor
 -- on the window for 'vi', which will be highlighted in yellow with a character,
 -- then you can jump to it by pressing that character)
-require("leap").add_default_mappings()
+local leap = require("leap")
+leap.add_default_mappings()
+leap.add_repeat_mappings(";", ",", {
+  relative_directions = true,
+})
 -- Highlight the leap search area
 local vscPalette = require("vscode.colors").get_colors();
 vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = vscPalette.vscUiOrange })
