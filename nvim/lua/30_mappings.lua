@@ -56,7 +56,7 @@ leap.add_default_mappings()
 -- leap.add_repeat_mappings(";", ",", {
 --   relative_directions = true,
 -- })
--- Remove the x/X mappings that change the behavior the key in visual mode
+-- Remove the x/X mappings that change the behavior of the key in visual mode
 for _, key in pairs({ "x", "X" }) do
   del({ "o", "x" }, key)
 end
