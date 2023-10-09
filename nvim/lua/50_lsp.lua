@@ -188,3 +188,13 @@ lspconfigs.jedi_language_server.setup({
   on_attach = on_attach,
   capabilities = nvimCmpCapabilities,
 })
+
+lspconfigs.neocmake.setup({
+  on_attach = on_attach,
+  capabilities = nvimCmpCapabilities,
+})
+
+lspconfigs.ruby_ls.setup({
+  on_attach = on_attach,
+  capabilities = nvimCmpCapabilities,
+})

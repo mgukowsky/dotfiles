@@ -139,7 +139,7 @@ require('nvim-cursorline').setup({
 
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "json", "lua", "python", "vim" },
+  ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "json", "lua", "python", "ruby", "vim" },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -354,6 +354,7 @@ local group_overrides = {
   ["@namespace.cpp"] = { fg = vscPalette.vscDarkYellow },
   ["@operator.cpp"] = { link = "@keyword.cpp" },     -- Includes `&` and `*`
   -- ["@punctuation.bracket.cpp"] = { fg = vscPalette.vscDarkYellow }, -- `{}`, `[]`, `()`
+  ["@text.uri"] = { fg = vscPalette.vscAccentBlue },
 
   -- LSP semantic tokens (these are specific to clangd; no idea if other LSPs will provide these same values)
   ["@lsp.mod.functionScope.cpp"] = { fg = vscPalette.vscFront }, -- regular function scope variables should be white

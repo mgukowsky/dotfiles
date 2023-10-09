@@ -41,3 +41,5 @@
 [color "diff"]
 	newMoved = reverse cyan
   oldMoved = reverse yellow
+[init]
+	defaultBranch = main
