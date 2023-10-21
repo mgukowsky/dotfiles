@@ -138,9 +138,10 @@ local function on_attach(client, bufnr)
     end
   end
 
+  -- I like this mapping, since C-] will be set to peek definition, and this
+  -- <leader> version can be used for all other less-frequently-used options
+  vim.keymap.set("n", "<C-]>", "<cmd>Lspsaga peek_definition<cr>")
   wk.register({
-    -- I like this mapping, since C-] will be set to the LSP tagfunc (usually definition), and this
-    -- <leader> version can be used for all other less-frequently-used options
     ["<leader>"] = {
       ["]"] = { function() vim.cmd.popup(LSPMenu) end, "LSP Popup menu" },
     },
