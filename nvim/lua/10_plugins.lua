@@ -80,6 +80,7 @@ Plug('yamatsum/nvim-cursorline')
 
 -- nvim-treesitter for better syntax highlighting
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = function() vim.cmd('TSUpdate') end })
+Plug('nvim-treesitter/nvim-treesitter-textobjects')
 
 -- nvim-cmp plugins
 Plug('hrsh7th/cmp-nvim-lsp')

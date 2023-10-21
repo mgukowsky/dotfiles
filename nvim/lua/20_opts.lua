@@ -145,6 +145,20 @@ require("nvim-treesitter.configs").setup({
     enable = true,
     additional_vim_regex_highlighting = false,
   },
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["af"] = { query = "@function.outer", desc = "Select an entire function" },
+        ["if"] = { query = "@function.inner", desc = "Select a function body" },
+        ["ac"] = { query = "@class.outer", desc = "Select an entire class" },
+        ["ic"] = { query = "@class.inner", desc = "Select the body of a class" },
+        ["as"] = { query = "@scope", query_group = "locals", desc = "Select the current scope" },
+      },
+      include_surrounding_whitespace = false,
+    },
+  },
 })
 
 -- nvim-cmp configuration; from https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#safely-select-entries-with-cr
