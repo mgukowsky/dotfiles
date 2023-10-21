@@ -139,7 +139,8 @@ require('nvim-cursorline').setup({
 
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "json", "lua", "python", "ruby", "vim" },
+  ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "json", "lua", "markdown",
+    "markdown_inline", "python", "ruby", "vim" },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -327,6 +328,54 @@ require("which-key").setup()
 
 -- fidget.nvim
 require("fidget").setup();
+
+-- lspsaga.nvim
+require("lspsaga").setup({
+  callhierarchy = {
+    keys = {
+      edit = "<CR>",
+      toggle_or_req = "<Space>",
+    },
+  },
+  code_action = {
+    extent_gitsigns = true,
+    num_shortcut = true,
+    show_server_name = true,
+  },
+  definition = {
+    width = 0.8,
+    height = 0.5,
+    keys = {
+      edit = "<CR>",
+    },
+  },
+  diagnostic = {
+    extend_relatedInformation = true,
+  },
+  finder = {
+    keys = {
+      toggle_or_open = "<CR>",
+    },
+    max_height = 0.8,
+  },
+  implement = {
+    enable = true,
+    sign = true,
+  },
+  outline = {
+    close_after_jump = false,
+    keys = {
+      toggle_or_jump = "<CR>",
+    },
+    win_width = 45,
+  },
+  symbol_in_winbar = {
+    enable = true,
+  },
+  ui = {
+    border = "rounded",
+  },
+});
 
 -- vscode.nvim
 local customPalette = {

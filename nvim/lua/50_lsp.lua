@@ -66,7 +66,9 @@ local function on_attach(client, bufnr)
   -- Some commands are in the vim.lsp.buf namespace, and some are in the telescope namespace
   local LSP = 0  -- Identifier for LSP functions
   local TEL = 1  -- Identifier for Telescope functions
-  local DIAG = 2 -- Special case for telescope.builtin.diagnostics
+  local SAGA = 2 -- Identifiers for Lspsaga
+  local SAGAREF = 3
+  local SAGAIMP = 4
 
   local function add_menu_entry(entry)
     local namespace = entry[1]
@@ -84,6 +86,12 @@ local function on_attach(client, bufnr)
       -- an additional argument to only search diagnostics for the current buffer
       -- TODO: this works but throws a weird error, but not when invoked directly as a command...
       cmdstring = ":lua require('telescope.builtin').diagnostics({bufnr=0})<cr>"
+    elseif namespace == SAGA then
+      cmdstring = ":Lspsaga " .. string.lower(methodname) .. "<cr>"
+    elseif namespace == SAGAREF then
+      cmdstring = ":Lspsaga finder ref<cr>"
+    elseif namespace == SAGAIMP then
+      cmdstring = ":Lspsaga finder imp<cr>"
     end
 
     vim.cmd.amenu({
@@ -98,24 +106,26 @@ local function on_attach(client, bufnr)
   local numSep = 1  -- Each separator must have a unique identifier
   for _, entry in pairs({
     -- General info
-    { LSP,  "Hover" },
-    { DIAG, "Diagnostics" },
-    { LSP,  "Declaration" },
-    { TEL,  "Definitions" },
-    { TEL,  "Implementations" },
-    { TEL,  "Type_Definitions" },
+    { SAGA,    "Hover_Doc" },
+    { SAGA,    "Outline" },
+    { SAGA,    "Peek_Definition" },
+    { SAGA,    "Show_Workspace_Diagnostics" },
+    { LSP,     "Declaration" },
+    { SAGAIMP, "Implementations" },
+    { TEL,     "Type_Definitions" },
+    { SAGA,    "Peek_Type_Definition" },
     SEP,
     -- Code structure info
-    { TEL, "References" },
-    { TEL, "Incoming_Calls" },
-    { TEL, "Outgoing_Calls" },
-    { TEL, "Document_Symbols" },
-    { TEL, "Workspace_Symbols" },
+    { SAGAREF, "References" },
+    { SAGA,    "Incoming_Calls" },
+    { SAGA,    "Outgoing_Calls" },
+    { TEL,     "Document_Symbols" },
+    { TEL,     "Workspace_Symbols" },
     SEP,
     -- Refactoring actions
-    { LSP, "Code_Action" },
-    { LSP, "Rename" },
-    { LSP, "Signature_Help" },
+    { SAGA, "Code_Action" },
+    { LSP,  "Rename" },
+    { LSP,  "Signature_Help" },
   }) do
     if entry == SEP then
       -- In order to be parsed as a separator, the identifier must be surrounded by -minuses-
@@ -135,10 +145,10 @@ local function on_attach(client, bufnr)
       ["]"] = { function() vim.cmd.popup(LSPMenu) end, "LSP Popup menu" },
     },
     ["["] = {
-      d = { function() vim.diagnostic.goto_prev() end, "Prev LSP diagnostic" }
+      d = { function() require("lspsaga.diagnostic"):goto_prev() end, "Prev LSP diagnostic" }
     },
     ["]"] = {
-      d = { function() vim.diagnostic.goto_prev() end, "Next LSP diagnostic" }
+      d = { function() require("lspsaga.diagnostic"):goto_next() end, "Next LSP diagnostic" }
     },
   })
 end
@@ -185,11 +195,6 @@ lspconfigs.ltex.setup({
 })
 
 lspconfigs.jedi_language_server.setup({
-  on_attach = on_attach,
-  capabilities = nvimCmpCapabilities,
-})
-
-lspconfigs.neocmake.setup({
   on_attach = on_attach,
   capabilities = nvimCmpCapabilities,
 })

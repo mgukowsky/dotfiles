@@ -116,4 +116,7 @@ Plug('ggandor/leap.nvim')
 -- Show LSP progress
 Plug('j-hui/fidget.nvim', { tag = 'legacy' })
 
+-- LSP quality of life enhancements
+Plug('nvimdev/lspsaga.nvim')
+
 vim.call("plug#end")
