@@ -331,6 +331,16 @@ require("Comment").setup()
 -- nvim-surround
 require("nvim-surround").setup()
 
+-- indent-blankline.nvim
+require("ibl").setup({
+  indent = {
+    char = "¦",
+  },
+  scope = {
+    enabled = false,
+  },
+})
+
 -- which-key.nvim
 -- Shows completions for a command as characters are entered
 -- (after vim.o.timeoutlen); can also be manually invoked with

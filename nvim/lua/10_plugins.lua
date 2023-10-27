@@ -73,7 +73,7 @@ Plug('numToStr/Comment.nvim')
 Plug('danilamihailov/beacon.nvim')
 
 -- Show vertical lines for each indent level
-Plug('Yggdroot/indentLine')
+Plug('lukas-reineke/indent-blankline.nvim')
 
 -- Underline the word under the cursor
 Plug('yamatsum/nvim-cursorline')
