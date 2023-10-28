@@ -108,7 +108,7 @@ local function on_attach(client, bufnr)
     -- General info
     { SAGA,    "Hover_Doc" },
     { SAGA,    "Outline" },
-    { SAGA,    "Peek_Definition" },
+    { TEL,     "Definitions" },
     { SAGA,    "Show_Workspace_Diagnostics" },
     { LSP,     "Declaration" },
     { SAGAIMP, "Implementations" },
