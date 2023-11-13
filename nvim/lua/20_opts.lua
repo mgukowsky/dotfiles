@@ -139,8 +139,8 @@ require('nvim-cursorline').setup({
 
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "json", "lua", "markdown",
-    "markdown_inline", "python", "ruby", "vim" },
+  ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "javascript", "json", "lua",
+    "markdown", "markdown_inline", "python", "ruby", "typescript", "vim" },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,

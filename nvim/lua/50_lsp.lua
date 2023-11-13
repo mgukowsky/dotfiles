@@ -161,8 +161,6 @@ local lspconfigs = require("lspconfig")
 -- nvim-cmp; needs to be set as the "capabilities for each lsp"
 local nvimCmpCapabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lspconfigs.clangd.setup({ on_attach = on_attach, capabilities = nvimCmpCapabilities })
-
 lspconfigs.lua_ls.setup({
   on_attach = on_attach,
   capabilities = nvimCmpCapabilities,
@@ -195,12 +193,10 @@ lspconfigs.ltex.setup({
   }
 })
 
-lspconfigs.jedi_language_server.setup({
-  on_attach = on_attach,
-  capabilities = nvimCmpCapabilities,
-})
-
-lspconfigs.ruby_ls.setup({
-  on_attach = on_attach,
-  capabilities = nvimCmpCapabilities,
-})
+-- Setup LSPs that don't require any additional configs
+for _, lsp_name in pairs({ "clangd", "jedi_language_server", "ruby_ls", "tsserver" }) do
+  lspconfigs[lsp_name].setup({
+    on_attach = on_attach,
+    capabilities = nvimCmpCapabilities,
+  })
+end
