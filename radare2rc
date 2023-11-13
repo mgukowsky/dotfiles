@@ -1,0 +1,5 @@
+eco monokai
+
+scr.prompt.mode = true
+scr.prompt.popup = true
+scr.prompt.vi = true

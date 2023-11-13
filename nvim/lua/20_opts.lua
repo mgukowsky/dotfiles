@@ -308,6 +308,11 @@ telescope.setup({
       }
     },
   },
+  extensions = {
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown()
+    }
+  },
   pickers = {
     find_files = {
       find_command = { "rg", "--files", HIDDEN, GLOB, GIT_DIR_REGEX },
@@ -315,6 +320,7 @@ telescope.setup({
   }
 })
 telescope.load_extension("luasnip")
+telescope.load_extension("ui-select")
 
 -- nvim-osc52
 require('osc52').setup({})

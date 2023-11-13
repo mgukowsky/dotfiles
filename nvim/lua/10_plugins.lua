@@ -47,6 +47,7 @@ Plug('lewis6991/gitsigns.nvim')
 Plug('nvim-lua/plenary.nvim')
 Plug('nvim-telescope/telescope.nvim')
 Plug('nvim-telescope/telescope-symbols.nvim')
+Plug('nvim-telescope/telescope-ui-select.nvim')
 Plug('benfowler/telescope-luasnip.nvim')
 
 -- Adds :BufOnly to close all buffers except the current one
