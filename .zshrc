@@ -198,6 +198,12 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # Used by the delta diff tool; see https://github.com/dandavison/delta#environment
 export DELTA_PAGER="$(which bat) --style=plain"
 
+# Function to pretty print help messages using bat, per
+# https://github.com/sharkdp/bat#highlighting---help-messages
+function bathelp {
+  "$@" --help |& bat --plain --language=help
+}
+
 # Enable reverse search with Ctrl-R
 bindkey -v
 bindkey '^R' history-incremental-search-backward
