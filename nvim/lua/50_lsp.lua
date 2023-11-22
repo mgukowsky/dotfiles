@@ -144,6 +144,7 @@ local function on_attach(client, bufnr)
   wk.register({
     ["<leader>"] = {
       ["]"] = { function() vim.cmd.popup(LSPMenu) end, "LSP Popup menu" },
+      ["n"] = { function() vim.cmd("Lspsaga outline") end, "Toggle LSP code outline" },
     },
     ["["] = {
       d = { function() require("lspsaga.diagnostic"):goto_prev() end, "Prev LSP diagnostic" }
