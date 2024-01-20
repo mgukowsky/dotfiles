@@ -1,0 +1,65 @@
+[colors.bright]
+black = "0x747369"
+blue = "0x6699cc"
+cyan = "0x66cccc"
+green = "0x99cc99"
+magenta = "0xcc99cc"
+red = "0xf2777a"
+white = "0xf2f0ec"
+yellow = "0xffcc66"
+
+[colors.normal]
+black = "0x2d2d2d"
+blue = "0x6699cc"
+cyan = "0x66cccc"
+green = "0x99cc99"
+magenta = "0xcc99cc"
+red = "0xf2777a"
+white = "0xd3d0c8"
+yellow = "0xffcc66"
+
+[colors.primary]
+background = "0x2d2d2d"
+foreground = "0xd3d0c8"
+
+[font]
+size = 10
+
+[font.bold]
+family = "Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "Mono"
+style = "Italic"
+
+[font.normal]
+family = "Mono"
+style = "Regular"
+
+[[keyboard.bindings]]
+action = "ScrollPageUp"
+key = "PageUp"
+mods = "Shift"
+
+[[keyboard.bindings]]
+action = "ScrollPageDown"
+key = "PageDown"
+mods = "Shift"
+
+[[keyboard.bindings]]
+action = "ScrollToTop"
+key = "Home"
+mods = "Shift"
+
+[[keyboard.bindings]]
+action = "ScrollToBottom"
+key = "End"
+mods = "Shift"
+
+[window]
+opacity = 0.8
