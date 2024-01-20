@@ -268,8 +268,9 @@ dict.switcher({
 g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 require("nvim-tree").setup({
+  disable_netrw = true,
   filters = {
-    dotfiles = true,
+    dotfiles = false,
   },
   view = {
     float = {
