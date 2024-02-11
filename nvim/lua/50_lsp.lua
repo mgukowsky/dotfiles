@@ -194,6 +194,13 @@ lspconfigs.ltex.setup({
   }
 })
 
+local json_lsp_cap = vim.lsp.protocol.make_client_capabilities()
+json_lsp_cap.textDocument.completion.completionItem.snippetSupport = true
+lspconfigs.jsonls.setup({
+  on_attach = on_attach,
+  capabilities = json_lsp_cap,
+})
+
 -- Setup LSPs that don't require any additional configs
 for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_ls", "tsserver" }) do
   lspconfigs[lsp_name].setup({

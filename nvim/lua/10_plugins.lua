@@ -121,4 +121,11 @@ Plug('j-hui/fidget.nvim', { tag = 'legacy' })
 -- LSP quality of life enhancements
 Plug('nvimdev/lspsaga.nvim')
 
+-- DAP (debugging) setup
+Plug('folke/neodev.nvim')
+Plug('mfussenegger/nvim-dap')
+Plug('rcarriga/nvim-dap-ui')
+Plug('nvim-telescope/telescope-dap.nvim')
+Plug('theHamsta/nvim-dap-virtual-text')
+
 vim.call("plug#end")

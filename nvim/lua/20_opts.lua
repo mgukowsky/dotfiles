@@ -257,12 +257,12 @@ if vim.fn.filereadable(DICTFILEPATH) == 0 and vim.fn.executable("aspell") == 1 t
   os.execute("aspell -d en dump master | aspell -l en expand > " .. DICTFILEPATH)
 end
 
-dict.switcher({
-  -- N.B. that given my locale, vim.opt.spelllang defaults to "en"
-  spelllang = {
-    en = DICTFILEPATH
-  }
-})
+-- dict.switcher({
+--   -- N.B. that given my locale, vim.opt.spelllang defaults to "en"
+--   spelllang = {
+--     en = DICTFILEPATH
+--   }
+-- })
 
 -- nvim-tree.lua
 g.loaded_netrw = 1
@@ -320,6 +320,7 @@ telescope.setup({
     }
   }
 })
+telescope.load_extension("dap")
 telescope.load_extension("luasnip")
 telescope.load_extension("ui-select")
 
@@ -407,6 +408,71 @@ require("lspsaga").setup({
     border = "rounded",
   },
 });
+
+require("neodev").setup({
+  library = {
+    plugins = {
+      "nvim-dap-ui"
+    },
+    types = true
+  },
+})
+
+local dap = require('dap')
+dap.adapters = {
+  -- vscode cpptools DAP
+  cppdbg = {
+    id = 'cppdbg',
+    type = 'executable',
+    -- TODO: this should obviously not be an absolute path to a random directory
+    command = '/home/mgukowsky/.vscode/extensions/ms-vscode.cpptools-1.17.5-linux-x64/debugAdapters/bin/OpenDebugAD7',
+  },
+  -- Native GDB DAP; doesn't seem to be quite as good as the vscode cpptools
+  gdb = {
+    id = 'gdb',
+    type = 'executable',
+    command = 'gdb',
+    args = { '-i', 'dap' },
+  },
+  python = {
+    id = 'python',
+    type = 'executable',
+    command = '/tmp/venv/bin/python',
+    args = { '-m', 'debugpy.adapter' },
+    options = {
+      source_filetype = 'python',
+    },
+  }
+}
+require('dap.ext.vscode').load_launchjs(nil, {
+  cppdbg = { "c", "cpp" },
+  python = { "python" },
+})
+
+local dapui = require("dapui")
+dapui.setup()
+dap.listeners.before.attach.dapui_config = function()
+  dapui.open()
+end
+dap.listeners.before.launch.dapui_config = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated.dapui_config = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited.dapui_config = function()
+  dapui.close()
+end
+require("nvim-dap-virtual-text").setup({
+  all_frames = true,
+})
+
+vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpointCondition', { text = '🛑', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapLogPoint', { text = '🔶', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapStopped', { text = '🟠', texthl = '', linehl = 'debugPC', numhl = '' })
+vim.fn.sign_define('DapBreakpointRejected', { text = '🔘', texthl = '', linehl = '', numhl = '' })
+
 
 -- vscode.nvim
 local customPalette = {
