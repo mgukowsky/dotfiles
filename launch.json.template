@@ -46,6 +46,14 @@
     {
       "cwd": "${workspaceFolder}",
       "name": "Launch",
+      "program": "${workspaceFolder}/build/bin/nvim",
+      "request": "launch",
+      "stopAtEntry": false,
+      "type": "lldb"
+    },
+    {
+      "cwd": "${workspaceFolder}",
+      "name": "Launch",
       "program": "${file}",
       "request": "launch",
       "type": "python"

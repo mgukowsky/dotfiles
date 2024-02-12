@@ -431,8 +431,13 @@ dap.adapters = {
   gdb = {
     id = 'gdb',
     type = 'executable',
-    command = 'gdb',
+    command = '/usr/bin/gdb',
     args = { '-i', 'dap' },
+  },
+  lldb = {
+    id = 'lldb',
+    type = 'executable',
+    command = '/usr/bin/lldb-vscode',
   },
   python = {
     id = 'python',
@@ -448,6 +453,10 @@ require('dap.ext.vscode').load_launchjs(nil, {
   cppdbg = { "c", "cpp" },
   python = { "python" },
 })
+
+-- Per https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#ccrust-via-lldb-vscode
+dap.configurations.c = dap.configurations.cpp
+dap.configurations.rust = dap.configurations.cpp
 
 local dapui = require("dapui")
 dapui.setup()
