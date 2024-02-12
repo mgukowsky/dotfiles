@@ -420,7 +420,8 @@ require("neodev").setup({
 
 local dap = require('dap')
 dap.adapters = {
-  -- vscode cpptools DAP
+  -- vscode cpptools DAP, per
+  -- https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)
   cppdbg = {
     id = 'cppdbg',
     type = 'executable',
