@@ -440,6 +440,17 @@ dap.adapters = {
     type = 'executable',
     command = '/usr/bin/lldb-vscode',
   },
+  codelldb = {
+    executable = {
+      command = '/usr/sbin/codelldb',
+      args = { "--port", "${port}" },
+      -- On windows you may have to uncomment this:
+      -- detached = false,
+    },
+    id = 'codelldb',
+    port = "${port}",
+    type = 'server'
+  },
   python = {
     id = 'python',
     type = 'executable',
