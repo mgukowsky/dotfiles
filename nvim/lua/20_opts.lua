@@ -370,7 +370,7 @@ require("lspsaga").setup({
     },
   },
   code_action = {
-    extent_gitsigns = true,
+    extend_gitsigns = true,
     num_shortcut = true,
     show_server_name = true,
   },
@@ -393,6 +393,9 @@ require("lspsaga").setup({
   implement = {
     enable = true,
     sign = true,
+  },
+  lightbulb = {
+    debounce = 3000, -- lightbulb can be noisy and/or cause performance issues, so let's throttle it
   },
   outline = {
     close_after_jump = false,
