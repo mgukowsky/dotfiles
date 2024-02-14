@@ -494,6 +494,13 @@ vim.fn.sign_define('DapLogPoint', { text = '🔶', texthl = '', linehl = '', num
 vim.fn.sign_define('DapStopped', { text = '🟠', texthl = '', linehl = 'debugPC', numhl = '' })
 vim.fn.sign_define('DapBreakpointRejected', { text = '🔘', texthl = '', linehl = '', numhl = '' })
 
+require("dressing").setup()
+require("notify").setup({
+  background_colour = "#000000",
+})
+vim.notify = require("notify");
+require('overseer').setup()
+
 
 -- vscode.nvim
 local customPalette = {

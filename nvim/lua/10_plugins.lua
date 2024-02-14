@@ -128,4 +128,9 @@ Plug('rcarriga/nvim-dap-ui')
 Plug('nvim-telescope/telescope-dap.nvim')
 Plug('theHamsta/nvim-dap-virtual-text')
 
+-- overseer.nvim (task runner)
+Plug('stevearc/dressing.nvim')
+Plug('rcarriga/nvim-notify')
+Plug('stevearc/overseer.nvim')
+
 vim.call("plug#end")

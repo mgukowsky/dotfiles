@@ -18,6 +18,7 @@ map("n", "<C-p>", telescope.find_files, {})
 local tel_dap = require('telescope').extensions.dap
 local dap = require('dap')
 local dapui = require('dapui')
+local overseer = require('overseer')
 
 -- which-key.nvim can create mappings and document them
 local wk = require("which-key")
@@ -78,6 +79,18 @@ wk.register({
       },
       "Debugger (DAP)"
     },
+    o = {
+      {
+        c = { function() overseer.close() end, "Close" },
+        o = { function() overseer.open() end, "Open" },
+        r = { function()
+          overseer.open()
+          overseer.run_template()
+        end, "Run" },
+        t = { function() overseer.toggle() end, "Toggle" },
+      },
+      "Overseer runner (tasks.json)"
+    }
   },
   -- From gitsigns.nvim; we only add the documentation here
   ["["] = {
@@ -138,6 +151,10 @@ vim.keymap.set('n', '<leader>cc', '"+yy')
 
 -- Alternative Visual Studio-style debugger mappings
 map("n", "<F5>", function() dap.continue() end)
+map("n", "<F7>", function()
+  overseer.open()
+  overseer.run_template()
+end)
 map("n", "<F9>", function() dap.toggle_breakpoint() end)
 map("n", "<F10>", function() dap.step_over() end)
 map("n", "<F11>", function() dap.step_into() end)
