@@ -464,6 +464,10 @@ dap.adapters = {
     },
   }
 }
+
+-- Better Json support for nvim-dap, per
+-- https://github.com/stevearc/overseer.nvim/blob/master/doc/third_party.md#dap
+require("dap.ext.vscode").json_decode = require("overseer.json").decode
 require('dap.ext.vscode').load_launchjs(nil, {
   cppdbg = { "c", "cpp" },
   python = { "python" },

@@ -144,7 +144,14 @@ local function on_attach(client, bufnr)
   wk.register({
     ["<leader>"] = {
       ["]"] = { function() vim.cmd.popup(LSPMenu) end, "LSP Popup menu" },
-      ["n"] = { function() vim.cmd("Lspsaga outline") end, "Toggle LSP code outline" },
+      n = { function() vim.cmd("Lspsaga outline") end, "Toggle LSP code outline" },
+      l = {
+        {
+          d = { function() require('telescope.builtin').lsp_document_symbols() end, "Document Symbol search" },
+          w = { function() require('telescope.builtin').lsp_workspace_symbols() end, "Workspace Symbol search" },
+        },
+        "LSP functions"
+      }
     },
     ["["] = {
       d = { function() require("lspsaga.diagnostic"):goto_prev() end, "Prev LSP diagnostic" }
