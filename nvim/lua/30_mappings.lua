@@ -40,11 +40,20 @@ wk.register({
             -- Per https://www.reddit.com/r/neovim/comments/15dtb8l/comment/ju4u4j7
             -- Seems like variables can be referenced directly and don't need the {} wrapping
             --  e.g. `i > 5` is OK;
-            c = { function() dap.set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, "Conditional breakpoint" },
-            h = { function() dap.set_breakpoint(nil, vim.fn.input("Hit condition (e.g. how many hits before stopping): ")) end, "Hit conditional breakpoint" },
+            c = { function()
+              vim.ui.input({ prompt = "Breakpoint condition" },
+                function(input) dap.set_breakpoint(input) end)
+            end, "Conditional breakpoint" },
+            h = { function()
+              vim.ui.input({ prompt = "Hit condition (e.g. how many hits before stopping)" },
+                function(input) dap.set_breakpoint(nil, input) end)
+            end, "Hit conditional breakpoint" },
             -- Requires the {} dereferencing syntax
             --  e.g. `num is {num}` is necessary
-            l = { function() dap.set_breakpoint(nil, nil, vim.fn.input("Trace log message: ")) end, "Set breakpoint with log message" },
+            l = { function()
+              vim.ui.input({ prompt = "Trace log message" },
+                function(input) dap.set_breakpoint(nil, nil, input) end)
+            end, "Set breakpoint with log message" },
           },
           "Breakpoints"
         },
@@ -75,7 +84,7 @@ wk.register({
         t = { function() dapui.toggle() end, "Toggle DAP UI" },
         u = { function() dap.run_to_cursor() end, "Run until current line" }, -- this will temporarily disable breakpoints
         x = { function() dap.terminate() end, "Terminate running program" },
-        ["]"] = { function() dapui.eval() end, "Evaluate variable under cursor/highlight" },
+        ["]"] = { function() dapui.eval(nil, { enter = true }) end, "Evaluate variable under cursor/highlight" },
       },
       "Debugger (DAP)"
     },
