@@ -493,6 +493,9 @@ dap.listeners.before.event_exited.dapui_config = function()
 end
 require("nvim-dap-virtual-text").setup({
   all_frames = true,
+  all_references = true,
+  highlight_new_as_changed = true,
+  only_first_definition = false,
 })
 
 vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
@@ -506,7 +509,11 @@ require("notify").setup({
   background_colour = "#000000",
 })
 vim.notify = require("notify");
-require('overseer').setup()
+require('overseer').setup({
+  task_list = {
+    default_detail = 2,
+  },
+})
 
 
 -- vscode.nvim
