@@ -243,6 +243,22 @@ cmp.setup({
     { name = 'nvim_lsp_signature_help' },
   })
 })
+-- Use buffer for completing "/" and "?" searches
+cmp.setup.cmdline({ "/", "?" }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+-- Use path and cmdline for completing ":" commands
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
 
 local dict = require("cmp_dictionary")
 
