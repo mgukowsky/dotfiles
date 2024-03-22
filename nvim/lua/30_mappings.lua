@@ -18,6 +18,7 @@ map("n", "<C-p>", telescope.find_files, {})
 local tel_dap = require('telescope').extensions.dap
 local dap = require('dap')
 local dapui = require('dapui')
+local gs = require('gitsigns')
 local overseer = require('overseer')
 
 -- which-key.nvim can create mappings and document them
@@ -88,6 +89,22 @@ wk.register({
       },
       "Debugger (DAP)"
     },
+    h = {
+      {
+        b = { function() gs.blame_line() end, "Show blame" },
+        B = { function() gs.blame_line({ full = true }) end, "Show full blame" },
+        d = { function() gs.toggle_deleted() end, "Toggle show deleted hunks" },
+        D = { function() gs.diffthis() end, "Vimdiff current line" },
+        p = { function() gs.preview_hunk() end, "Preview hunk" },
+        r = { function() gs.undo_stage_buffer() end, "Undo stage buffer" },
+        R = { function() gs.reset_buffer() end, "Reset buffer" },
+        s = { function() gs.stage_hunk() end, "Stage hunk" },
+        S = { function() gs.stage_buffer() end, "Stage buffer" },
+        u = { function() gs.reset_hunk() end, "Reset hunk" },
+
+      },
+      "Git Hunk"
+    },
     o = {
       {
         c = { function() overseer.close() end, "Close" },
@@ -103,10 +120,18 @@ wk.register({
   },
   -- From gitsigns.nvim; we only add the documentation here
   ["["] = {
-    c = { "Prev Git change" }
+    c = { function()
+      if vim.wo.diff then return '[c' end
+      vim.schedule(function() gs.prev_hunk() end)
+      return '<Ignore>'
+    end, "Prev Git change" }
   },
   ["]"] = {
-    c = { "Next Git change" }
+    c = { function()
+      if vim.wo.diff then return ']c' end
+      vim.schedule(function() gs.next_hunk() end)
+      return '<Ignore>'
+    end, "Next Git change" }
   },
 })
 

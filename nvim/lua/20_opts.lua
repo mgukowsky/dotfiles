@@ -80,45 +80,26 @@ g.markdown_syntax_conceal = 0
 -- Show quote characters in JSON files
 g.vim_json_conceal = 0
 
+-- which-key.nvim
+-- Shows completions for a command as characters are entered
+-- (after vim.o.timeoutlen); can also be manually invoked with
+-- :WhichKey <partial command...>
+-- Also adds hooks in normal mode: will show marks when ` is pressed, and
+-- registers when " is pressed, and will also show a menu for spelling suggestions
+-- when z= is pressed
+require("which-key").setup()
+
 -- gitsigns.nvim (replaces GitGutter)
 require('gitsigns').setup({
   numhl = true,
   -- Install recommended keybindings per https://github.com/lewis6991/gitsigns.nvim
   -- Very similar to what was in GitGutter
   on_attach = function(bufnr)
-    local gs = package.loaded.gitsigns
-
     local function map(mode, l, r, opts)
       opts = opts or {}
       opts.buffer = bufnr
       vim.keymap.set(mode, l, r, opts)
     end
-
-    -- Navigation
-    map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(function() gs.next_hunk() end)
-      return '<Ignore>'
-    end, { expr = true })
-
-    map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(function() gs.prev_hunk() end)
-      return '<Ignore>'
-    end, { expr = true })
-
-    -- Actions
-    map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>')
-    map({ 'n', 'v' }, '<leader>hu', ':Gitsigns reset_hunk<CR>')
-    map('n', '<leader>hS', gs.stage_buffer)
-    map('n', '<leader>hr', gs.undo_stage_hunk)
-    map('n', '<leader>hR', gs.reset_buffer)
-    map('n', '<leader>hp', gs.preview_hunk)
-    map('n', '<leader>hb', function() gs.blame_line { full = true } end)
-    map('n', '<leader>tb', gs.toggle_current_line_blame)
-    map('n', '<leader>hd', gs.diffthis)
-    map('n', '<leader>hD', function() gs.diffthis('~') end)
-    map('n', '<leader>td', gs.toggle_deleted)
 
     -- Text object
     map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
@@ -364,15 +345,6 @@ require("ibl").setup({
     enabled = false,
   },
 })
-
--- which-key.nvim
--- Shows completions for a command as characters are entered
--- (after vim.o.timeoutlen); can also be manually invoked with
--- :WhichKey <partial command...>
--- Also adds hooks in normal mode: will show marks when ` is pressed, and
--- registers when " is pressed, and will also show a menu for spelling suggestions
--- when z= is pressed
-require("which-key").setup()
 
 -- fidget.nvim
 require("fidget").setup();
