@@ -123,6 +123,7 @@ Plug('nvimdev/lspsaga.nvim')
 
 -- DAP (debugging) setup
 Plug('folke/neodev.nvim')
+Plug('nvim-neotest/nvim-nio')
 Plug('mfussenegger/nvim-dap')
 Plug('rcarriga/nvim-dap-ui')
 Plug('nvim-telescope/telescope-dap.nvim')
