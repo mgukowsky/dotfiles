@@ -409,6 +409,27 @@ require("neodev").setup({
   },
 })
 
+-- Find the most recently installed cpptools vscode plugin
+local function get_cpptools_path()
+  local cpptools = vim.fn.glob("~/.vscode/extensions/ms-vscode.cpptools*")
+
+  local max = nil
+  local toolspath = nil
+  for entry in cpptools:gmatch("[^\r\n]+") do -- glob() returns a string, so we need to split it
+    local ftime = vim.fn.getftime(entry)
+    if max == nil or ftime > max then
+      toolspath = entry
+      max = ftime
+    end
+  end
+
+  if toolspath == nil then
+    vim.notify("cpptools not found", vim.log.levels.WARN)
+  end
+
+  return toolspath
+end
+
 local dap = require('dap')
 dap.adapters = {
   -- vscode cpptools DAP, per
@@ -416,8 +437,7 @@ dap.adapters = {
   cppdbg = {
     id = 'cppdbg',
     type = 'executable',
-    -- TODO: this should obviously not be an absolute path to a random directory
-    command = '/home/mgukowsky/.vscode/extensions/ms-vscode.cpptools-1.17.5-linux-x64/debugAdapters/bin/OpenDebugAD7',
+    command = get_cpptools_path() .. '/debugAdapters/bin/OpenDebugAD7',
   },
   -- Native GDB DAP; doesn't seem to be quite as good as the vscode cpptools
   gdb = {
