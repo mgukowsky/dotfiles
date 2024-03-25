@@ -424,7 +424,7 @@ local function get_cpptools_path()
   end
 
   if toolspath == nil then
-    vim.notify("cpptools not found", vim.log.levels.WARN)
+    return "/CPPTOOLS_NOT_FOUND"
   end
 
   return toolspath
