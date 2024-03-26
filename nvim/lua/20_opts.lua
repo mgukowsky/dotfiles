@@ -8,7 +8,7 @@ opt.background = "dark"
 opt.cindent = false   -- Don't use C indentation rules
 
 --[[
--- Makes y and p commands use the global copy/paster buffer.
+-- Makes y and p commands use the global copy/paste buffer.
 --
 -- N.B. this probably won't play well with vim sessions over SSH. To copy in
 -- such scenarios, either X11 forward hold SHIFT while click-dragging the mouse
@@ -121,7 +121,7 @@ require('nvim-cursorline').setup({
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
   ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "javascript", "json", "lua",
-    "markdown", "markdown_inline", "python", "ruby", "typescript", "vim" },
+    "markdown", "markdown_inline", "python", "ruby", "typescript", "vim", "vimdoc" },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -168,6 +168,7 @@ cmp.setup({
       menu = ({
         buffer = "🔠",
         nvim_lsp = "🐲",
+        nvim_lua = "📜",
         luasnip = "🤓",
         dictionary = "📕",
         treesitter = "🎄"
@@ -218,6 +219,7 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp',               keyword_length = 1 },
     { name = 'treesitter',             keyword_length = 2 },
+    { name = 'nvim_lua',               keyword_length = 2 },
     { name = 'buffer',                 keyword_length = 2 },
     { name = 'luasnip',                keyword_length = 3 },
     { name = 'dictionary',             keyword_length = 6 },

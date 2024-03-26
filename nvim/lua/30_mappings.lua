@@ -4,6 +4,10 @@
 local map = vim.keymap.set
 local del = vim.keymap.del
 
+-- Move visual selections around, from https://youtu.be/w7i4amO_zaE?feature=shared
+map("v", "J", ":m '>+1<CR>gv=gv")
+map("v", "K", ":m '<-2<CR>gv=gv")
+
 -- Easy buffer navigation
 map("n", "<C-h>", vim.cmd.bp)
 map("n", "<C-l>", vim.cmd.bn)
@@ -31,6 +35,7 @@ wk.register({
     w = { function() telescope.live_grep() end, "Live grep" },
     a = { function() telescope.grep_string() end, "Grep word under cursor" },
     q = { function() telescope.commands() end, "Vim command search" },
+    u = { function() vim.cmd("UndotreeToggle") end, "Undotree toggle" },
     ["."] = { function() telescope.symbols() end, "Symbol/emoji search" },
     ["<leader>"] = { function() telescope.builtin() end, "Telescope picker search" },
     d = {

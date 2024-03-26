@@ -85,6 +85,7 @@ Plug('nvim-treesitter/nvim-treesitter-textobjects')
 
 -- nvim-cmp plugins
 Plug('hrsh7th/cmp-nvim-lsp')
+Plug('hrsh7th/cmp-nvim-lua')
 Plug('hrsh7th/cmp-buffer')
 Plug('hrsh7th/cmp-path')
 Plug('hrsh7th/cmp-cmdline')
@@ -133,5 +134,9 @@ Plug('theHamsta/nvim-dap-virtual-text')
 Plug('stevearc/dressing.nvim')
 Plug('rcarriga/nvim-notify')
 Plug('stevearc/overseer.nvim')
+
+-- TODO: still not sold on this, saw some performance hitches on WSL...
+-- undotree (view undo history)
+-- Plug('mbbill/undotree')
 
 vim.call("plug#end")
