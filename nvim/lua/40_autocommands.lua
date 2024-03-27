@@ -29,6 +29,13 @@ au("FileType", {
   end
 })
 
+au("TextYankPost", {
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank()
+  end
+})
+
 -- File types for rare extensions
 local function setft(ext, syntax) -- Set syntax association for a given filetype
   au("BufReadPost", {
