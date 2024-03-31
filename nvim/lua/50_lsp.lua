@@ -147,6 +147,7 @@ local function on_attach(client, bufnr)
       n = { function() vim.cmd("Lspsaga outline") end, "Toggle LSP code outline" },
       l = {
         {
+          a = { function() vim.cmd("Lspsaga code_action") end, "LSP code action" },
           d = { function() require('telescope.builtin').lsp_document_symbols() end, "Document Symbol search" },
           w = { function() require('telescope.builtin').lsp_workspace_symbols() end, "Workspace Symbol search" },
         },
