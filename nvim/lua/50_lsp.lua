@@ -81,11 +81,6 @@ local function on_attach(client, bufnr)
           string.lower(methodname) .. "({noremap=true, silent=true, buffer=" .. bufnr .. "})<cr>"
     elseif namespace == TEL then
       cmdstring = ":lua require('telescope.builtin').lsp_" .. string.lower(methodname) .. "()<cr>"
-    elseif namespace == DIAG then
-      -- Diagnostics doesn't have the lsp_ prefix like the other telescope LSP methods, and needs
-      -- an additional argument to only search diagnostics for the current buffer
-      -- TODO: this works but throws a weird error, but not when invoked directly as a command...
-      cmdstring = ":lua require('telescope.builtin').diagnostics({bufnr=0})<cr>"
     elseif namespace == SAGA then
       cmdstring = ":Lspsaga " .. string.lower(methodname) .. "<cr>"
     elseif namespace == SAGAREF then
@@ -148,7 +143,8 @@ local function on_attach(client, bufnr)
       l = {
         {
           a = { function() vim.cmd("Lspsaga code_action") end, "LSP code action" },
-          d = { function() require('telescope.builtin').lsp_document_symbols() end, "Document Symbol search" },
+          d = { function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end, "Diagnostics" },
+          s = { function() require('telescope.builtin').lsp_document_symbols() end, "Document Symbol search" },
           w = { function() require('telescope.builtin').lsp_workspace_symbols() end, "Workspace Symbol search" },
         },
         "LSP functions"
