@@ -39,88 +39,75 @@ wk.register({
     ["."] = { function() telescope.symbols() end, "Symbol/emoji search" },
     ["<leader>"] = { function() telescope.builtin() end, "Telescope picker search" },
     d = {
-      {
-        b = {
-          {
-            b = { function() dap.toggle_breakpoint() end, "Toggle breakpoint" },
-            -- Per https://www.reddit.com/r/neovim/comments/15dtb8l/comment/ju4u4j7
-            -- Seems like variables can be referenced directly and don't need the {} wrapping
-            --  e.g. `i > 5` is OK;
-            c = { function()
-              vim.ui.input({ prompt = "Breakpoint condition" },
-                function(input) dap.set_breakpoint(input) end)
-            end, "Conditional breakpoint" },
-            h = { function()
-              vim.ui.input({ prompt = "Hit condition (e.g. how many hits before stopping)" },
-                function(input) dap.set_breakpoint(nil, input) end)
-            end, "Hit conditional breakpoint" },
-            -- Requires the {} dereferencing syntax
-            --  e.g. `num is {num}` is necessary
-            l = { function()
-              vim.ui.input({ prompt = "Trace log message" },
-                function(input) dap.set_breakpoint(nil, nil, input) end)
-            end, "Set breakpoint with log message" },
-          },
-          "Breakpoints"
-        },
-        c = { function() dap.continue() end, "Start/Continue execution" },
-        f = {
-          {
-            c = { function() dap.focus_frame() end, "Go to current (active) frame" },
-            d = { function() dap.down() end, "Go down one frame" },
-            r = { function() dap.restart_frame() end, "Restart execution of the current frame" },
-            u = { function() dap.up() end, "Go up one frame" }
-          },
-          "Frames"
-        },
-        n = { function() dap.step_over() end, "Step Over" }, -- "next"
-        o = { function() dap.step_out() end, "Step Out" },   -- "finish"
-        p = { function() dap.pause() end, "Pause execution" },
-        q = {
-          {
-            q = { function() tel_dap.commands() end, "Command search" },
-            c = { function() tel_dap.configurations() end, "Select configuration" },
-            b = { function() tel_dap.list_breakpoints() end, "List breakpoints" },
-            v = { function() tel_dap.variables() end, "List variables" },
-            f = { function() tel_dap.frames() end, "List frames" },
-          },
-          "DAP commands"
-        },
-        s = { function() dap.step_into() end, "Step Into" },
-        t = { function() dapui.toggle() end, "Toggle DAP UI" },
-        u = { function() dap.run_to_cursor() end, "Run until current line" }, -- this will temporarily disable breakpoints
-        x = { function() dap.terminate() end, "Terminate running program" },
-        ["]"] = { function() dapui.eval(nil, { enter = true }) end, "Evaluate variable under cursor/highlight" },
+      name = "Debugger (DAP)",
+      b = {
+        name = "Breakpoints",
+        b = { function() dap.toggle_breakpoint() end, "Toggle breakpoint" },
+        -- Per https://www.reddit.com/r/neovim/comments/15dtb8l/comment/ju4u4j7
+        -- Seems like variables can be referenced directly and don't need the {} wrapping
+        --  e.g. `i > 5` is OK;
+        c = { function()
+          vim.ui.input({ prompt = "Breakpoint condition" },
+            function(input) dap.set_breakpoint(input) end)
+        end, "Conditional breakpoint" },
+        h = { function()
+          vim.ui.input({ prompt = "Hit condition (e.g. how many hits before stopping)" },
+            function(input) dap.set_breakpoint(nil, input) end)
+        end, "Hit conditional breakpoint" },
+        -- Requires the {} dereferencing syntax
+        --  e.g. `num is {num}` is necessary
+        l = { function()
+          vim.ui.input({ prompt = "Trace log message" },
+            function(input) dap.set_breakpoint(nil, nil, input) end)
+        end, "Set breakpoint with log message" },
       },
-      "Debugger (DAP)"
+      c = { function() dap.continue() end, "Start/Continue execution" },
+      f = {
+        name = "Frames",
+        c = { function() dap.focus_frame() end, "Go to current (active) frame" },
+        d = { function() dap.down() end, "Go down one frame" },
+        r = { function() dap.restart_frame() end, "Restart execution of the current frame" },
+        u = { function() dap.up() end, "Go up one frame" }
+      },
+      n = { function() dap.step_over() end, "Step Over" }, -- "next"
+      o = { function() dap.step_out() end, "Step Out" },   -- "finish"
+      p = { function() dap.pause() end, "Pause execution" },
+      q = {
+        name = "DAP commands",
+        q = { function() tel_dap.commands() end, "Command search" },
+        c = { function() tel_dap.configurations() end, "Select configuration" },
+        b = { function() tel_dap.list_breakpoints() end, "List breakpoints" },
+        v = { function() tel_dap.variables() end, "List variables" },
+        f = { function() tel_dap.frames() end, "List frames" },
+      },
+      s = { function() dap.step_into() end, "Step Into" },
+      t = { function() dapui.toggle() end, "Toggle DAP UI" },
+      u = { function() dap.run_to_cursor() end, "Run until current line" }, -- this will temporarily disable breakpoints
+      x = { function() dap.terminate() end, "Terminate running program" },
+      ["]"] = { function() dapui.eval(nil, { enter = true }) end, "Evaluate variable under cursor/highlight" },
     },
     h = {
-      {
-        b = { function() gs.blame_line() end, "Show blame" },
-        B = { function() gs.blame_line({ full = true }) end, "Show full blame" },
-        d = { function() gs.toggle_deleted() end, "Toggle show deleted hunks" },
-        D = { function() gs.diffthis() end, "Vimdiff current line" },
-        p = { function() gs.preview_hunk() end, "Preview hunk" },
-        r = { function() gs.undo_stage_buffer() end, "Undo stage buffer" },
-        R = { function() gs.reset_buffer() end, "Reset buffer" },
-        s = { function() gs.stage_hunk() end, "Stage hunk" },
-        S = { function() gs.stage_buffer() end, "Stage buffer" },
-        u = { function() gs.reset_hunk() end, "Reset hunk" },
-
-      },
-      "Git Hunk"
+      name = "Git Hunk operations",
+      b = { function() gs.blame_line() end, "Show blame" },
+      B = { function() gs.blame_line({ full = true }) end, "Show full blame" },
+      d = { function() gs.toggle_deleted() end, "Toggle show deleted hunks" },
+      D = { function() gs.diffthis() end, "Vimdiff current line" },
+      p = { function() gs.preview_hunk() end, "Preview hunk" },
+      r = { function() gs.undo_stage_buffer() end, "Undo stage buffer" },
+      R = { function() gs.reset_buffer() end, "Reset buffer" },
+      s = { function() gs.stage_hunk() end, "Stage hunk" },
+      S = { function() gs.stage_buffer() end, "Stage buffer" },
+      u = { function() gs.reset_hunk() end, "Reset hunk" },
     },
     o = {
-      {
-        c = { function() overseer.close() end, "Close" },
-        o = { function() overseer.open() end, "Open" },
-        r = { function()
-          overseer.open()
-          overseer.run_template()
-        end, "Run" },
-        t = { function() overseer.toggle() end, "Toggle" },
-      },
-      "Overseer runner (tasks.json)"
+      name = "Overseer runner (tasks.json)",
+      c = { function() overseer.close() end, "Close" },
+      o = { function() overseer.open() end, "Open" },
+      r = { function()
+        overseer.open()
+        overseer.run_template()
+      end, "Run" },
+      t = { function() overseer.toggle() end, "Toggle" },
     }
   },
   -- From gitsigns.nvim; we only add the documentation here
@@ -185,8 +172,8 @@ vim.g.clipboard = {
 }
 
 -- Now the '+' register will copy to system clipboard using OSC52
-vim.keymap.set('n', '<leader>c', '"+y')
-vim.keymap.set('n', '<leader>cc', '"+yy')
+vim.keymap.set('n', '<leader>y', '"+y')
+vim.keymap.set('n', '<leader>yy', '"+yy')
 
 -- Alternative Visual Studio-style debugger mappings
 map("n", "<F5>", function() dap.continue() end)

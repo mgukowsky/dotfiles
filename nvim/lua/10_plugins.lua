@@ -139,4 +139,9 @@ Plug('stevearc/overseer.nvim')
 -- undotree (view undo history)
 -- Plug('mbbill/undotree')
 
+-- AI plugins
+Plug('MunifTanjim/nui.nvim')
+Plug('folke/trouble.nvim')
+Plug('jackmort/chatgpt.nvim')
+
 vim.call("plug#end")
