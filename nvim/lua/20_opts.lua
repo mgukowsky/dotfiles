@@ -239,7 +239,10 @@ cmp.setup.cmdline(':', {
   sources = cmp.config.sources({
     { name = 'path' }
   }, {
-    { name = 'cmdline' }
+    -- Setting keyword_length to a low value can lead to performance issues, since it will try
+    -- to match against _all_ possible commands. Observed that `:r!` caused nvim to lock up as
+    -- nvim-cmp tried to match it against all possible commands on the system.
+    { name = 'cmdline', keyword_length = 4 }
   })
 })
 
