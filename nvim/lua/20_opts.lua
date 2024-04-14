@@ -26,6 +26,7 @@ opt.exrc = true                                     -- Load external rc files, i
 opt.hidden = true                                   -- Remove warnings when switching btwn buffers that haven't yet been written out
 opt.hlsearch = true                                 -- Highlight search match
 opt.incsearch = true                                -- Match search as you type
+opt.jumpoptions = "stack"                           -- Make jumplist function like a browser forward/back button
 
 -- Characters used to represent whitespace
 -- N.B. use the command `:set list` or `vim.opt.list = true` to see these
