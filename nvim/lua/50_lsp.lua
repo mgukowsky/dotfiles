@@ -150,6 +150,7 @@ local function on_attach(client, bufnr)
         "LSP functions"
       }
     },
+    ["+"] = { function() vim.cmd("Lspsaga hover_doc") end, "Show hover (press twice to focus)" },
     ["["] = {
       d = { function() require("lspsaga.diagnostic"):goto_prev() end, "Prev LSP diagnostic" }
     },
@@ -206,7 +207,8 @@ lspconfigs.jsonls.setup({
 })
 
 -- Setup LSPs that don't require any additional configs
-for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_lsp", "tsserver" }) do
+for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_lsp", "rust_analyzer",
+  "tsserver" }) do
   lspconfigs[lsp_name].setup({
     on_attach = on_attach,
     capabilities = nvimCmpCapabilities,

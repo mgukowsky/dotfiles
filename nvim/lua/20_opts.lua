@@ -122,7 +122,7 @@ require('nvim-cursorline').setup({
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
   ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "javascript", "json", "lua",
-    "markdown", "markdown_inline", "python", "ruby", "typescript", "vim", "vimdoc" },
+    "markdown", "markdown_inline", "python", "ruby", "rust", "typescript", "vim", "vimdoc" },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -393,9 +393,11 @@ require("lspsaga").setup({
   },
   outline = {
     close_after_jump = false,
+    layout = 'float',
     keys = {
       toggle_or_jump = "<CR>",
     },
+    max_height = 0.8,
     win_width = 45,
   },
   symbol_in_winbar = {
@@ -483,7 +485,7 @@ dap.adapters = {
 -- https://github.com/stevearc/overseer.nvim/blob/master/doc/third_party.md#dap
 require("dap.ext.vscode").json_decode = require("overseer.json").decode
 require('dap.ext.vscode').load_launchjs(nil, {
-  cppdbg = { "c", "cpp" },
+  cppdbg = { "c", "cpp", "rust" },
   python = { "python" },
 })
 
