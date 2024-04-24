@@ -206,7 +206,7 @@ lspconfigs.jsonls.setup({
 })
 
 -- Setup LSPs that don't require any additional configs
-for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_ls", "tsserver" }) do
+for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_lsp", "tsserver" }) do
   lspconfigs[lsp_name].setup({
     on_attach = on_attach,
     capabilities = nvimCmpCapabilities,
