@@ -5,8 +5,9 @@ local map = vim.keymap.set
 local del = vim.keymap.del
 
 -- Move visual selections around, from https://youtu.be/w7i4amO_zaE?feature=shared
-map("v", "J", ":m '>+1<CR>gv=gv")
-map("v", "K", ":m '<-2<CR>gv=gv")
+-- ***commenting out for now, as this is easy to misuse in visual mode
+-- map("v", "J", ":m '>+1<CR>gv=gv")
+-- map("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Easy buffer navigation
 map("n", "<C-h>", vim.cmd.bp)

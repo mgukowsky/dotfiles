@@ -139,6 +139,9 @@ Plug('stevearc/overseer.nvim')
 -- undotree (view undo history)
 -- Plug('mbbill/undotree')
 
+-- Specialized Rust LSP setup
+Plug('mrcjkb/rustaceanvim')
+
 -- AI plugins
 Plug('MunifTanjim/nui.nvim')
 Plug('folke/trouble.nvim')

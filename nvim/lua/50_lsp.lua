@@ -207,10 +207,31 @@ lspconfigs.jsonls.setup({
 })
 
 -- Setup LSPs that don't require any additional configs
-for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_lsp", "rust_analyzer",
+-- N.B. that we intentionally omit rust_analyzer from this list; it's handled by rustacean.nvim
+for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_lsp",
   "tsserver" }) do
   lspconfigs[lsp_name].setup({
     on_attach = on_attach,
     capabilities = nvimCmpCapabilities,
   })
 end
+
+-- rustacean requires us to setup the Rust LSP separately
+vim.g.rustaceanvim = {
+  -- Plugin configuration
+  tools = {
+  },
+  -- LSP configuration
+  server = {
+    on_attach = on_attach,
+    default_settings = {
+      -- rust-analyzer language server configuration
+      ['rust-analyzer'] = {
+      },
+    },
+  },
+  -- DAP configuration
+  -- We handle this in DAP setup earlier, so this can stay commented out unless debugging stops
+  -- working
+  -- dap = require('dap').configurations.cpp
+}
