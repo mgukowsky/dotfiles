@@ -81,6 +81,23 @@ g.markdown_syntax_conceal = 0
 -- Show quote characters in JSON files
 g.vim_json_conceal = 0
 
+-- Autopairs/endwise setup
+local npairs = require("nvim-autopairs")
+npairs.setup({
+  -- Don't add the closing pair if the next character is alphanumeric or '.'
+  -- This is usually what we want
+  ignored_next_char = "[%w%.]"
+})
+
+local endwise = require('nvim-autopairs.ts-rule').endwise
+npairs.add_rules({
+  -- For C++ files, add a matching #endif to #if directives
+  -- Not covered by nvim-treesitter-endwise, do we have to add it
+  -- Per https://github.com/windwp/nvim-autopairs/wiki/Endwise#create-a-new-endwise-rule
+  endwise('^#if.*$', '#endif', 'cpp', 'preproc_if')
+})
+
+
 -- which-key.nvim
 -- Shows completions for a command as characters are entered
 -- (after vim.o.timeoutlen); can also be manually invoked with
@@ -141,6 +158,10 @@ require("nvim-treesitter.configs").setup({
       include_surrounding_whitespace = false,
     },
   },
+  -- Turn on nvim-treesitter-endwise
+  endwise = {
+    enable = true
+  }
 })
 
 -- nvim-cmp configuration; from https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#safely-select-entries-with-cr
