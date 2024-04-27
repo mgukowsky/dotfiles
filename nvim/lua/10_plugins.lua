@@ -49,6 +49,7 @@ Plug('nvim-telescope/telescope.nvim')
 Plug('nvim-telescope/telescope-symbols.nvim')
 Plug('nvim-telescope/telescope-ui-select.nvim')
 Plug('benfowler/telescope-luasnip.nvim')
+Plug('rafamadriz/friendly-snippets')
 
 -- Adds :BufOnly to close all buffers except the current one
 Plug('schickling/vim-bufonly')

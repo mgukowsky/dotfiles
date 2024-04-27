@@ -152,6 +152,7 @@ end
 
 local cmp = require("cmp")
 local luasnip = require("luasnip")
+require("luasnip.loaders.from_vscode").lazy_load() -- loads friendly-snippets
 local lspkind = require('lspkind')
 cmp.setup({
   snippet = {
@@ -184,8 +185,8 @@ cmp.setup({
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
+      elseif luasnip.locally_jumpable(1) then
+        luasnip.jump(1)
       elseif has_words_before() then
         cmp.complete()
       else
@@ -195,7 +196,7 @@ cmp.setup({
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
+      elseif luasnip.locally_jumpable(-1) then
         luasnip.jump(-1)
       else
         fallback()
@@ -313,6 +314,7 @@ telescope.setup({
     },
   },
   extensions = {
+    -- Use telescope for vim.ui.select()
     ["ui-select"] = {
       require("telescope.themes").get_dropdown()
     }
