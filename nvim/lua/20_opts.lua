@@ -581,20 +581,30 @@ local group_overrides = {
   ["@attribute.cpp"] = { link = "@type.qualifier" }, -- C++ [[attributes]]
   ["@label.cpp"] = { fg = vscPalette.vscRed },       -- `goto` labels
   ["@namespace.cpp"] = { fg = vscPalette.vscDarkYellow },
-  ["@operator.cpp"] = { link = "@keyword.cpp" },     -- Includes `&` and `*`
+
+  -- Treesitter update in ~2024 gave some keywords different highlighting; let's make all keywords
+  -- use the same highlighting
+  ["@keyword.cpp"] = { link = "@keyword.return" },
+  ["@operator.cpp"] = { link = "@keyword.cpp" }, -- Includes `&` and `*`
+  ["@operator.rust"] = { link = "@operator.cpp" },
   -- ["@punctuation.bracket.cpp"] = { fg = vscPalette.vscDarkYellow }, -- `{}`, `[]`, `()`
   ["@text.uri"] = { fg = vscPalette.vscAccentBlue },
 
   -- LSP semantic tokens (these are specific to clangd; no idea if other LSPs will provide these same values)
   ["@lsp.mod.functionScope.cpp"] = { fg = vscPalette.vscFront }, -- regular function scope variables should be white
+  ["@lsp.type.variable.rust"] = { link = "@lsp.mod.functionScope.cpp" },
   ["@lsp.mod.static.cpp"] = { fg = customPalette.lime },         -- Use bright green for statics
   ["@lsp.type.comment.cpp"] = { fg = vscPalette.vscGray },       -- Inactive #ifdefs, etc.
   ["@lsp.type.enum.cpp"] = { fg = vscPalette.vscOrange },        -- Name of an enum...
+  ["@lsp.type.decorator.rust"] = { link = "@attribute.cpp" },
   ["@lsp.type.enumMember.cpp"] = { link = "@constant.cpp" },     -- ...and the enum values
   ["@lsp.type.macro.cpp"] = { fg = customPalette.visualStudioDarkPurple },
+  ["@lsp.type.macro.rust"] = { link = "@lsp.type.macro.cpp" },
   ["@lsp.type.namespace.cpp"] = { link = "@namespace.cpp" },
+  ["@lsp.type.namespace.rust"] = { link = "@lsp.type.namespace.cpp" },
   ["@lsp.typemod.class.deduced.cpp"] = { link = "@type.builtin.cpp" },                      -- `auto` type, etc. N.B. that `auto` may be highlighted differently if it resolves to a type with more specific highlighting rules!
   ["@lsp.typemod.parameter.functionScope.cpp"] = { link = "Identifier" },                   -- Parameters should have a little highlighting
+  ["@lsp.type.parameter.rust"] = { link = "@lsp.typemod.parameter.functionScope.cpp" },
   ["@lsp.typemod.property.classScope.cpp"] = { fg = vscPalette.vscLightBlue, bold = true }, -- Member variables should be bold identifiers
   ["@lsp.typemod.type.deduced.cpp"] = { link = "@type.builtin.cpp" },                       -- Other uses of `auto`
   ["@lsp.typemod.type.defaultLibrary.cpp"] = { link = "@type.cpp" },                        -- Types from the standard library shouldn't have special highlighing
