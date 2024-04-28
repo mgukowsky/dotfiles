@@ -142,12 +142,12 @@ local function on_attach(client, bufnr)
       n = { function() vim.cmd("Lspsaga outline") end, "Toggle LSP code outline" },
       l = {
         {
+          name = "LSP functions",
           a = { function() vim.cmd("Lspsaga code_action") end, "LSP code action" },
           d = { function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end, "Diagnostics" },
           s = { function() require('telescope.builtin').lsp_document_symbols() end, "Document Symbol search" },
           w = { function() require('telescope.builtin').lsp_workspace_symbols() end, "Workspace Symbol search" },
-        },
-        "LSP functions"
+        }
       }
     },
     ["+"] = { function() vim.cmd("Lspsaga hover_doc") end, "Show hover (press twice to focus)" },
@@ -157,6 +157,8 @@ local function on_attach(client, bufnr)
     ["]"] = {
       d = { function() require("lspsaga.diagnostic"):goto_next() end, "Next LSP diagnostic" }
     },
+  }, {
+    buffer = bufnr,
   })
 end
 
@@ -216,6 +218,64 @@ for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_lsp"
   })
 end
 
+-- Specialization for Rustacean to provide mappings to some of the utility functions
+-- that this library provides us
+local function rustacean_on_attach(client, bufnr)
+  local rlsp = vim.cmd.RustLsp
+  on_attach(client, bufnr)
+  wk.register({
+    ["<leader>"] = {
+      l = {
+        a = { function() rlsp("codeAction") end, "Code action (Rust)" },
+      },
+      r = { -- Normally mapped to cmd history search
+        name = "Rust functions",
+        c = { function() rlsp("openCargo") end, "Cargo.toml" },
+        d = { function() rlsp("debuggables") end, "Debuggables select" },
+        D = { function() rlsp("debug") end, "Debug target at cursor" },
+        e = { function() rlsp("explainError") end, "Explain error" },
+        -- Only useful if checkOnSave for rust-analyzer is false
+        f = { function() rlsp("flyCheck") end, "Fly check (cargo/clippy)" },
+        g = { function() rlsp("crateGraph") end, "View crate DAG" },
+        m = { function() rlsp("expandMacro") end, "Expand macro" },
+        o = { function() rlsp("openDocs") end, "Open docs" },
+        p = { function() rlsp("parentModule") end, "Parent module" },
+        r = { function() rlsp("runnables") end, "Runnables select" },
+        R = { function() rlsp("run") end, "Run target at cursor" },
+        s = { function() rlsp("syntaxTree") end, "View syntax tree" },
+        t = { function() rlsp("testables") end, "Testables select" },
+        v = {
+          name = "View low-level information",
+          a = { function() vim.cmd.RustEmitAsm() end, "View ASM" },
+          h = { function() rlsp({ "view", "hir" }) end, "View HIR" },
+          i = { function() vim.cmd.RustEmitIr() end, "View LLVM IR" },
+          l = { function() rlsp("logFile") end, "rust-analyzer logs" },
+          m = { function() rlsp({ "view", "mir" }) end, "View MIR" },
+        }
+      }
+    },
+    J = { function() rlsp("joinLines") end, "Join lines" },
+    ["+"] = { function() rlsp({ "hover", "actions" }) end, "Show hover (press twice to focus)" },
+    ["]"] = {
+      d = { function() rlsp("renderDiagnostic") end, "Next LSP diagnostic" }
+    },
+    ["<F5>"] = { function() rlsp({ "debuggables", bang = true }) end, "Run last debuggable" },
+
+    -- Ctrl+F5; same as Visual Studio mapping
+    ["<F29>"] = { function() rlsp({ "runnables", bang = true }) end, "Run last runnable" },
+  }, {
+    mode = "n",
+    buffer = bufnr,
+  })
+
+  wk.register({
+    ["+"] = { function() rlsp({ "hover", "range" }) end, "Show hover (press twice to focus)" },
+  }, {
+    mode = "v",
+    buffer = bufnr,
+  })
+end
+
 -- rustacean requires us to setup the Rust LSP separately
 vim.g.rustaceanvim = {
   -- Plugin configuration
@@ -223,7 +283,7 @@ vim.g.rustaceanvim = {
   },
   -- LSP configuration
   server = {
-    on_attach = on_attach,
+    on_attach = rustacean_on_attach,
     default_settings = {
       -- rust-analyzer language server configuration
       ['rust-analyzer'] = {

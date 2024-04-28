@@ -126,6 +126,18 @@ wk.register({
       return '<Ignore>'
     end, "Next Git change" }
   },
+  -- Alternative Visual Studio-style debugger mappings
+  ["<F5>"] = { function() dap.continue() end, "Continue (DAP)" },
+  ["<F7>"] = { function()
+    overseer.open()
+    overseer.run_template()
+  end, "Run overseer template" },
+  ["<F9>"] = { function() dap.toggle_breakpoint() end, "Toggle breakpoint" },
+  ["<F10>"] = { function() dap.step_over() end, "Step over" },
+  ["<F11>"] = { function() dap.step_into() end, "Step into" },
+
+  -- This is the keysym for Shift+F11 (i.e. F12 + 11)
+  ["<F23>"] = { function() dap.step_out() end, "Step out" },
 })
 
 -- Use arrows for resizing splits instead of navigation; vim "hard mode" ;)
@@ -175,14 +187,3 @@ vim.g.clipboard = {
 -- Now the '+' register will copy to system clipboard using OSC52
 vim.keymap.set('n', '<leader>y', '"+y')
 vim.keymap.set('n', '<leader>yy', '"+yy')
-
--- Alternative Visual Studio-style debugger mappings
-map("n", "<F5>", function() dap.continue() end)
-map("n", "<F7>", function()
-  overseer.open()
-  overseer.run_template()
-end)
-map("n", "<F9>", function() dap.toggle_breakpoint() end)
-map("n", "<F10>", function() dap.step_over() end)
-map("n", "<F11>", function() dap.step_into() end)
-map("n", "<F12>", function() dap.step_out() end)
