@@ -495,15 +495,16 @@ dap.adapters = {
     port = "${port}",
     type = 'server'
   },
-  python = {
-    id = 'python',
-    type = 'executable',
-    command = '/tmp/venv/bin/python',
-    args = { '-m', 'debugpy.adapter' },
-    options = {
-      source_filetype = 'python',
-    },
-  }
+  -- We let nvim-dap-python handle this configuration
+  -- python = {
+  --   id = 'python',
+  --   type = 'executable',
+  --   command = '/tmp/venv/bin/python',
+  --   args = { '-m', 'debugpy.adapter' },
+  --   options = {
+  --     source_filetype = 'python',
+  --   },
+  -- }
 }
 
 -- Better Json support for nvim-dap, per
@@ -511,12 +512,21 @@ dap.adapters = {
 require("dap.ext.vscode").json_decode = require("overseer.json").decode
 require('dap.ext.vscode').load_launchjs(nil, {
   cppdbg = { "c", "cpp", "rust" },
-  python = { "python" },
+  -- Again, we let nvim-dap-python handle this configuration
+  -- python = { "python" },
 })
 
 -- Per https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#ccrust-via-lldb-vscode
 dap.configurations.c = dap.configurations.cpp
 dap.configurations.rust = dap.configurations.cpp
+
+-- TODO: this won't work on Windows
+local pyhandle = io.popen("which python3")
+if pyhandle ~= nil then
+  local pypath = pyhandle:read("*a")
+  pyhandle:close()
+  require('dap-python').setup(pypath)
+end
 
 local dapui = require("dapui")
 dapui.setup()
@@ -596,8 +606,9 @@ local group_overrides = {
   ["@lsp.mod.static.cpp"] = { fg = customPalette.lime },         -- Use bright green for statics
   ["@lsp.type.comment.cpp"] = { fg = vscPalette.vscGray },       -- Inactive #ifdefs, etc.
   ["@lsp.type.enum.cpp"] = { fg = vscPalette.vscOrange },        -- Name of an enum...
+  ["@lsp.type.enum.rust"] = { link = "@lsp.type.enum.cpp" },
   ["@lsp.type.decorator.rust"] = { link = "@attribute.cpp" },
-  ["@lsp.type.enumMember.cpp"] = { link = "@constant.cpp" },     -- ...and the enum values
+  ["@lsp.type.enumMember.cpp"] = { link = "@constant.cpp" }, -- ...and the enum values
   ["@lsp.type.macro.cpp"] = { fg = customPalette.visualStudioDarkPurple },
   ["@lsp.type.macro.rust"] = { link = "@lsp.type.macro.cpp" },
   ["@lsp.type.namespace.cpp"] = { link = "@namespace.cpp" },

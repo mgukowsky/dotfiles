@@ -127,6 +127,7 @@ Plug('mfussenegger/nvim-dap')
 Plug('rcarriga/nvim-dap-ui')
 Plug('nvim-telescope/telescope-dap.nvim')
 Plug('theHamsta/nvim-dap-virtual-text')
+Plug('mfussenegger/nvim-dap-python')
 
 -- overseer.nvim (task runner)
 Plug('stevearc/dressing.nvim')

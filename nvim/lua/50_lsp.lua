@@ -210,13 +210,49 @@ lspconfigs.jsonls.setup({
 
 -- Setup LSPs that don't require any additional configs
 -- N.B. that we intentionally omit rust_analyzer from this list; it's handled by rustacean.nvim
-for _, lsp_name in pairs({ "clangd", "cmake", "jedi_language_server", "ruby_lsp",
-  "tsserver" }) do
+for _, lsp_name in pairs({ "clangd", "cmake", "ruby_lsp", "tsserver" }) do
   lspconfigs[lsp_name].setup({
     on_attach = on_attach,
     capabilities = nvimCmpCapabilities,
   })
 end
+
+local function python_on_attach(client, bufnr)
+  on_attach(client, bufnr)
+  local dap_python = require("dap-python")
+  wk.register({
+    ["<leader>"] = {
+      p = {
+        name = "Python functions",
+        d = {
+          name = "Debug",
+          c = { function() dap_python.test_class() end, "Test class under cursor" },
+          m = { function() dap_python.test_method() end, "Test method under cursor" },
+        }
+      }
+    }
+  }, {
+    mode = "n",
+    buffer = bufnr,
+  })
+
+  wk.register({
+    ["<leader>"] = {
+      p = {
+        name = "Python functions",
+        d = { function() dap_python.debug_selection() end, "Debug selection" },
+      }
+    }
+  }, {
+    mode = "v",
+    buffer = bufnr,
+  })
+end
+
+lspconfigs.jedi_language_server.setup({
+  on_attach = python_on_attach,
+  capabilities = nvimCmpCapabilities,
+})
 
 -- Specialization for Rustacean to provide mappings to some of the utility functions
 -- that this library provides us
