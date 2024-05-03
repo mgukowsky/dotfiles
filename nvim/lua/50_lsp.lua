@@ -263,38 +263,36 @@ local function rustacean_on_attach(client, bufnr)
     ["<leader>"] = {
       l = {
         a = { function() rlsp("codeAction") end, "Code action (Rust)" },
-      },
-      r = { -- Normally mapped to cmd history search
-        name = "Rust functions",
-        c = { function() rlsp("openCargo") end, "Cargo.toml" },
-        d = { function() rlsp("debuggables") end, "Debuggables select" },
-        D = { function() rlsp("debug") end, "Debug target at cursor" },
-        e = { function() rlsp("explainError") end, "Explain error" },
-        -- Only useful if checkOnSave for rust-analyzer is false
-        f = { function() rlsp("flyCheck") end, "Fly check (cargo/clippy)" },
-        g = { function() rlsp("crateGraph") end, "View crate DAG" },
-        m = { function() rlsp("expandMacro") end, "Expand macro" },
-        o = { function() rlsp("openDocs") end, "Open docs" },
-        p = { function() rlsp("parentModule") end, "Parent module" },
-        r = { function() rlsp("runnables") end, "Runnables select" },
-        R = { function() rlsp("run") end, "Run target at cursor" },
-        s = { function() rlsp("syntaxTree") end, "View syntax tree" },
-        t = { function() rlsp("testables") end, "Testables select" },
-        v = {
-          name = "View low-level information",
-          a = { function() vim.cmd.RustEmitAsm() end, "View ASM" },
-          h = { function() rlsp({ "view", "hir" }) end, "View HIR" },
-          i = { function() vim.cmd.RustEmitIr() end, "View LLVM IR" },
-          l = { function() rlsp("logFile") end, "rust-analyzer logs" },
-          m = { function() rlsp({ "view", "mir" }) end, "View MIR" },
+        r = {
+          name = "Rust functions",
+          c = { function() rlsp("openCargo") end, "Cargo.toml" },
+          d = { function() rlsp("debuggables") end, "Debuggables select" },
+          D = { function() rlsp("debug") end, "Debug target at cursor" },
+          e = { function() rlsp("explainError") end, "Explain error" },
+          E = { function() rlsp("renderDiagnostic") end, "Render diagnostic" },
+          -- Only useful if checkOnSave for rust-analyzer is false
+          f = { function() rlsp("flyCheck") end, "Fly check (cargo/clippy)" },
+          g = { function() rlsp("crateGraph") end, "View crate DAG" },
+          m = { function() rlsp("expandMacro") end, "Expand macro" },
+          o = { function() rlsp("openDocs") end, "Open docs" },
+          p = { function() rlsp("parentModule") end, "Parent module" },
+          r = { function() rlsp("runnables") end, "Runnables select" },
+          R = { function() rlsp("run") end, "Run target at cursor" },
+          s = { function() rlsp("syntaxTree") end, "View syntax tree" },
+          t = { function() rlsp("testables") end, "Testables select" },
+          x = {
+            name = "eXtended functionality",
+            a = { function() vim.cmd.RustEmitAsm() end, "View ASM" },
+            h = { function() rlsp({ "view", "hir" }) end, "View HIR" },
+            i = { function() vim.cmd.RustEmitIr() end, "View LLVM IR" },
+            l = { function() rlsp("logFile") end, "rust-analyzer logs" },
+            m = { function() rlsp({ "view", "mir" }) end, "View MIR" },
+          }
         }
-      }
+      },
     },
     J = { function() rlsp("joinLines") end, "Join lines" },
     ["+"] = { function() rlsp({ "hover", "actions" }) end, "Show hover (press twice to focus)" },
-    ["]"] = {
-      d = { function() rlsp("renderDiagnostic") end, "Next LSP diagnostic" }
-    },
     ["<F5>"] = { function() rlsp({ "debuggables", bang = true }) end, "Run last debuggable" },
 
     -- Ctrl+F5; same as Visual Studio mapping
