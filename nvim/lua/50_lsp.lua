@@ -1,6 +1,8 @@
 -- Language Server Protocol Configuration
 
+local dap = require('dap')
 local wk = require("which-key")
+local util = require("local.util")
 
 -- Change the icon that precedes diagnostics, per
 -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-prefixcharacter-preceding-the-diagnostics-virtual-text
@@ -17,6 +19,77 @@ local signs = { Error = "🤬", Warn = "😬", Hint = "🤔", Info = "🤓" }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
+local function run_dap_config(program_path, args)
+  local cfg = {
+    cwd = "${workspaceFolder}",
+    name = "Launch",
+    program = program_path,
+    args = args,
+    request = "launch",
+    stopAtEntry = false,
+    type = "cppdbg",
+    preLaunchTask = "default_build",
+    linux = {
+      MIMode = "gdb",
+      miDebuggerPath = "/usr/bin/gdb"
+    },
+    osx = {
+      MIMode = "lldb",
+      miDebuggerPath = "/usr/local/bin/lldb-mi"
+    },
+    windows = {
+      MIMode = "gdb",
+      miDebuggerPath = "C:\\MinGw\\bin\\gdb.exe"
+    },
+    setupCommands = {
+      {
+        text = "-enable-pretty-printing",
+        description = "enable pretty printing",
+        ignoreFailures = false
+      }
+    }
+  }
+
+  dap.run(cfg)
+end
+
+local function cpp_dbg_select()
+  local outdir = util.stdout_exec("dirname $(realpath compile_commands.json)")
+  -- Get the paths of all executable targets relative to the root of the build directory
+  local executables = vim.split(
+    util.stdout_exec("ninja -C " .. outdir .. " -t targets all | grep -e 'EXECUTABLE' | cut -d':' -f1"), "\n")
+
+  vim.ui.select(executables,
+    { prompt = "Executable to debug:", format_item = function(item) return item end },
+    function(choice) run_dap_config(outdir .. "/" .. choice) end)
+end
+
+local function cpp_run_gtest_at_cursor()
+  local info = util.get_cursor_gtest_info()
+
+  if info == nil then
+    vim.notify("Not in a TEST* body", vim.log.levels.ERROR)
+    return
+  end
+
+  local outdir = util.stdout_exec("dirname $(realpath compile_commands.json)")
+  -- ctest can provide us a nice manifest of all the tests mapped to their executables, in JSON format
+  local ctest_json = require("dap.ext.vscode").json_decode(
+    util.stdout_exec("cd " .. outdir .. " && ctest --show-only=json-v1"))
+
+  local testname = info.suite .. "." .. info.test
+  for _, testinfo in ipairs(ctest_json.tests) do
+    if testinfo.name == testname then
+      vim.notify("Running test " .. testname)
+      local executable = table.remove(testinfo.command, 1)
+      run_dap_config(executable, testinfo.command)
+      return
+    end
+  end
+
+  vim.notify("Failed to find test config for " .. testname, vim.log.levels.ERROR)
 end
 
 -- Recommended LSP configuration per https://github.com/neovim/nvim-lspconfig
@@ -210,7 +283,7 @@ lspconfigs.jsonls.setup({
 
 -- Setup LSPs that don't require any additional configs
 -- N.B. that we intentionally omit rust_analyzer from this list; it's handled by rustacean.nvim
-for _, lsp_name in pairs({ "clangd", "cmake", "ruby_lsp", "tsserver" }) do
+for _, lsp_name in pairs({ "cmake", "ruby_lsp", "tsserver" }) do
   lspconfigs[lsp_name].setup({
     on_attach = on_attach,
     capabilities = nvimCmpCapabilities,
@@ -254,6 +327,29 @@ lspconfigs.jedi_language_server.setup({
   capabilities = nvimCmpCapabilities,
 })
 
+local function clangd_on_attach(client, bufnr)
+  on_attach(client, bufnr)
+  wk.register({
+    ["<leader>"] = {
+      d = {
+        q = {
+          d = { function() util.run_if_compile_commands(cpp_dbg_select) end, "Select program to debug" },
+          D = { function() util.run_if_compile_commands(cpp_run_gtest_at_cursor) end, "Debug gtest at cursor" },
+        }
+      }
+    },
+    ["<F5>"] = { function() util.run_if_compile_commands(cpp_dbg_select) end, "Select program to debug" },
+  }, {
+    mode = "n",
+    buffer = bufnr,
+  })
+end
+
+lspconfigs.clangd.setup({
+  on_attach = clangd_on_attach,
+  capabilities = nvimCmpCapabilities,
+})
+
 -- Specialization for Rustacean to provide mappings to some of the utility functions
 -- that this library provides us
 local function rustacean_on_attach(client, bufnr)
@@ -261,13 +357,17 @@ local function rustacean_on_attach(client, bufnr)
   on_attach(client, bufnr)
   wk.register({
     ["<leader>"] = {
+      d = {
+        q = {
+          d = { function() rlsp("debuggables") end, "Select program to debug" },
+          D = { function() rlsp("debug") end, "Debug target at cursor" },
+        },
+      },
       l = {
         a = { function() rlsp("codeAction") end, "Code action (Rust)" },
         r = {
           name = "Rust functions",
           c = { function() rlsp("openCargo") end, "Cargo.toml" },
-          d = { function() rlsp("debuggables") end, "Debuggables select" },
-          D = { function() rlsp("debug") end, "Debug target at cursor" },
           e = { function() rlsp("explainError") end, "Explain error" },
           E = { function() rlsp("renderDiagnostic") end, "Render diagnostic" },
           -- Only useful if checkOnSave for rust-analyzer is false

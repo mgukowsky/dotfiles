@@ -521,12 +521,8 @@ dap.configurations.c = dap.configurations.cpp
 dap.configurations.rust = dap.configurations.cpp
 
 -- TODO: this won't work on Windows
-local pyhandle = io.popen("which python3")
-if pyhandle ~= nil then
-  local pypath = pyhandle:read("*a")
-  pyhandle:close()
-  require('dap-python').setup(pypath)
-end
+local pypath = require("local.util").stdout_exec("which python3")
+require('dap-python').setup(pypath)
 
 local dapui = require("dapui")
 dapui.setup()
