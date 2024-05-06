@@ -3,6 +3,7 @@
 local dap = require('dap')
 local wk = require("which-key")
 local util = require("local.util")
+local dap_util = require("local.dap_util")
 
 -- Change the icon that precedes diagnostics, per
 -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-prefixcharacter-preceding-the-diagnostics-virtual-text
@@ -21,7 +22,9 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
-local function run_dap_config(program_path, args)
+-- Create a DAP session using the first DAP adapter found in the list [cpptools, codelldb, lldb,
+-- gdb]
+local function run_dap_config(program_path, program_name, args)
   local cfg = {
     cwd = "${workspaceFolder}",
     name = "Launch",
@@ -29,29 +32,51 @@ local function run_dap_config(program_path, args)
     args = args,
     request = "launch",
     stopAtEntry = false,
-    type = "cppdbg",
     preLaunchTask = "default_build",
-    linux = {
+  }
+
+  local cpptools_path = dap_util.get_cpptools_path()
+
+  if cpptools_path ~= nil and vim.fn.executable(cpptools_path) then
+    cfg.type = "cppdbg"
+    cfg.linux = {
       MIMode = "gdb",
       miDebuggerPath = "/usr/bin/gdb"
-    },
-    osx = {
+    }
+    cfg.osx = {
       MIMode = "lldb",
       miDebuggerPath = "/usr/local/bin/lldb-mi"
-    },
-    windows = {
+    }
+    cfg.windows = {
       MIMode = "gdb",
       miDebuggerPath = "C:\\MinGw\\bin\\gdb.exe"
-    },
-    setupCommands = {
+    }
+    cfg.setupCommands = {
       {
         text = "-enable-pretty-printing",
         description = "enable pretty printing",
         ignoreFailures = false
       }
     }
-  }
+  elseif vim.fn.executable(dap_util.CODELLDB_PATH) then
+    cfg.type = "codelldb"
+  elseif vim.fn.executable(dap_util.LLDB_PATH) then
+    cfg.type = "lldb"
+  elseif vim.fn.executable(dap_util.GDB_PATH) then
+    cfg.type = "gdb"
+    cfg.setupCommands = {
+      {
+        text = "-enable-pretty-printing",
+        description = "enable pretty printing",
+        ignoreFailures = false
+      }
+    }
+  else
+    vim.notify("No executable DAP binary found", vim.log.levels.ERROR)
+    return
+  end
 
+  vim.notify("Running " .. program_name .. " via " .. cfg.type)
   dap.run(cfg)
 end
 
@@ -63,7 +88,11 @@ local function cpp_dbg_select()
 
   vim.ui.select(executables,
     { prompt = "Executable to debug:", format_item = function(item) return item end },
-    function(choice) run_dap_config(outdir .. "/" .. choice) end)
+    function(choice)
+      if choice ~= nil then
+        run_dap_config(outdir .. "/" .. choice, choice)
+      end
+    end)
 end
 
 local function cpp_run_gtest_at_cursor()
@@ -82,9 +111,8 @@ local function cpp_run_gtest_at_cursor()
   local testname = info.suite .. "." .. info.test
   for _, testinfo in ipairs(ctest_json.tests) do
     if testinfo.name == testname then
-      vim.notify("Running test " .. testname)
       local executable = table.remove(testinfo.command, 1)
-      run_dap_config(executable, testinfo.command)
+      run_dap_config(executable, testname, testinfo.command)
       return
     end
   end

@@ -1,5 +1,7 @@
 -- Various settings are managed here
 
+local dap_util = require("local.dap_util")
+
 -- Corresponds to the `:set` command
 local opt = vim.opt
 
@@ -442,27 +444,6 @@ require("neodev").setup({
   },
 })
 
--- Find the most recently installed cpptools vscode plugin
-local function get_cpptools_path()
-  local cpptools = vim.fn.glob("~/.vscode/extensions/ms-vscode.cpptools*")
-
-  local max = nil
-  local toolspath = nil
-  for entry in cpptools:gmatch("[^\r\n]+") do -- glob() returns a string, so we need to split it
-    local ftime = vim.fn.getftime(entry)
-    if max == nil or ftime > max then
-      toolspath = entry
-      max = ftime
-    end
-  end
-
-  if toolspath == nil then
-    return "/CPPTOOLS_NOT_FOUND"
-  end
-
-  return toolspath
-end
-
 local dap = require('dap')
 dap.adapters = {
   -- vscode cpptools DAP, per
@@ -470,23 +451,23 @@ dap.adapters = {
   cppdbg = {
     id = 'cppdbg',
     type = 'executable',
-    command = get_cpptools_path() .. '/debugAdapters/bin/OpenDebugAD7',
+    command = dap_util.get_cpptools_path(),
   },
   -- Native GDB DAP; doesn't seem to be quite as good as the vscode cpptools
   gdb = {
     id = 'gdb',
     type = 'executable',
-    command = '/usr/bin/gdb',
+    command = dap_util.GDB_PATH,
     args = { '-i', 'dap' },
   },
   lldb = {
     id = 'lldb',
     type = 'executable',
-    command = '/usr/bin/lldb-vscode',
+    command = dap_util.LLDB_PATH,
   },
   codelldb = {
     executable = {
-      command = '/usr/sbin/codelldb',
+      command = dap_util.CODELLDB_PATH,
       args = { "--port", "${port}" },
       -- On windows you may have to uncomment this:
       -- detached = false,
@@ -655,7 +636,7 @@ require("lualine").setup({
       "diff",
       {
         "diagnostics",
-        sources = { "nvim_lsp", "nvim_diagnostic", "nvim_workspace_diagnostic" },
+        sources = { "nvim_lsp", "nvim_diagnostic" },
         symbols = { error = "E", warn = "W", info = "I", hint = "H" },
         -- update_in_insert = true,
       },
