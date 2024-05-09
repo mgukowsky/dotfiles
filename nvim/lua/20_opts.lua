@@ -623,6 +623,17 @@ require("vscode").load()
 local lualine_theme = require("lualine.themes.vscode")
 lualine_theme.insert.a.bg = vscPalette.vscRed
 lualine_theme.insert.b.fg = vscPalette.vscRed
+
+-- Custom lualine component to show DAP status
+local dap_status_comp = require("lualine.component"):extend()
+function dap_status_comp:init(options)
+  dap_status_comp.super.init(self, options)
+end
+
+function dap_status_comp:update_status()
+  return require("dap").status()
+end
+
 require("lualine").setup({
   extensions = {
     "fugitive", "fzf", "man", "nvim-tree", "nvim-dap-ui", "quickfix", "trouble"
@@ -653,7 +664,11 @@ require("lualine").setup({
           unnamed = "[No Name]",
           newfile = "[New]"
         },
-      }
+      },
+      {
+        dap_status_comp,
+        color = { fg = vscPalette.vscDarkYellow }
+      },
     },
   },
   tabline = {
