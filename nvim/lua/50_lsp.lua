@@ -1,9 +1,8 @@
 -- Language Server Protocol Configuration
 
-local dap = require('dap')
 local wk = require("which-key")
 local util = require("local.util")
-local dap_util = require("local.dap_util")
+local cpp_util = require("local.cpp_util")
 
 -- Change the icon that precedes diagnostics, per
 -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-prefixcharacter-preceding-the-diagnostics-virtual-text
@@ -22,106 +21,8 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
--- Create a DAP session using the first DAP adapter found in the list [cpptools, codelldb, lldb,
--- gdb]
-local function run_dap_config(program_path, program_name, args)
-  local cfg = {
-    cwd = "${workspaceFolder}",
-    name = "Launch",
-    program = program_path,
-    args = args,
-    request = "launch",
-    stopAtEntry = false,
-    preLaunchTask = "default_build",
-  }
-
-  local cpptools_path = dap_util.get_cpptools_path()
-
-  if cpptools_path ~= nil and vim.fn.executable(cpptools_path) then
-    cfg.type = "cppdbg"
-    cfg.linux = {
-      MIMode = "gdb",
-      miDebuggerPath = "/usr/bin/gdb"
-    }
-    cfg.osx = {
-      MIMode = "lldb",
-      miDebuggerPath = "/usr/local/bin/lldb-mi"
-    }
-    cfg.windows = {
-      MIMode = "gdb",
-      miDebuggerPath = "C:\\MinGw\\bin\\gdb.exe"
-    }
-    cfg.setupCommands = {
-      {
-        text = "-enable-pretty-printing",
-        description = "enable pretty printing",
-        ignoreFailures = false
-      }
-    }
-  elseif vim.fn.executable(dap_util.CODELLDB_PATH) then
-    cfg.type = "codelldb"
-  elseif vim.fn.executable(dap_util.LLDB_PATH) then
-    cfg.type = "lldb"
-  elseif vim.fn.executable(dap_util.GDB_PATH) then
-    cfg.type = "gdb"
-    cfg.setupCommands = {
-      {
-        text = "-enable-pretty-printing",
-        description = "enable pretty printing",
-        ignoreFailures = false
-      }
-    }
-  else
-    vim.notify("No executable DAP binary found", vim.log.levels.ERROR)
-    return
-  end
-
-  vim.notify("Running " .. program_name .. " via " .. cfg.type)
-  dap.run(cfg)
-end
-
-local function cpp_dbg_select()
-  local outdir = util.stdout_exec("dirname $(realpath compile_commands.json)")
-  -- Get the paths of all executable targets relative to the root of the build directory
-  local executables = vim.split(
-    util.stdout_exec("ninja -C " .. outdir .. " -t targets all | grep -e 'EXECUTABLE' | cut -d':' -f1"), "\n")
-
-  vim.ui.select(executables,
-    { prompt = "Executable to debug:", format_item = function(item) return item end },
-    function(choice)
-      if choice ~= nil then
-        run_dap_config(outdir .. "/" .. choice, choice)
-      end
-    end)
-end
-
-local function cpp_run_gtest_at_cursor()
-  local info = util.get_cursor_gtest_info()
-
-  if info == nil then
-    vim.notify("Not in a TEST* body", vim.log.levels.ERROR)
-    return
-  end
-
-  local outdir = util.stdout_exec("dirname $(realpath compile_commands.json)")
-  -- ctest can provide us a nice manifest of all the tests mapped to their executables, in JSON format
-  local ctest_json = require("dap.ext.vscode").json_decode(
-    util.stdout_exec("cd " .. outdir .. " && ctest --show-only=json-v1"))
-
-  local testname = info.suite .. "." .. info.test
-  for _, testinfo in ipairs(ctest_json.tests) do
-    if testinfo.name == testname then
-      local executable = table.remove(testinfo.command, 1)
-      run_dap_config(executable, testname, testinfo.command)
-      return
-    end
-  end
-
-  vim.notify("Failed to find test config for " .. testname, vim.log.levels.ERROR)
-end
-
 -- Recommended LSP configuration per https://github.com/neovim/nvim-lspconfig
-local function on_attach(client, bufnr)
+local function on_attach(_, bufnr)
   -- Enable completion recommendations from the LSP
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
@@ -323,12 +224,10 @@ local function python_on_attach(client, bufnr)
   local dap_python = require("dap-python")
   wk.register({
     ["<leader>"] = {
-      p = {
-        name = "Python functions",
-        d = {
-          name = "Debug",
-          c = { function() dap_python.test_class() end, "Test class under cursor" },
-          m = { function() dap_python.test_method() end, "Test method under cursor" },
+      d = {
+        q = {
+          d = { function() dap_python.test_class() end, "Test class under cursor" },
+          D = { function() dap_python.test_method() end, "Test method under cursor" },
         }
       }
     }
@@ -339,9 +238,10 @@ local function python_on_attach(client, bufnr)
 
   wk.register({
     ["<leader>"] = {
-      p = {
-        name = "Python functions",
-        d = { function() dap_python.debug_selection() end, "Debug selection" },
+      d = {
+        q = {
+          d = { function() dap_python.debug_selection() end, "Debug selection" },
+        }
       }
     }
   }, {
@@ -361,12 +261,12 @@ local function clangd_on_attach(client, bufnr)
     ["<leader>"] = {
       d = {
         q = {
-          d = { function() util.run_if_compile_commands(cpp_dbg_select) end, "Select program to debug" },
-          D = { function() util.run_if_compile_commands(cpp_run_gtest_at_cursor) end, "Debug gtest at cursor" },
+          d = { function() util.run_if_compile_commands(cpp_util.dbg_select) end, "Select program to debug" },
+          D = { function() util.run_if_compile_commands(cpp_util.run_gtest_at_cursor) end, "Debug gtest at cursor" },
         }
       }
     },
-    ["<F5>"] = { function() util.run_if_compile_commands(cpp_dbg_select) end, "Select program to debug" },
+    ["<F5>"] = { function() util.run_if_compile_commands(cpp_util.dbg_select) end, "Select program to debug" },
   }, {
     mode = "n",
     buffer = bufnr,

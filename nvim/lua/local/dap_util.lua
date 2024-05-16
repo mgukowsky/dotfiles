@@ -26,4 +26,62 @@ function M.get_cpptools_path()
   return toolspath .. '/debugAdapters/bin/OpenDebugAD7'
 end
 
+-- Create a DAP session using the first DAP adapter found in the list [cpptools, codelldb, lldb,
+-- gdb]
+function M.run_dap_config(program_path, program_name, args)
+  local cfg = {
+    cwd = "${workspaceFolder}",
+    name = "Launch",
+    program = program_path,
+    args = args,
+    request = "launch",
+    stopAtEntry = false,
+    preLaunchTask = "default_build",
+  }
+
+  local cpptools_path = M.get_cpptools_path()
+
+  if cpptools_path ~= nil and vim.fn.executable(cpptools_path) then
+    cfg.type = "cppdbg"
+    cfg.linux = {
+      MIMode = "gdb",
+      miDebuggerPath = "/usr/bin/gdb"
+    }
+    cfg.osx = {
+      MIMode = "lldb",
+      miDebuggerPath = "/usr/local/bin/lldb-mi"
+    }
+    cfg.windows = {
+      MIMode = "gdb",
+      miDebuggerPath = "C:\\MinGw\\bin\\gdb.exe"
+    }
+    cfg.setupCommands = {
+      {
+        text = "-enable-pretty-printing",
+        description = "enable pretty printing",
+        ignoreFailures = false
+      }
+    }
+  elseif vim.fn.executable(M.CODELLDB_PATH) then
+    cfg.type = "codelldb"
+  elseif vim.fn.executable(M.LLDB_PATH) then
+    cfg.type = "lldb"
+  elseif vim.fn.executable(M.GDB_PATH) then
+    cfg.type = "gdb"
+    cfg.setupCommands = {
+      {
+        text = "-enable-pretty-printing",
+        description = "enable pretty printing",
+        ignoreFailures = false
+      }
+    }
+  else
+    vim.notify("No executable DAP binary found", vim.log.levels.ERROR)
+    return
+  end
+
+  vim.notify("Running " .. program_name .. " via " .. cfg.type)
+  require("dap").run(cfg)
+end
+
 return M

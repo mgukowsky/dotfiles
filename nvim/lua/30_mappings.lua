@@ -111,7 +111,7 @@ wk.register({
       t = { function() overseer.toggle() end, "Toggle" },
     }
   },
-  -- From gitsigns.nvim; we only add the documentation here
+  -- From gitsigns.nvim
   ["["] = {
     c = { function()
       if vim.wo.diff then return '[c' end
