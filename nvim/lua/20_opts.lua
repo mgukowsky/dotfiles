@@ -147,6 +147,22 @@ require("nvim-treesitter.configs").setup({
     additional_vim_regex_highlighting = false,
   },
   textobjects = {
+    move = {
+      enable = true,
+      set_jumps = true, -- set jumps in jumplist
+      goto_next_start = {
+        ["]f"] = { query = "@function.outer", desc = "Next function start" }
+      },
+      goto_next_end = {
+        ["]F"] = { query = "@function.outer", desc = "Next function end" }
+      },
+      goto_previous_start = {
+        ["[f"] = { query = "@function.outer", desc = "Previous function start" }
+      },
+      goto_previous_end = {
+        ["[F"] = { query = "@function.outer", desc = "Previous function end" }
+      },
+    },
     select = {
       enable = true,
       lookahead = true,
@@ -574,6 +590,7 @@ local group_overrides = {
   -- use the same highlighting
   ["@keyword.cpp"] = { link = "@keyword.return" },
   ["@operator.cpp"] = { link = "@keyword.cpp" }, -- Includes `&` and `*`
+  ["@lsp.type.operator.cpp"] = { link = "@operator.cpp" },
   ["@operator.rust"] = { link = "@operator.cpp" },
   -- ["@punctuation.bracket.cpp"] = { fg = vscPalette.vscDarkYellow }, -- `{}`, `[]`, `()`
   ["@text.uri"] = { fg = vscPalette.vscAccentBlue },
@@ -619,7 +636,9 @@ require('vscode').setup({
   italic_comments = true,
   group_overrides = group_overrides,
 })
-require("vscode").load()
+-- `require("vscode").load()` resets a bunch of highlight groups and does some other work behind
+-- the scenes that breaks highlighting for a few other plugins, but this form skips all of that.
+vim.cmd.colorscheme("vscode")
 
 local lualine_theme = require("lualine.themes.vscode")
 lualine_theme.insert.a.bg = vscPalette.vscRed
