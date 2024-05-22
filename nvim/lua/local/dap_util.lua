@@ -23,7 +23,14 @@ function M.get_cpptools_path()
     return nil
   end
 
-  return toolspath .. '/debugAdapters/bin/OpenDebugAD7'
+  local fullpath = toolspath .. '/debugAdapters/bin/OpenDebugAD7'
+
+  if vim.fn.executable(fullpath) ~= 1 then
+    vim.notify("Debug adapter is not executable: " .. fullpath, vim.log.levels.ERROR)
+    return nil
+  end
+
+  return fullpath
 end
 
 -- Create a DAP session using the first DAP adapter found in the list [cpptools, codelldb, lldb,

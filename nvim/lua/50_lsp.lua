@@ -110,6 +110,7 @@ local function on_attach(_, bufnr)
     { LSP,     "Declaration" },
     { SAGAIMP, "Implementations" },
     { TEL,     "Type_Definitions" },
+    { LSP,     "TypeHierarchy" },
     { SAGA,    "Peek_Type_Definition" },
     SEP,
     -- Code structure info
@@ -147,6 +148,7 @@ local function on_attach(_, bufnr)
           name = "LSP functions",
           a = { function() vim.cmd("Lspsaga code_action") end, "LSP code action" },
           d = { function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end, "Diagnostics" },
+          i = { function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, "Toggle Inlay Hints" },
           s = { function() require('telescope.builtin').lsp_document_symbols() end, "Document Symbol search" },
           w = { function() require('telescope.builtin').lsp_workspace_symbols() end, "Workspace Symbol search" },
         }
