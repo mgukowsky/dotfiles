@@ -1,5 +1,6 @@
 -- Language Server Protocol Configuration
 
+local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
 local wk = require("which-key")
 local util = require("local.util")
 local cpp_util = require("local.cpp_util")
@@ -155,15 +156,27 @@ local function on_attach(_, bufnr)
       }
     },
     ["+"] = { function() vim.cmd("Lspsaga hover_doc") end, "Show hover (press twice to focus)" },
-    ["["] = {
-      d = { function() require("lspsaga.diagnostic"):goto_prev() end, "Prev LSP diagnostic" }
-    },
-    ["]"] = {
-      d = { function() require("lspsaga.diagnostic"):goto_next() end, "Next LSP diagnostic" }
-    },
   }, {
     buffer = bufnr,
   })
+
+  -- Movement mappings
+  local next_diag_repeat, prev_diag_repeat = ts_repeat_move.make_repeatable_move_pair(
+    function() require("lspsaga.diagnostic"):goto_next() end,
+    function() require("lspsaga.diagnostic"):goto_prev() end
+  )
+  wk.register({
+      ["["] = {
+        d = { function() prev_diag_repeat() end, "Prev LSP diagnostic" }
+      },
+      ["]"] = {
+        d = { function() next_diag_repeat() end, "Next LSP diagnostic" }
+      },
+    },
+    {
+      mode = { "n", "x", "o" },
+    }
+  )
 end
 
 -- Language Server configurations

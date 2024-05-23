@@ -20,6 +20,7 @@ map("", "<C-n>", vim.cmd.NvimTreeToggle)
 local telescope = require('telescope.builtin')
 map("n", "<C-p>", telescope.find_files, {})
 
+local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
 local tel_dap = require('telescope').extensions.dap
 local dap = require('dap')
 local dapui = require('dapui')
@@ -29,6 +30,25 @@ local overseer = require('overseer')
 -- which-key.nvim can create mappings and document them
 local wk = require("which-key")
 wk.register({
+  -- Use arrows for resizing splits instead of navigation; vim "hard mode" ;)
+  ["<Up>"] = { function() vim.cmd.resize(-2) end, "Resize horizontal up" },
+  -- '+2' needs to be passed as a string, otherwise the vim side will interpret this as setting
+  -- the size to 2
+  ["<Down>"] = { function() vim.cmd.resize("+2") end, "Resize horizontal up" },
+  ["<Left>"] = { function() vim.cmd({ cmd = "resize", args = { "-2" }, mods = { vertical = true } }) end, "Resize horizontal up" },
+  ["<Right>"] = { function() vim.cmd({ cmd = "resize", args = { "+2" }, mods = { vertical = true } }) end, "Resize horizontal up" },
+  -- Visual Studio-style debugger mappings
+  ["<F5>"] = { function() dap.continue() end, "Continue (DAP)" },
+  ["<F7>"] = { function()
+    overseer.open()
+    overseer.run_template()
+  end, "Run overseer template" },
+  ["<F9>"] = { function() dap.toggle_breakpoint() end, "Toggle breakpoint" },
+  ["<F10>"] = { function() dap.step_over() end, "Step over" },
+  ["<F11>"] = { function() dap.step_into() end, "Step into" },
+
+  -- This is the keysym for Shift+F11 (i.e. F12 + 11)
+  ["<F23>"] = { function() dap.step_out() end, "Step out" },
   ["<leader>"] = {
     -- Similar to the bash shortcut
     r = { function() telescope.command_history() end, "Command history" },
@@ -111,43 +131,30 @@ wk.register({
       t = { function() overseer.toggle() end, "Toggle" },
     }
   },
-  -- From gitsigns.nvim
-  ["["] = {
-    c = { function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(function() gs.prev_hunk() end)
-      return '<Ignore>'
-    end, "Prev Git change" }
-  },
-  ["]"] = {
-    c = { function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(function() gs.next_hunk() end)
-      return '<Ignore>'
-    end, "Next Git change" }
-  },
-  -- Alternative Visual Studio-style debugger mappings
-  ["<F5>"] = { function() dap.continue() end, "Continue (DAP)" },
-  ["<F7>"] = { function()
-    overseer.open()
-    overseer.run_template()
-  end, "Run overseer template" },
-  ["<F9>"] = { function() dap.toggle_breakpoint() end, "Toggle breakpoint" },
-  ["<F10>"] = { function() dap.step_over() end, "Step over" },
-  ["<F11>"] = { function() dap.step_into() end, "Step into" },
-
-  -- This is the keysym for Shift+F11 (i.e. F12 + 11)
-  ["<F23>"] = { function() dap.step_out() end, "Step out" },
 })
 
--- Use arrows for resizing splits instead of navigation; vim "hard mode" ;)
-map("n", "<Up>", function() vim.cmd.resize(-2) end)
-
--- '+2' needs to be passed as a string, otherwise the vim side will interpret this as setting
--- the size to 2
-map("n", "<Down>", function() vim.cmd.resize("+2") end)
-map("n", "<Left>", '<cmd>vertical resize -2<cr>')  -- TODO: vim.cmd.vertical doesn't want to behave...
-map("n", "<Right>", '<cmd>vertical resize +2<cr>') -- TODO: ditto...
+-- Make certain motions repeatable, and retain f/F/t/T behavior
+-- Per https://github.com/nvim-treesitter/nvim-treesitter-textobjects?tab=readme-ov-file#text-objects-move
+local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)
+-- Movement mappings
+wk.register({
+    [";"] = { function() ts_repeat_move.repeat_last_move() end, "Repeat last movement" },
+    [","] = { function() ts_repeat_move.repeat_last_move_opposite() end, "Repeat opposite of last movement" },
+    f = { function() ts_repeat_move.builtin_f() end, "Move to next char" },
+    F = { function() ts_repeat_move.builtin_F() end, "Move to previous char" },
+    t = { function() ts_repeat_move.builtin_t() end, "Move before next char" },
+    T = { function() ts_repeat_move.builtin_T() end, "Move before previous char" },
+    ["["] = {
+      c = { function() prev_hunk_repeat() end, "Prev Git change" }
+    },
+    ["]"] = {
+      c = { function() next_hunk_repeat() end, "Next Git change" }
+    },
+  },
+  {
+    mode = { "n", "x", "o" },
+  }
+)
 
 -- Search using `s|S` (e.g. `svi` will highlight all matches after the cursor
 -- on the window for 'vi', which will be highlighted in yellow with a character,
