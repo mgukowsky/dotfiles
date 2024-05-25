@@ -25,7 +25,7 @@ end
 -- Recommended LSP configuration per https://github.com/neovim/nvim-lspconfig
 local function on_attach(_, bufnr)
   -- Enable completion recommendations from the LSP
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+  vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
 
   -- TODO: can/should these go in the opts file?
   vim.opt.completeopt:remove("preview") -- Don't show the stupid Scratch window

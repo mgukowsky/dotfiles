@@ -94,7 +94,7 @@ npairs.setup({
 local endwise = require('nvim-autopairs.ts-rule').endwise
 npairs.add_rules({
   -- For C++ files, add a matching #endif to #if directives
-  -- Not covered by nvim-treesitter-endwise, do we have to add it
+  -- Not covered by nvim-treesitter-endwise, so we have to add it
   -- Per https://github.com/windwp/nvim-autopairs/wiki/Endwise#create-a-new-endwise-rule
   endwise('^#if.*$', '#endif', 'cpp', 'preproc_if')
 })
@@ -140,8 +140,9 @@ require('nvim-cursorline').setup({
 
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "bash", "c", "cmake", "comment", "cpp", "javascript", "json", "lua",
-    "markdown", "markdown_inline", "python", "ruby", "rust", "typescript", "vim", "vimdoc" },
+  ensure_installed = { "asm", "bash", "c", "cmake", "comment", "cpp", "javascript", "json", "lua",
+    "markdown", "markdown_inline", "mermaid", "nasm", "python", "ruby", "rust", "typescript",
+    "vim", "vimdoc" },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -173,6 +174,8 @@ require("nvim-treesitter.configs").setup({
         ["if"] = { query = "@function.inner", desc = "Select a function body" },
         ["ac"] = { query = "@class.outer", desc = "Select an entire class" },
         ["ic"] = { query = "@class.inner", desc = "Select the body of a class" },
+        ["a#"] = { query = "@comment.outer", desc = "Select an entire comment" },
+        ["i#"] = { query = "@comment.inner", desc = "Select the body of a comment" },
         ["iS"] = { query = "@statement.outer", desc = "Select the current statement" },
         ["aS"] = { query = "@scope", query_group = "locals", desc = "Select the current scope" },
       },
@@ -543,9 +546,9 @@ require("nvim-dap-virtual-text").setup({
   only_first_definition = false,
 })
 
-vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
-vim.fn.sign_define('DapBreakpointCondition', { text = '🛑', texthl = '', linehl = '', numhl = '' })
-vim.fn.sign_define('DapLogPoint', { text = '🔶', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = 'BreakpointSet', numhl = '' })
+vim.fn.sign_define('DapBreakpointCondition', { text = '🛑', texthl = '', linehl = 'BreakpointSet', numhl = '' })
+vim.fn.sign_define('DapLogPoint', { text = '🔶', texthl = '', linehl = 'BreakpointSet', numhl = '' })
 vim.fn.sign_define('DapStopped', { text = '🟠', texthl = '', linehl = 'debugPC', numhl = '' })
 vim.fn.sign_define('DapBreakpointRejected', { text = '🔘', texthl = '', linehl = '', numhl = '' })
 
@@ -710,3 +713,9 @@ require("lualine").setup({
     },
   },
 })
+
+-- Custom HL groups need to be defined **AFTER** setting the colorscheme
+-- explanation: https://jdhao.github.io/2020/09/22/highlight_groups_cleared_in_nvim/
+
+-- Color is the same as in Visual Studio's line highlight for breakpoints
+vim.api.nvim_set_hl(0, 'BreakpointSet', { bg = "#762c2c" })

@@ -25,6 +25,7 @@ function M.get_cpptools_path()
 
   local fullpath = toolspath .. '/debugAdapters/bin/OpenDebugAD7'
 
+  -- Sometimes the DAP binary will be installed with the wrong perms
   if vim.fn.executable(fullpath) ~= 1 then
     vim.notify("Debug adapter is not executable: " .. fullpath, vim.log.levels.ERROR)
     return nil
@@ -43,8 +44,12 @@ function M.run_dap_config(program_path, program_name, args)
     args = args,
     request = "launch",
     stopAtEntry = false,
-    preLaunchTask = "default_build",
   }
+
+  -- tasks.json must exist in order for us to use a task from it
+  if vim.fn.filereadable("./.vscode/tasks.json") == 1 then
+    cfg.preLaunchTask = "default_build"
+  end
 
   local cpptools_path = M.get_cpptools_path()
 

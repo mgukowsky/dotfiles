@@ -51,12 +51,13 @@ wk.register({
   ["<F23>"] = { function() dap.step_out() end, "Step out" },
   ["<leader>"] = {
     -- Similar to the bash shortcut
-    r = { function() telescope.command_history() end, "Command history" },
-    b = { function() telescope.buffers() end, "Show buffers" },
-    w = { function() telescope.live_grep() end, "Live grep" },
     a = { function() telescope.grep_string() end, "Grep word under cursor" },
+    b = { function() telescope.buffers() end, "Show buffers" },
     q = { function() telescope.commands() end, "Vim command search" },
+    r = { function() telescope.command_history() end, "Command history" },
+    s = { function() require("telescope").extensions.luasnip.luasnip() end, "Snippet search" },
     u = { function() vim.cmd("UndotreeToggle") end, "Undotree toggle" },
+    w = { function() telescope.live_grep() end, "Live grep" },
     ["."] = { function() telescope.symbols() end, "Symbol/emoji search" },
     ["<leader>"] = { function() telescope.builtin() end, "Telescope picker search" },
     d = {
