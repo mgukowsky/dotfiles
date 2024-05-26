@@ -1,6 +1,8 @@
 [user]
 	name = Matt Gukowsky
 	email = mgukowsky@gmail.com
+[init]
+	defaultBranch = main
 [commit]
 	template = /home/mgukowsky/.gitmessage
 [pull]
@@ -14,6 +16,10 @@
   log = delta
   reflog = delta
   show = delta
+
+; Enables `git clone github:org/repo` shorthand
+[url "git@github.com:"]
+    insteadOf = github:
 
 [interactive]
   diffFilter = delta --color-only --features=interactive
@@ -41,5 +47,3 @@
 [color "diff"]
 	newMoved = reverse cyan
   oldMoved = reverse yellow
-[init]
-	defaultBranch = main
