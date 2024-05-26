@@ -52,6 +52,8 @@ wk.register({
   ["<leader>"] = {
     -- Similar to the bash shortcut
     a = { function() telescope.grep_string() end, "Grep word under cursor" },
+    -- Similar to the Windows shortcut
+    ["<M-a>"] = { function() require("notify").dismiss() end, "Dismiss notifications" },
     b = { function() telescope.buffers() end, "Show buffers" },
     q = { function() telescope.commands() end, "Vim command search" },
     r = { function() telescope.command_history() end, "Command history" },
