@@ -140,8 +140,8 @@ require('nvim-cursorline').setup({
 
 --- nvim-treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "asm", "bash", "c", "cmake", "comment", "cpp", "javascript", "json", "lua",
-    "markdown", "markdown_inline", "mermaid", "nasm", "python", "ruby", "rust", "typescript",
+  ensure_installed = { "asm", "bash", "c", "cmake", "comment", "cpp", "glsl", "javascript", "json",
+    "lua", "markdown", "markdown_inline", "mermaid", "nasm", "python", "ruby", "rust", "typescript",
     "vim", "vimdoc" },
   highlight = {
     enable = true,

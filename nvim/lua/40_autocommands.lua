@@ -38,13 +38,15 @@ au("TextYankPost", {
 
 -- File types for rare extensions
 local function setft(ext, syntax) -- Set syntax association for a given filetype
-  au("BufReadPost", {
+  au({ "BufNewFile", "BufReadPost" }, {
     pattern = { ext },
-    callback = function() vim.opt.syntax = syntax end
+    callback = function() vim.opt.ft = syntax end
   })
 end
 
 setft("*.manifest", "xml")
+setft("*.frag", "glsl")
+setft("*.vert", "glsl")
 setft("*.zsh-theme", "sh")
 setft(".clang-format", "yaml")
 setft(".gitmessage", "gitcommit")
