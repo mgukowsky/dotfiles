@@ -323,7 +323,8 @@ require("nvim-tree").setup({
   },
   view = {
     float = {
-      enable = true
+      enable = true,
+      quit_on_focus_loss = false,
     }
   }
 })
