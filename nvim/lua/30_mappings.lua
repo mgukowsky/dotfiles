@@ -55,12 +55,15 @@ wk.register({
     -- Similar to the Windows shortcut
     ["<M-a>"] = { function() require("notify").dismiss() end, "Dismiss notifications" },
     b = { function() telescope.buffers() end, "Show buffers" },
-    q = { function() telescope.commands() end, "Vim command search" },
+    -- Similar to VSCode Ctrl+Shift+P
+    p = { function() telescope.commands() end, "Vim command search" },
     r = { function() telescope.command_history() end, "Command history" },
     s = { function() require("telescope").extensions.luasnip.luasnip() end, "Snippet search" },
     u = { function() vim.cmd("UndotreeToggle") end, "Undotree toggle" },
     w = { function() telescope.live_grep() end, "Live grep" },
     ["."] = { function() telescope.symbols() end, "Symbol/emoji search" },
+    -- Similar to VSCode Ctrl+`
+    ["`"] = { function() vim.cmd("bo te") end, "Open terminal" },
     ["<leader>"] = { function() telescope.builtin() end, "Telescope picker search" },
     d = {
       name = "Debugger (DAP)",
