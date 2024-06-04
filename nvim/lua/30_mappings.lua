@@ -143,10 +143,6 @@ local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_p
 wk.register({
     [";"] = { function() ts_repeat_move.repeat_last_move() end, "Repeat last movement" },
     [","] = { function() ts_repeat_move.repeat_last_move_opposite() end, "Repeat opposite of last movement" },
-    f = { function() ts_repeat_move.builtin_f() end, "Move to next char" },
-    F = { function() ts_repeat_move.builtin_F() end, "Move to previous char" },
-    t = { function() ts_repeat_move.builtin_t() end, "Move before next char" },
-    T = { function() ts_repeat_move.builtin_T() end, "Move before previous char" },
     ["["] = {
       c = { function() prev_hunk_repeat() end, "Prev Git change" }
     },
@@ -155,6 +151,17 @@ wk.register({
     },
   },
   {
+    mode = { "n", "x", "o" },
+  }
+)
+wk.register({
+    f = { ts_repeat_move.builtin_f_expr, "Move to next char" },
+    F = { ts_repeat_move.builtin_F_expr, "Move to previous char" },
+    t = { ts_repeat_move.builtin_t_expr, "Move before next char" },
+    T = { ts_repeat_move.builtin_T_expr, "Move before previous char" },
+  },
+  {
+    expr = true,
     mode = { "n", "x", "o" },
   }
 )
