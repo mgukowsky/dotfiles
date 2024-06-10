@@ -372,3 +372,13 @@ vim.g.rustaceanvim = {
   -- working
   -- dap = require('dap').configurations.cpp
 }
+
+local nls = require("null-ls")
+nls.setup({
+  sources = {
+    -- relatively noisy by default, but useful
+    -- nls.builtins.diagnostics.pylint,
+    nls.builtins.formatting.black,
+    nls.builtins.formatting.isort,
+  }
+})

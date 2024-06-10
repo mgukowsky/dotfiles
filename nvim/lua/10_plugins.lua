@@ -8,6 +8,7 @@ vim.call("plug#begin", vim.fn.stdpath("data") .. "/plugged")
 
 -- Recommended LSP configs
 Plug('neovim/nvim-lspconfig')
+Plug('nvimtools/none-ls.nvim')
 
 -- tabline & statusline
 Plug('nvim-lualine/lualine.nvim')
