@@ -146,6 +146,10 @@ Plug("stevearc/overseer.nvim")
 -- Specialized Rust LSP setup
 Plug("mrcjkb/rustaceanvim")
 
+-- Retrieve JSON schemas for better LSP completion
+Plug("b0o/schemastore.nvim")
+Plug("someone-stole-my-name/yaml-companion.nvim")
+
 -- AI plugins
 Plug("MunifTanjim/nui.nvim")
 Plug("folke/trouble.nvim")

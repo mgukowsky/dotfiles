@@ -272,16 +272,59 @@ lspconfigs.ltex.setup({
 	},
 })
 
+-- Schema configs per https://www.arthurkoziel.com/json-schemas-in-neovim/
 local json_lsp_cap = vim.lsp.protocol.make_client_capabilities()
 json_lsp_cap.textDocument.completion.completionItem.snippetSupport = true
 lspconfigs.jsonls.setup({
 	on_attach = on_attach,
 	capabilities = json_lsp_cap,
+	settings = {
+		json = {
+			schemas = require("schemastore").json.schemas(),
+			validate = { enable = true },
+		},
+	},
 })
+
+lspconfigs.yamlls.setup(require("yaml-companion").setup({
+	lspconfig = {
+		on_attach = function(client, bufnr)
+			on_attach(client, bufnr)
+			wk.register({
+				["<leader>"] = {
+					l = {
+						x = {
+							function()
+								require("telescope").extensions.yaml_schema.yaml_schema()
+							end,
+							"Select YAML schema",
+						},
+					},
+				},
+			}, {
+				mode = "n",
+				buffer = bufnr,
+			})
+		end,
+		capabilities = nvimCmpCapabilities,
+		settings = {
+			yaml = {
+				validate = true,
+				-- Using schemastore seems to not work for this atm...
+				-- schemaStore = {
+				-- 	enable = false,
+				-- 	url = "",
+				-- },
+				-- schemas = require("schemastore").yaml.schemas(),
+			},
+		},
+	},
+}))
+require("telescope").load_extension("yaml_schema")
 
 -- Setup LSPs that don't require any additional configs
 -- N.B. that we intentionally omit rust_analyzer from this list; it's handled by rustacean.nvim
-for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "ruby_lsp", "tsserver" }) do
+for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "ruby_lsp", "taplo", "tsserver" }) do
 	lspconfigs[lsp_name].setup({
 		on_attach = on_attach,
 		capabilities = nvimCmpCapabilities,
