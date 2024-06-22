@@ -409,6 +409,15 @@ local function clangd_on_attach(client, bufnr)
 			end,
 			"Select program to debug",
 		},
+		-- Shift+F5
+		["<F17>"] = {
+			function()
+				util.run_if_compile_commands(function()
+					cpp_util.dbg_select({ enter_args = true })
+				end)
+			end,
+			"Select program (w/args) to debug",
+		},
 	}, {
 		mode = "n",
 		buffer = bufnr,

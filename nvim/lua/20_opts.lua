@@ -531,9 +531,9 @@ dap.adapters = {
 -- https://github.com/stevearc/overseer.nvim/blob/master/doc/third_party.md#dap
 require("dap.ext.vscode").json_decode = require("overseer.json").decode
 require("dap.ext.vscode").load_launchjs(nil, {
+	-- N.B. that this will cause multiple "cppdbg: <cfg name>" entries to show up in the
+	-- list of configurations
 	cppdbg = { "c", "cpp", "rust" },
-	-- Again, we let nvim-dap-python handle this configuration
-	-- python = { "python" },
 })
 
 -- Per https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#ccrust-via-lldb-vscode
