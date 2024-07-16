@@ -1,0 +1,5 @@
+CompileFlags:
+  Add: [-std=c++2b, -Wall]
+  Compiler: clang++
+Hover:
+  ShowAKA: true

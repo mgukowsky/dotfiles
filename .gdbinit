@@ -17,6 +17,3 @@ set backtrace past-entry on
 set backtrace past-main on
 
 set debuginfod enabled on
-
-# Turn on GEF; assumes that the script has been appropriately symlinked
-source ~/.local/bin/gef.py
