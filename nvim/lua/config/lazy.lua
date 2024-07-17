@@ -14,7 +14,7 @@ vim.g.maplocalleader = "\\"
 require("config.opts")
 require("config.mappings")
 
--- -- Setup lazy.nvim
+-- Setup lazy.nvim
 require("lazy").setup({
   spec = {
     -- import your plugins
