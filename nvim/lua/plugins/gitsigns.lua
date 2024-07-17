@@ -1,6 +1,5 @@
 return {
   'lewis6991/gitsigns.nvim',
-  dependencies = { "folke/which-key.nvim" },
   event = "VeryLazy",
   keys = {
     -- Hunk text object
