@@ -61,6 +61,7 @@ return {
           },
         },
       },
+      theme = 'tokyonight'
     }
   }
 }
