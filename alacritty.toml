@@ -23,22 +23,22 @@ background = "0x2d2d2d"
 foreground = "0xd3d0c8"
 
 [font]
-size = 10
+size = 8
 
 [font.bold]
-family = "Mono"
+family = "FiraCode Nerd Font"
 style = "Bold"
 
 [font.bold_italic]
-family = "Mono"
+family = "VictorMono Nerd Font"
 style = "Bold Italic"
 
 [font.italic]
-family = "Mono"
+family = "VictorMono Nerd Font"
 style = "Italic"
 
 [font.normal]
-family = "Mono"
+family = "FiraCode Nerd Font"
 style = "Regular"
 
 [[keyboard.bindings]]
