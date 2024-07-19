@@ -57,8 +57,8 @@ return {
             enable = true,
             lookahead = true,
             keymaps = {
-              ["ab"] = { query = "@block.outer", desc = "Select the body of a block" },
-              ["ib"] = { query = "@block.inner", desc = "Select an entire block" },
+              ["ab"] = { query = "@block.outer", desc = "Select an entire block" },
+              ["ib"] = { query = "@block.inner", desc = "Select the body of a block" },
               ["af"] = { query = "@function.outer", desc = "Select an entire function" },
               ["if"] = { query = "@function.inner", desc = "Select a function body" },
               ["ac"] = { query = "@class.outer", desc = "Select an entire class" },

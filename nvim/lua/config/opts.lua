@@ -79,3 +79,16 @@ g.markdown_syntax_conceal = 0
 -- Show quote characters in JSON files
 g.vim_json_conceal = 0
 
+-- Use OSC 52 for clipboard, per `:h clipboard-osc52`
+local osc52 = require('vim.ui.clipboard.osc52') 
+g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = osc52.copy('+'),
+    ['*'] = osc52.copy('*'),
+  },
+  paste = {
+    ['+'] = osc52.paste('+'),
+    ['*'] = osc52.paste('*'),
+  },
+}
