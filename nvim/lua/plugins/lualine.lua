@@ -1,7 +1,21 @@
+-- Get YAML schema for current buffer, per https://www.arthurkoziel.com/json-schemas-in-neovim/
+local function get_schema()
+	local schema = require("yaml-companion").get_buf_schema(0)
+	local name = schema.result[1].name
+	if name == "none" then
+		return ""
+	else
+		return "📜" .. name
+	end
+end
+
 return {
   {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons', opt = true },
+    dependencies = {
+      'someone-stole-my-name/yaml-companion.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
     opts = {
       extensions = {
         "fugitive",
