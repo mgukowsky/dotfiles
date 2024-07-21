@@ -139,49 +139,23 @@ local function on_attach(_, bufnr)
 	-- I like this mapping, since C-] will be set to peek definition, and this
 	-- <leader> version can be used for all other less-frequently-used options
 	vim.keymap.set("n", "<C-]>", "<cmd>Lspsaga peek_definition<cr>", {desc = "Peek definition"})
-	wk.register({
-		["<leader>"] = {
-			["]"] = {
-				function() vim.cmd.popup(LSPMenu) end,
-				"LSP Popup menu",
-			},
-			n = {
-				function() vim.cmd("Lspsaga outline") end,
-				"Toggle LSP code outline",
-			},
-			l = {
-				{
-					name = "LSP functions",
-					a = {
-						function() vim.cmd("Lspsaga code_action") end,
-						"LSP code action",
-					},
-					d = {
-						function() require("telescope.builtin").diagnostics({ bufnr = 0 }) end,
-						"Diagnostics",
-					},
-					i = {
-						function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end,
-						"Toggle Inlay Hints",
-					},
-					s = {
-						function() require("telescope.builtin").lsp_document_symbols() end,
-						"Document Symbol search",
-					},
-					w = {
-						function() require("telescope.builtin").lsp_workspace_symbols() end,
-						"Workspace Symbol search",
-					},
-				},
-			},
-		},
-		["+"] = {
-			function() vim.cmd("Lspsaga hover_doc") end,
-			"Show hover (press twice to focus)",
-		},
-	}, {
-		buffer = bufnr,
-	})
+  wk.add({
+    {
+		  buffer = bufnr,
+      {"+", function() vim.cmd("Lspsaga hover_doc") end, desc = "Show hover (press twice to focus)"},
+
+      {"<leader>]", function() vim.cmd.popup(LSPMenu) end, desc = "LSP Popup menu"},
+      {"<leader>n", function() vim.cmd("Lspsaga outline") end, desc = "Toggle LSP code outline"},
+
+      {"<leader>l", group = "LSP functions"},
+      {"<leader>la", function() vim.cmd("Lspsaga code_action") end, desc = "LSP code action"},
+      {"<leader>ld", function() require("telescope.builtin").diagnostics({ bufnr = 0 }) end, desc = "Diagnostics"},
+      {"<leader>li", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Toggle Inlay Hints"},
+      {"<leader>ls", function() require("telescope.builtin").lsp_document_symbols() end, desc = "Document Symbol search"},
+      {"<leader>lw", function() require("telescope.builtin").lsp_workspace_symbols() end, desc = "Workspace Symbol search"},
+
+    }
+  })
 
 	-- Movement mappings
 	local next_diag_repeat, prev_diag_repeat = require("nvim-treesitter.textobjects.repeatable_move").make_repeatable_move_pair(function()
@@ -189,27 +163,18 @@ local function on_attach(_, bufnr)
 	end, function()
 		require("lspsaga.diagnostic"):goto_prev()
 	end)
-	wk.register({
-		["["] = {
-			d = {
-				function() prev_diag_repeat() end,
-				"Prev LSP diagnostic",
-			},
-		},
-		["]"] = {
-			d = {
-				function() next_diag_repeat() end,
-				"Next LSP diagnostic",
-			},
-		},
-	}, {
-		mode = { "n", "x", "o" },
-	})
+  wk.add({
+    {
+	    mode = { "n", "x", "o" },
+      { "[d", function() prev_diag_repeat() end, desc = "Prev LSP diagnostic" },
+      { "]d", function() next_diag_repeat() end, desc = "Next LSP diagnostic" },
+    },
+  })
 end
 
 local function get_lsp_caps()
   -- nvim-cmp; needs to be set as the "capabilities for each lsp"
-  return require("cmp_nvim_lsp").default_capabilities()
+  return require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 end
 
 local function setup_lsps()
@@ -228,6 +193,104 @@ local function setup_lsps()
       },
     },
   })
+
+  -- Server for LanguageTool. The bin `ltex-ls` needs to be present; see
+  -- https://www.reddit.com/r/neovim/comments/sdvfwr/comment/hughrfi/
+  lspconfigs.ltex.setup({
+    on_attach = on_attach,
+    capabilities = get_lsp_caps(),
+    -- Settings documented at https://valentjn.github.io/ltex/settings.html
+    settings = {
+      ltex = {
+        language = "en-US",
+        additionalRules = {
+          -- Use ngrams for powerful grammar checking; see
+          -- https://dev.languagetool.org/finding-errors-using-n-gram-data.html
+          -- for more info. N.B. that the ngram data NEEDS to be unzipped and
+          -- MANUALLY placed into the directory specified here!!!
+          languageModel = vim.fn.stdpath("data") .. "/ngrams",
+        },
+      },
+    },
+  })
+
+  -- Schema configs per https://www.arthurkoziel.com/json-schemas-in-neovim/
+  local json_lsp_cap = get_lsp_caps()
+  json_lsp_cap.textDocument.completion.completionItem.snippetSupport = true
+  lspconfigs.jsonls.setup({
+    on_attach = on_attach,
+    capabilities = json_lsp_cap,
+    settings = {
+      json = {
+        schemas = require("schemastore").json.schemas(),
+        validate = { enable = true },
+      },
+    },
+  })
+
+  lspconfigs.yamlls.setup(require("yaml-companion").setup({
+    lspconfig = {
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        require("which-key").add({
+          {
+            buffer = bufnr,
+            {"<leader>lx", function() require("telescope").extensions.yaml_schema.yaml_schema() end, desc = "Select YAML schema"},
+          }
+        })
+      end,
+      capabilities = get_lsp_caps(),
+      settings = {
+        yaml = {
+          validate = true,
+          -- Using schemastore seems to not work for this atm...
+          -- schemaStore = {
+          -- 	enable = false,
+          -- 	url = "",
+          -- },
+          -- schemas = require("schemastore").yaml.schemas(),
+        },
+      },
+    },
+  }))
+  require("telescope").load_extension("yaml_schema")
+
+---@diagnostic disable-next-line: unused-function
+  local function clangd_on_attach(client, bufnr)
+    on_attach(client, bufnr)
+
+    local util = require("local.util")
+    local cpp_util = require("local.cpp_util")
+
+    require("which-key").add({
+      {
+        buffer = bufnr,
+        {"<leader>dqd", function() util.run_if_compile_commands(cpp_util.dbg_select) end, desc = "Select program to debug"},
+        {"<leader>dqD", function() util.run_if_compile_commands(cpp_util.run_gtest_at_cursor) end, desc = "Debug gtest at cursor"},
+        {"<F5>", function() util.run_if_compile_commands(cpp_util.dbg_select) end, desc = "Select program to debug"},
+        -- Shift+F5
+        {"<F17>", function()
+          util.run_if_compile_commands(function()
+            cpp_util.dbg_select({ enter_args = true })
+          end)
+        end, desc = "Select program (w/args) to debug"},
+      }
+    })
+  end
+
+  lspconfigs.clangd.setup({
+    on_attach = clangd_on_attach,
+    capabilities = get_lsp_caps(),
+  })
+
+  -- Setup LSPs that don't require any additional configs
+  -- N.B. that we intentionally omit rust_analyzer from this list; it's handled by rustacean.nvim
+  for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "ruby_lsp", "taplo", "tsserver" }) do
+    lspconfigs[lsp_name].setup({
+      on_attach = on_attach,
+      capabilities = get_lsp_caps(),
+    })
+  end
 end
 
 return {
@@ -237,10 +300,15 @@ return {
   end,
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
+    "folke/neodev.nvim",
     "folke/which-key.nvim",
     "nvim-treesitter/nvim-treesitter",
     "nvim-telescope/telescope.nvim",
     "hrsh7th/cmp-nvim-lsp",
+    "b0o/schemastore.nvim",
+
+    -- setup for this plugin is handled by the yamlls setup
+    -- "someone-stole-my-name/yaml-companion.nvim",
     {
       "nvimdev/lspsaga.nvim",
       opts = {
@@ -294,6 +362,14 @@ return {
           border = "rounded",
         },
       },
+    },
+    {
+        "ray-x/lsp_signature.nvim",
+        event = "VeryLazy",
+        opts = {
+          hint_prefix = "🧐",
+          select_signature_key = "<C-S>",
+        }
     }
   }
 }
