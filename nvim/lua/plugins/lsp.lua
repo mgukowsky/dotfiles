@@ -265,6 +265,10 @@ local function setup_lsps()
     require("which-key").add({
       {
         buffer = bufnr,
+        {"<leader>d", group = "Debugger (DAP)"},
+        {"<leader>db", group = "Breakpoints"},
+        {"<leader>df", group = "Frames"},
+        {"<leader>dq", group = "DAP commands"},
         {"<leader>dqd", function() util.run_if_compile_commands(cpp_util.dbg_select) end, desc = "Select program to debug"},
         {"<leader>dqD", function() util.run_if_compile_commands(cpp_util.run_gtest_at_cursor) end, desc = "Debug gtest at cursor"},
         {"<F5>", function() util.run_if_compile_commands(cpp_util.dbg_select) end, desc = "Select program to debug"},
@@ -300,13 +304,23 @@ return {
   end,
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
-    "folke/neodev.nvim",
     "folke/which-key.nvim",
     "nvim-treesitter/nvim-treesitter",
     "nvim-telescope/telescope.nvim",
     "hrsh7th/cmp-nvim-lsp",
     "b0o/schemastore.nvim",
 
+    {
+      "folke/neodev.nvim",
+      opts = {
+        library = {
+          plugins = {
+            "nvim-dap-ui",
+          },
+          types = true,
+        },
+      }
+    },
     -- setup for this plugin is handled by the yamlls setup
     -- "someone-stole-my-name/yaml-companion.nvim",
     {

@@ -1,6 +1,6 @@
 return {
   'nvim-telescope/telescope.nvim',
-  dependencies = { 
+  dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope-symbols.nvim",
     "nvim-telescope/telescope-ui-select.nvim",
@@ -9,7 +9,9 @@ return {
     -- "nvim-telescope/telescope-dap.nvim",
   },
   keys = {
-    {"<C-p>", function() require("telescope.builtin").find_files() end, desc = "Find files"}
+    {"<C-p>", function() require("telescope.builtin").find_files() end, desc = "Find files"},
+		-- Similar to the bash shortcut
+    {"<leader>a", function() require("telescope.builtin").grep_string() end, desc = "Grep word under cursor"},
   },
   config = function()
     local telescopeConfig = require("telescope.config")
