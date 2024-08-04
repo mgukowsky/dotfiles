@@ -16,7 +16,7 @@ return {
       },
     },
   },
-  init = function() 
+  init = function()
     -- Plugin recommends to set these as early as possible
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1

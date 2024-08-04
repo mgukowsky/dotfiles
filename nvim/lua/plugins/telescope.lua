@@ -6,7 +6,7 @@ return {
     "nvim-telescope/telescope-ui-select.nvim",
     "benfowler/telescope-luasnip.nvim",
     -- TODO: this needs DAP to be loaded, so load it as part of DAP
-    -- "nvim-telescope/telescope-dap.nvim",
+    "nvim-telescope/telescope-dap.nvim",
   },
   keys = {
     {"<C-p>", function() require("telescope.builtin").find_files() end, desc = "Find files"},
@@ -61,7 +61,7 @@ return {
         },
       },
     })
-    -- telescope.load_extension("dap")
+    telescope.load_extension("dap")
     telescope.load_extension("luasnip")
     telescope.load_extension("ui-select")
   end

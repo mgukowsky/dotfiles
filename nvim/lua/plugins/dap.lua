@@ -72,6 +72,7 @@ return {
   {
     "mfussenegger/nvim-dap",
     dependencies = {
+      -- TODO, although we define the spec below, omitting this dependency here causes debug configurations to break...
       "rcarriga/nvim-dap-ui",
       {
         "theHamsta/nvim-dap-virtual-text",
@@ -192,4 +193,5 @@ return {
       end
     end
   },
+  "nvim-telescope/telescope-dap.nvim",
 }
