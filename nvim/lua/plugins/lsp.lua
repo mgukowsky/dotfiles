@@ -163,11 +163,20 @@ local function on_attach(_, bufnr)
 	end, function()
 		require("lspsaga.diagnostic"):goto_prev()
 	end)
+
+  local function run_if_diagnostics(fn)
+    if vim.tbl_isempty(vim.diagnostic.get(0)) then
+      -- Based on the equivalent message shown by gitsigns when there are no hunks
+      vim.api.nvim_echo({ { 'No diagnostics', 'WarningMsg' } }, false, {})
+    else
+      fn()
+    end
+  end
   wk.add({
     {
 	    mode = { "n", "x", "o" },
-      { "[d", function() prev_diag_repeat() end, desc = "Prev LSP diagnostic" },
-      { "]d", function() next_diag_repeat() end, desc = "Next LSP diagnostic" },
+      { "[d", function() run_if_diagnostics(prev_diag_repeat) end, desc = "Prev LSP diagnostic" },
+      { "]d", function() run_if_diagnostics(next_diag_repeat) end, desc = "Next LSP diagnostic" },
     },
   })
 end
@@ -265,10 +274,6 @@ local function setup_lsps()
     require("which-key").add({
       {
         buffer = bufnr,
-        {"<leader>d", group = "Debugger (DAP)"},
-        {"<leader>db", group = "Breakpoints"},
-        {"<leader>df", group = "Frames"},
-        {"<leader>dq", group = "DAP commands"},
         {"<leader>dqd", function() util.run_if_compile_commands(cpp_util.dbg_select) end, desc = "Select program to debug"},
         {"<leader>dqD", function() util.run_if_compile_commands(cpp_util.run_gtest_at_cursor) end, desc = "Debug gtest at cursor"},
         {"<F5>", function() util.run_if_compile_commands(cpp_util.dbg_select) end, desc = "Select program to debug"},

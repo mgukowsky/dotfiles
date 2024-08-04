@@ -12,6 +12,16 @@ return {
     {"<C-p>", function() require("telescope.builtin").find_files() end, desc = "Find files"},
 		-- Similar to the bash shortcut
     {"<leader>a", function() require("telescope.builtin").grep_string() end, desc = "Grep word under cursor"},
+    {"<leader>b", function() require("telescope.builtin").buffers() end, desc = "Show buffers"},
+		-- Similar to VSCode Ctrl+Shift+P
+    {"<leader>p", function() require("telescope.builtin").commands() end, desc = "Vim command search"},
+    {"<leader>r", function() require("telescope.builtin").command_history() end, desc = "Command history"},
+    {"<leader>s", function() require("telescope").extensions.luasnip.luasnip() end, desc = "Snippet search"},
+    {"<leader>w", function() require("telescope.builtin").live_grep() end, desc = "Live grep"},
+    {"<leader>.", function() require("telescope.builtin").symbols() end, desc = "Symbol/emoji search"},
+		-- Similar to VSCode Ctrl+`
+    {"<leader>`", function() vim.cmd("bo te") end, desc = "Open terminal"},
+    {"<leader><leader>", function() require("telescope.builtin").builtin() end, desc = "Telescope picker search"},
   },
   config = function()
     local telescopeConfig = require("telescope.config")

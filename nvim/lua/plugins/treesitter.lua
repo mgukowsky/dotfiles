@@ -3,8 +3,24 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
+      "folke/which-key.nvim",
       "RRethy/nvim-treesitter-endwise",
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        config = function()
+          local wk = require("which-key")
+          local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+          wk.add({
+            { ";", ts_repeat_move.repeat_last_move, desc = "Repeat last movement", mode = { "n", "x", "o" } },
+            { ",", ts_repeat_move.repeat_last_move_opposite, desc = "Repeat opposite of last movement", mode = { "n", "x", "o" } },
+            { "f", ts_repeat_move.builtin_f_expr, desc = "Move to next char", expr = true, mode = { "n", "x", "o" } },
+            { "F", ts_repeat_move.builtin_F_expr, desc = "Move to previous char", expr = true, mode = { "n", "x", "o" } },
+            { "t", ts_repeat_move.builtin_t_expr, desc = "Move before next char", expr = true, mode = { "n", "x", "o" } },
+            { "T", ts_repeat_move.builtin_T_expr, desc = "Move before previous char", expr = true, mode = { "n", "x", "o" } },
+          })
+
+        end,
+      }
     },
     config = function()
       require("nvim-treesitter.configs").setup({
@@ -76,6 +92,8 @@ return {
           enable = true,
         },
       })
+
+
     end
   },
   {

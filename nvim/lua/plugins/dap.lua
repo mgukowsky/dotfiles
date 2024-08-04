@@ -88,6 +88,16 @@ return {
           task_list = {
             default_detail = 2,
           },
+        },
+        keys = {
+          { "<leader>oc", function() require("overseer").close() end, "Close" },
+          { "<leader>oo", function() require("overseer").open() end, "Open" },
+          { "<leader>or", function()
+            local overseer = require("overseer")
+            overseer.open()
+            overseer.run_template()
+          end, "Run" },
+          { "<leader>ot", function() require("overseer").toggle() end, "Toggle" },
         }
       },
     },
@@ -105,8 +115,6 @@ return {
       -- This is the keysym for Shift+F11 (i.e. F12 + 11)
       {"<F23>", function() require("dap").step_out() end, desc = "Step out"},
 
-      {"<leader>d", group = "Debugger (DAP)"},
-      {"<leader>db", group = "Breakpoints"},
       {"<leader>dbb", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint"},
 
       -- Per https://www.reddit.com/r/neovim/comments/15dtb8l/comment/ju4u4j7
@@ -133,7 +141,6 @@ return {
 
       {"<leader>dc", function() require("dap").continue() end, desc = "Start/Continue execution"},
 
-      {"<leader>df", group = "Frames"},
       {"<leader>dfc", function() require("dap").focus_frame() end, desc = "Go to current (active) frame"},
       {"<leader>dfd", function() require("dap").down() end, desc = "Go down one frame"},
       {"<leader>dfr", function() require("dap").restart_frame() end, desc = "Restart execution of the current frame"},
@@ -146,7 +153,6 @@ return {
       {"<leader>du", function() require("dap").run_to_cursor() end, desc = "Run until current line"}, -- this will temporarily disable breakpoints
       {"<leader>dx", function() require("dap").terminate() end, desc = "Terminate running program"},
 
-      {"<leader>dq", group = "DAP commands"},
       {"<leader>dqq", function() require("telescope").extensions.dap.commands() end, desc = "Command search"},
       {"<leader>dqb", function() require("telescope").extensions.dap.list_breakpoints() end, desc = "List breakpoints"},
       {"<leader>dqc", function() require("telescope").extensions.dap.configurations() end, desc = "Select configuration"},
