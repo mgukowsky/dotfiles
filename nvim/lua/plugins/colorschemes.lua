@@ -114,7 +114,7 @@ return {
 
       require("vscode").setup({
         style = "dark",
-        transparent = true,
+        -- transparent = true,
         italic_comments = true,
         group_overrides = create_group_overrides({
           fg = vscPalette.vscFront,

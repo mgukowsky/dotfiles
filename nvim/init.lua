@@ -13,4 +13,4 @@ require("config.autocommands")
 -- Setup all plugins
 lazy.setup_lazy()
 
-vim.cmd.colorscheme("vscode")
+vim.cmd.colorscheme("tokyonight-night")
