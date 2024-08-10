@@ -15,7 +15,6 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
-      "hrsh7th/nvim-cmp",
       -- Conflicts with the lsp_signature.nvim plugin
       -- "hrsh7th/cmp-nvim-lsp-signature-help",
       "ray-x/cmp-treesitter",
@@ -54,11 +53,13 @@ return {
               buffer = "🔠",
               nvim_lsp = "🐲",
               nvim_lua = "📜",
+              lazydev = "📜",
               luasnip = "🤓",
               dictionary = "📕",
               treesitter = "🎄",
             },
           }),
+          expandable_indicator = true,
         },
         mapping = cmp.mapping.preset.insert({
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -140,9 +141,18 @@ return {
         print("Creating dictionary file '" .. DICTFILEPATH .. "' with aspell")
         os.execute("aspell -d en dump master | aspell -l en expand > " .. DICTFILEPATH)
       end
+
+      -- TODO: not working
       require("cmp_dictionary").setup({
         paths = { DICTFILEPATH },
         exact_length = 2,
+        first_case_insensitive = true,
+        max_number_items = 10,
+        -- Show a definition for the completion candidate
+        document = {
+          enable = true,
+          command = { "wn", "${label}", "-over" },
+        },
       })
 
       -- dict.switcher({

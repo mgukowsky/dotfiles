@@ -46,16 +46,6 @@ local function on_attach(_, bufnr)
 		})
 	end
 
-	-- Autoformat on save
-	-- Per https://www.jvt.me/posts/2022/03/01/neovim-format-on-save/, but updated to use
-	-- vim.lsp.buf.format instead of the deprecated (and removed) vim.lsp.buf.formatting_sync
-	-- vim.api.nvim_create_autocmd("BufWritePre", {
-	-- 	buffer = bufnr,
-	-- 	callback = function()
-	-- 		vim.lsp.buf.format({ bufnr = bufnr, async = false })
-	-- 	end,
-	-- })
-
 	--[[
   -- Create a custom popup menu for various LSP-based actions we can take. I prefer this to
   -- having to create and memorize a shortcut for each of these, most of which I will rarely use
@@ -287,6 +277,67 @@ local function setup_lsps()
     capabilities = get_lsp_caps(),
   })
 
+  -- Specialization for Rustacean to provide mappings to some of the utility functions
+  -- that this library provides us.
+  -- N.B. that this plugin is already lazy and this the `RustLsp` command will be available
+  local function rustacean_on_attach(client, bufnr)
+    local rlsp = vim.cmd.RustLsp
+    on_attach(client, bufnr)
+    local wk = require("which-key")
+    wk.add({
+      {
+        buffer = bufnr,
+        {"<leader>dqd", function() rlsp("debuggables") end, desc = "Select program to debug"},
+        {"<leader>dqD", function() rlsp("debug") end, desc = "Debug target at cursor"},
+        {"<leader>la", function() rlsp("codeAction") end, desc = "Code action (Rust)"},
+        {"<leader>lrc", function() rlsp("openCargo") end, desc = "Cargo.toml"},
+        {"<leader>lre", function() rlsp("explainError") end, desc = "Explain error"},
+        {"<leader>lrE", function() rlsp("renderDiagnostic") end, desc = "Render diagnostic"},
+        {"<leader>lrf", function() rlsp("flyCheck") end, desc = "Fly check (cargo/clippy)"},
+        {"<leader>lrg", function() rlsp("crateGraph") end, desc = "View crate DAG"},
+        {"<leader>lrm", function() rlsp("expandMacro") end, desc = "Expand macro"},
+        {"<leader>lro", function() rlsp("openDocs") end, desc = "Open docs"},
+        {"<leader>lrp", function() rlsp("parentModule") end, desc = "Parent module"},
+        {"<leader>lrr", function() rlsp("runnables") end, desc = "Runnables select"},
+        {"<leader>lrR", function() rlsp("run") end, desc = "Run target at cursor"},
+        {"<leader>lrs", function() rlsp("syntaxTree") end, desc = "View syntax tree"},
+        {"<leader>lrt", function() rlsp("testables") end, desc = "Testables select"},
+        {"<leader>lrxa", function() vim.cmd.RustEmitAsm() end, desc = "View ASM"},
+        {"<leader>lrxh", function() rlsp({ "view", "hir" }) end, desc = "View HIR"},
+        {"<leader>lrxi", function() vim.cmd.RustEmitIr() end, desc = "View LLVM IR"},
+        {"<leader>lrxl", function() rlsp("logFile") end, desc = "rust-analyzer logs"},
+        {"<leader>lrxm", function() rlsp({ "view", "mir" }) end, desc = "View MIR"},
+        {"J", function() rlsp("joinLines") end, desc = "Join lines"},
+        {"+", function() rlsp({ "hover", "actions" }) end, desc = "Show hover (press twice to focus)"},
+        {"<F5>", function() rlsp({ "debuggables", bang = true }) end, desc = "Run last debuggable"},
+        -- Ctrl+F5; same as Visual Studio mapping
+        {"<F29>", function() rlsp({ "runnables", bang = true }) end, desc = "Run last runnable"},
+      }
+    })
+
+    wk.add({
+      {
+        buffer = bufnr,
+        mode = "v",
+        {"+", function() rlsp({ "hover", "range" }) end, desc = "Show hover (press twice to focus)"},
+      }
+    })
+  end
+
+  -- rustacean requires us to setup the Rust LSP separately
+  vim.g.rustaceanvim = {
+    -- Plugin configuration
+    tools = {},
+    -- LSP configuration
+    server = {
+      on_attach = rustacean_on_attach,
+      default_settings = {
+        -- rust-analyzer language server configuration
+        ["rust-analyzer"] = {},
+      },
+    },
+  }
+
   -- Setup LSPs that don't require any additional configs
   -- N.B. that we intentionally omit rust_analyzer from this list; it's handled by rustacean.nvim
   for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "jedi_language_server", "ruby_lsp", "taplo", "tsserver" }) do
@@ -385,6 +436,10 @@ return {
           hint_prefix = "🧐",
           select_signature_key = "<C-S>",
         }
-    }
+    },
+    {
+      'mrcjkb/rustaceanvim',
+      lazy = false, -- This plugin is already lazy
+    },
   }
 }
