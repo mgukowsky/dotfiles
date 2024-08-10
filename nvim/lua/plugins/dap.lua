@@ -72,7 +72,7 @@ return {
   {
     "mfussenegger/nvim-dap",
     dependencies = {
-      -- TODO, although we define the spec below, omitting this dependency here causes debug configurations to break...
+      -- Specs listed below
       "rcarriga/nvim-dap-ui",
       {
         "theHamsta/nvim-dap-virtual-text",
@@ -192,6 +192,18 @@ return {
         dapui.close()
       end
     end
+  },
+  {
+    "mfussenegger/nvim-dap-python",
+    ft = "python",
+    keys = {
+      {"<leader>dqd", function() require("dap-python").test_class() end, desc = "Test class under cursor"},
+      {"<leader>dqD", function() require("dap-python").test_method() end, desc = "Test method under cursor"},
+    },
+    config = function()
+      local pypath = require("local.util").stdout_exec("which python3")
+      require("dap-python").setup(pypath)
+    end,
   },
   "nvim-telescope/telescope-dap.nvim",
 }

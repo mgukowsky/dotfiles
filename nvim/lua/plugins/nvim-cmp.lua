@@ -16,7 +16,8 @@ return {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
       "hrsh7th/nvim-cmp",
-      "hrsh7th/cmp-nvim-lsp-signature-help",
+      -- Conflicts with the lsp_signature.nvim plugin
+      -- "hrsh7th/cmp-nvim-lsp-signature-help",
       "ray-x/cmp-treesitter",
 
       -- LuaSnip, to support nvim-cmp
@@ -104,7 +105,7 @@ return {
           { name = "buffer", keyword_length = 2 },
           { name = "luasnip", keyword_length = 3 },
           { name = "dictionary", keyword_length = 6 },
-          { name = "nvim_lsp_signature_help" },
+          -- { name = "nvim_lsp_signature_help" },
           { name = "lazydev", group_index = 0 },
         }),
       })
