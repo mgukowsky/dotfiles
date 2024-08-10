@@ -289,7 +289,7 @@ local function setup_lsps()
 
   -- Setup LSPs that don't require any additional configs
   -- N.B. that we intentionally omit rust_analyzer from this list; it's handled by rustacean.nvim
-  for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "ruby_lsp", "taplo", "tsserver" }) do
+  for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "jedi_language_server", "ruby_lsp", "taplo", "tsserver" }) do
     lspconfigs[lsp_name].setup({
       on_attach = on_attach,
       capabilities = get_lsp_caps(),

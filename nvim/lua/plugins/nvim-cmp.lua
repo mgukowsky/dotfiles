@@ -23,12 +23,15 @@ return {
       -- LuaSnip, to support nvim-cmp
       "L3MON4D3/LuaSnip", --{ ["do"] = "make install_jsregexp" }
       "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets",
 
       -- Spellchecking for nvim-cmp
       "uga-rosa/cmp-dictionary",
+      "nvim-lua/plenary.nvim",
       -- Icons in completion menu
       "onsails/lspkind.nvim",
     },
+    build = "make install_jsregexp",
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
@@ -129,10 +132,6 @@ return {
         }),
       })
 
-      local dict = require("cmp_dictionary")
-
-      dict.setup({})
-
       local DICTFILEPATH = vim.fn.stdpath("data") .. "/en.dict"
 
       -- Create the dictionary if it doesn't exist
@@ -141,6 +140,10 @@ return {
         print("Creating dictionary file '" .. DICTFILEPATH .. "' with aspell")
         os.execute("aspell -d en dump master | aspell -l en expand > " .. DICTFILEPATH)
       end
+      require("cmp_dictionary").setup({
+        paths = { DICTFILEPATH },
+        exact_length = 2,
+      })
 
       -- dict.switcher({
       --   -- N.B. that given my locale, vim.opt.spelllang defaults to "en"
