@@ -20,6 +20,7 @@ return {
     },
     config = function()
       local vscPalette = require("vscode.colors").get_colors()
+      -- local lualine_theme = require("lualine.themes.vscode")
       local lualine_theme = require("lualine.themes.vscode")
 
       lualine_theme.insert.a.bg = vscPalette.vscRed
@@ -46,7 +47,8 @@ return {
           "trouble",
         },
         options = {
-          theme = lualine_theme
+          -- theme = lualine_theme
+          theme = "tokyonight"
         },
         sections = {
           lualine_b = {
