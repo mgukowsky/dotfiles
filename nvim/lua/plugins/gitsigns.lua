@@ -22,6 +22,7 @@ return {
     local gs = require("gitsigns")
     gs.setup({
       numhl = true,
+      signs_staged_enable = false,
     })
     local next_hunk_repeat, prev_hunk_repeat =
       require("nvim-treesitter.textobjects.repeatable_move").make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)

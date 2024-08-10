@@ -1,3 +1,4 @@
+-- Highlight characters after pressing f|F|t|T
 return {
   "jinh0/eyeliner.nvim",
   event = "VeryLazy",

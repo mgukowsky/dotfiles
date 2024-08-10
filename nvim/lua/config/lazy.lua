@@ -32,6 +32,8 @@ function M.setup_lazy()
     -- install = { colorscheme = { "habamax" } },
     -- automatically check for plugin updates
     checker = { enabled = true },
+    -- Don't load local `.lazy.lua` files
+    local_spec = false,
   })
 end
 

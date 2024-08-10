@@ -105,6 +105,7 @@ return {
           { name = "luasnip", keyword_length = 3 },
           { name = "dictionary", keyword_length = 6 },
           { name = "nvim_lsp_signature_help" },
+          { name = "lazydev", group_index = 0 },
         }),
       })
       -- Use buffer for completing "/" and "?" searches

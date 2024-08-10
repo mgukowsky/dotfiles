@@ -194,12 +194,7 @@ local function setup_lsps()
     on_attach = on_attach,
     capabilities = get_lsp_caps(),
     settings = {
-      Lua = {
-        runtime = { version = "LuaJIT" },
-        diagnostics = { globals = { "vim" } },
-        workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },
-        telemetry = { enable = false },
-      },
+      -- empty; config handled elsewhere by lazydev.nvim
     },
   })
 
@@ -316,16 +311,17 @@ return {
     "b0o/schemastore.nvim",
 
     {
-      "folke/neodev.nvim",
+      "folke/lazydev.nvim",
+      ft = "lua", -- only load on lua files
       opts = {
         library = {
-          plugins = {
-            "nvim-dap-ui",
-          },
-          types = true,
+          -- See the configuration section for more details
+          -- Load luvit types when the `vim.uv` word is found
+          { path = "luvit-meta/library", words = { "vim%.uv" } },
         },
-      }
+      },
     },
+    { "Bilal2453/luvit-meta", ft = "lua", lazy = true }, -- optional `vim.uv` typings
     -- setup for this plugin is handled by the yamlls setup
     -- "someone-stole-my-name/yaml-companion.nvim",
     {
