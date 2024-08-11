@@ -91,14 +91,15 @@ return {
           },
         },
         keys = {
-          { "<leader>oc", function() require("overseer").close() end, "Close" },
-          { "<leader>oo", function() require("overseer").open() end, "Open" },
+          { "<leader>oc", function() require("overseer").close() end, desc = "Close" },
+          { "<leader>oo", function() require("overseer").open() end, desc = "Open" },
           { "<leader>or", function()
             local overseer = require("overseer")
             overseer.open()
             overseer.run_template()
-          end, "Run" },
-          { "<leader>ot", function() require("overseer").toggle() end, "Toggle" },
+          end, desc = "Run" },
+          -- { "<leader>ot", function() require("overseer").toggle() end, desc = "Toggle" },
+          { "<leader>ot", function() require("overseer").toggleterm({direction = "float"}) end, desc = "Toggle" },
         }
       },
     },

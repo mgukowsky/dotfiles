@@ -1,8 +1,8 @@
 -- nvim-cmp configuration; from https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#safely-select-entries-with-cr
 local function has_words_before()
-	unpack = unpack or table.unpack
-	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
 return {
@@ -31,6 +31,8 @@ return {
       "onsails/lspkind.nvim",
     },
     build = "make install_jsregexp",
+    -- Run `:CmpStatus` to get information about this plugin
+    cmd = { "CmpStatus" },
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
@@ -103,14 +105,14 @@ return {
           }),
         }),
         sources = cmp.config.sources({
-          { name = "nvim_lsp", keyword_length = 1 },
+          { name = "nvim_lsp",   keyword_length = 1 },
           { name = "treesitter", keyword_length = 2 },
-          { name = "nvim_lua", keyword_length = 2 },
-          { name = "buffer", keyword_length = 2 },
-          { name = "luasnip", keyword_length = 3 },
+          { name = "nvim_lua",   keyword_length = 2 },
+          { name = "buffer",     keyword_length = 2 },
+          { name = "luasnip",    keyword_length = 3 },
           { name = "dictionary", keyword_length = 6 },
           -- { name = "nvim_lsp_signature_help" },
-          { name = "lazydev", group_index = 0 },
+          { name = "lazydev",    group_index = 0 },
         }),
       })
       -- Use buffer for completing "/" and "?" searches
