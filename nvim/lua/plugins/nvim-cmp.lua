@@ -33,6 +33,7 @@ return {
     build = "make install_jsregexp",
     -- Run `:CmpStatus` to get information about this plugin
     cmd = { "CmpStatus" },
+    event = { "CmdlineEnter", "InsertEnter" },
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")

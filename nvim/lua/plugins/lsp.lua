@@ -4,155 +4,168 @@
 -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-prefixcharacter-preceding-the-diagnostics-virtual-text
 
 vim.diagnostic.config({
-	virtual_text = {
-		prefix = "🤯",
-	},
+  float = {
+    source = true,
+  },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "🤬",
+      [vim.diagnostic.severity.WARN] = "😬",
+      [vim.diagnostic.severity.HINT] = "🤔",
+      [vim.diagnostic.severity.INFO] = "🤓",
+    }
+  },
+  virtual_text = {
+    prefix = "🤯",
+    source = true,
+  },
 })
 
 -- Configuration for vim diagnostics; per
 -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-diagnostic-symbols-in-the-sign-column-gutter
-local signs = { Error = "🤬", Warn = "😬", Hint = "🤔", Info = "🤓" }
-for type, icon in pairs(signs) do
-	local hl = "DiagnosticSign" .. type
-	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-end
+-- local signs = { Error = "🤬", Warn = "😬", Hint = "🤔", Info = "🤓" }
+-- for type, icon in pairs(signs) do
+-- 	local hl = "DiagnosticSign" .. type
+-- 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+-- end
 
 -- Recommended LSP configuration per https://github.com/neovim/nvim-lspconfig
 local function on_attach(_, bufnr)
   local wk = require("which-key")
-	-- Enable completion recommendations from the LSP
-	vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
+  -- Enable completion recommendations from the LSP
+  vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
 
-	-- TODO: can/should these go in the opts file?
-	vim.opt.completeopt:remove("preview") -- Don't show the stupid Scratch window
+  -- TODO: can/should these go in the opts file?
+  vim.opt.completeopt:remove("preview") -- Don't show the stupid Scratch window
 
-	-- EDIT: Disabled this as I found it to be too noisy
-	-- This will trigger according to the interval set in `vim.opt.updatetime`
-	-- TODO: consider power needs...
-	if false then
-		vim.api.nvim_create_autocmd("CursorHold", {
-			buffer = bufnr,
-			callback = function()
-				-- Display any diagnostic(s) for the current line, otherwise show generic hover information
-				local current_line = vim.api.nvim_win_get_cursor(0)[1]
+  -- EDIT: Disabled this as I found it to be too noisy
+  -- This will trigger according to the interval set in `vim.opt.updatetime`
+  -- TODO: consider power needs...
+  if false then
+    vim.api.nvim_create_autocmd("CursorHold", {
+      buffer = bufnr,
+      callback = function()
+        -- Display any diagnostic(s) for the current line, otherwise show generic hover information
+        local current_line = vim.api.nvim_win_get_cursor(0)[1]
 
-				-- N.B. lnum starts at 0, so it will be one less than the current line
-				if #(vim.diagnostic.get(bufnr, { lnum = current_line - 1 })) > 0 then
-					vim.diagnostic.open_float({ noremap = true, silent = true })
-				else
-					vim.lsp.buf.hover()
-				end
-			end,
-		})
-	end
+        -- N.B. lnum starts at 0, so it will be one less than the current line
+        if #(vim.diagnostic.get(bufnr, { lnum = current_line - 1 })) > 0 then
+          vim.diagnostic.open_float({ noremap = true, silent = true })
+        else
+          vim.lsp.buf.hover()
+        end
+      end,
+    })
+  end
 
-	--[[
+  --[[
   -- Create a custom popup menu for various LSP-based actions we can take. I prefer this to
   -- having to create and memorize a shortcut for each of these, most of which I will rarely use
   --]]
-	local LSPMenu = "]LSPMenu" -- The leading ']' is a vim-ism for "hidden" menus like this one
+  local LSPMenu = "]LSPMenu" -- The leading ']' is a vim-ism for "hidden" menus like this one
 
-	-- Some commands are in the vim.lsp.buf namespace, and some are in the telescope namespace
-	local LSP = 0 -- Identifier for LSP functions
-	local TEL = 1 -- Identifier for Telescope functions
-	local SAGA = 2 -- Identifiers for Lspsaga
-	local SAGAREF = 3
-	local SAGAIMP = 4
+  -- Some commands are in the vim.lsp.buf namespace, and some are in the telescope namespace
+  local LSP = 0  -- Identifier for LSP functions
+  local TEL = 1  -- Identifier for Telescope functions
+  local SAGA = 2 -- Identifiers for Lspsaga
+  local SAGAREF = 3
+  local SAGAIMP = 4
 
-	local function add_menu_entry(entry)
-		local namespace = entry[1]
-		local methodname = entry[2]
+  local function add_menu_entry(entry)
+    local namespace = entry[1]
+    local methodname = entry[2]
 
-		local cmdstring
+    local cmdstring
 
-		if namespace == LSP then
-			cmdstring = ":lua vim.lsp.buf."
-				.. string.lower(methodname)
-				.. "({noremap=true, silent=true, buffer="
-				.. bufnr
-				.. "})<cr>"
-		elseif namespace == TEL then
-			cmdstring = ":lua require('telescope.builtin').lsp_" .. string.lower(methodname) .. "()<cr>"
-		elseif namespace == SAGA then
-			cmdstring = ":Lspsaga " .. string.lower(methodname) .. "<cr>"
-		elseif namespace == SAGAREF then
-			cmdstring = ":Lspsaga finder ref<cr>"
-		elseif namespace == SAGAIMP then
-			cmdstring = ":Lspsaga finder imp<cr>"
-		end
+    if namespace == LSP then
+      cmdstring = ":lua vim.lsp.buf."
+          .. string.lower(methodname)
+          .. "({noremap=true, silent=true, buffer="
+          .. bufnr
+          .. "})<cr>"
+    elseif namespace == TEL then
+      cmdstring = ":lua require('telescope.builtin').lsp_" .. string.lower(methodname) .. "()<cr>"
+    elseif namespace == SAGA then
+      cmdstring = ":Lspsaga " .. string.lower(methodname) .. "<cr>"
+    elseif namespace == SAGAREF then
+      cmdstring = ":Lspsaga finder ref<cr>"
+    elseif namespace == SAGAIMP then
+      cmdstring = ":Lspsaga finder imp<cr>"
+    end
 
-		vim.cmd.amenu({
-			LSPMenu .. "." .. methodname,
-			-- TODO: can we provide a lua function as the callback instead of the vim cmd string?
-			cmdstring,
-		})
-		-- TODO: Use vim.cmd.tmenu to add a tooltip for each entry
-	end
+    vim.cmd.amenu({
+      LSPMenu .. "." .. methodname,
+      -- TODO: can we provide a lua function as the callback instead of the vim cmd string?
+      cmdstring,
+    })
+    -- TODO: Use vim.cmd.tmenu to add a tooltip for each entry
+  end
 
-	local SEP = "Sep" -- Arbitrary string to represent a menu separator
-	local numSep = 1 -- Each separator must have a unique identifier
-	for _, entry in pairs({
-		-- General info
-		{ SAGA, "Hover_Doc" },
-		{ SAGA, "Outline" },
-		{ TEL, "Definitions" },
-		{ SAGA, "Show_Workspace_Diagnostics" },
-		{ LSP, "Declaration" },
-		{ SAGAIMP, "Implementations" },
-		{ TEL, "Type_Definitions" },
-		{ LSP, "TypeHierarchy" },
-		{ SAGA, "Peek_Type_Definition" },
-		SEP,
-		-- Code structure info
-		{ SAGAREF, "References" },
-		{ SAGA, "Incoming_Calls" },
-		{ SAGA, "Outgoing_Calls" },
-		{ TEL, "Document_Symbols" },
-		{ TEL, "Workspace_Symbols" },
-		SEP,
-		-- Refactoring actions
-		{ SAGA, "Code_Action" },
-		{ LSP, "Rename" },
-		{ LSP, "Signature_Help" },
-	}) do
-		if entry == SEP then
-			-- In order to be parsed as a separator, the identifier must be surrounded by -minuses-
-			-- The command cannot be empty and must have something other than just whitespace,
-			-- so we give it a no-op
-			vim.cmd.amenu({ LSPMenu .. ".-" .. SEP .. numSep .. "-", "echo ''" })
-			numSep = numSep + 1
-		else
-			add_menu_entry(entry)
-		end
-	end
+  local SEP = "Sep" -- Arbitrary string to represent a menu separator
+  local numSep = 1  -- Each separator must have a unique identifier
+  for _, entry in pairs({
+    -- General info
+    { SAGA,    "Hover_Doc" },
+    { SAGA,    "Outline" },
+    { TEL,     "Definitions" },
+    { SAGA,    "Show_Workspace_Diagnostics" },
+    { LSP,     "Declaration" },
+    { SAGAIMP, "Implementations" },
+    { TEL,     "Type_Definitions" },
+    { LSP,     "TypeHierarchy" },
+    { SAGA,    "Peek_Type_Definition" },
+    SEP,
+    -- Code structure info
+    { SAGAREF, "References" },
+    { SAGA,    "Incoming_Calls" },
+    { SAGA,    "Outgoing_Calls" },
+    { TEL,     "Document_Symbols" },
+    { TEL,     "Workspace_Symbols" },
+    SEP,
+    -- Refactoring actions
+    { SAGA, "Code_Action" },
+    { LSP,  "Rename" },
+    { LSP,  "Signature_Help" },
+  }) do
+    if entry == SEP then
+      -- In order to be parsed as a separator, the identifier must be surrounded by -minuses-
+      -- The command cannot be empty and must have something other than just whitespace,
+      -- so we give it a no-op
+      vim.cmd.amenu({ LSPMenu .. ".-" .. SEP .. numSep .. "-", "echo ''" })
+      numSep = numSep + 1
+    else
+      add_menu_entry(entry)
+    end
+  end
 
-	-- I like this mapping, since C-] will be set to peek definition, and this
-	-- <leader> version can be used for all other less-frequently-used options
-	vim.keymap.set("n", "<C-]>", "<cmd>Lspsaga peek_definition<cr>", {desc = "Peek definition"})
+  -- I like this mapping, since C-] will be set to peek definition, and this
+  -- <leader> version can be used for all other less-frequently-used options
+  vim.keymap.set("n", "<C-]>", "<cmd>Lspsaga peek_definition<cr>", { desc = "Peek definition" })
   wk.add({
     {
-		  buffer = bufnr,
-      {"+", function() vim.cmd("Lspsaga hover_doc") end, desc = "Show hover (press twice to focus)"},
+      buffer = bufnr,
+      { "+",          function() vim.cmd("Lspsaga hover_doc") end,                                   desc = "Show hover (press twice to focus)" },
 
-      {"<leader>]", function() vim.cmd.popup(LSPMenu) end, desc = "LSP Popup menu"},
-      {"<leader>n", function() vim.cmd("Lspsaga outline") end, desc = "Toggle LSP code outline"},
+      { "<leader>]",  function() vim.cmd.popup(LSPMenu) end,                                         desc = "LSP Popup menu" },
+      { "<leader>n",  function() vim.cmd("Lspsaga outline") end,                                     desc = "Toggle LSP code outline" },
 
-      {"<leader>l", group = "LSP functions"},
-      {"<leader>la", function() vim.cmd("Lspsaga code_action") end, desc = "LSP code action"},
-      {"<leader>ld", function() require("telescope.builtin").diagnostics({ bufnr = 0 }) end, desc = "Diagnostics"},
-      {"<leader>li", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Toggle Inlay Hints"},
-      {"<leader>ls", function() require("telescope.builtin").lsp_document_symbols() end, desc = "Document Symbol search"},
-      {"<leader>lw", function() require("telescope.builtin").lsp_workspace_symbols() end, desc = "Workspace Symbol search"},
+      { "<leader>l",  group = "LSP functions" },
+      { "<leader>la", function() vim.cmd("Lspsaga code_action") end,                                 desc = "LSP code action" },
+      { "<leader>ld", function() require("telescope.builtin").diagnostics({ bufnr = 0 }) end,        desc = "Diagnostics" },
+      { "<leader>li", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Toggle Inlay Hints" },
+      { "<leader>ls", function() require("telescope.builtin").lsp_document_symbols() end,            desc = "Document Symbol search" },
+      { "<leader>lw", function() require("telescope.builtin").lsp_workspace_symbols() end,           desc = "Workspace Symbol search" },
 
     }
   })
 
-	-- Movement mappings
-	local next_diag_repeat, prev_diag_repeat = require("nvim-treesitter.textobjects.repeatable_move").make_repeatable_move_pair(function()
-		require("lspsaga.diagnostic"):goto_next()
-	end, function()
-		require("lspsaga.diagnostic"):goto_prev()
-	end)
+  -- Movement mappings
+  local next_diag_repeat, prev_diag_repeat = require("nvim-treesitter.textobjects.repeatable_move")
+      .make_repeatable_move_pair(function()
+        require("lspsaga.diagnostic"):goto_next()
+      end, function()
+        require("lspsaga.diagnostic"):goto_prev()
+      end)
 
   local function run_if_diagnostics(fn)
     if vim.tbl_isempty(vim.diagnostic.get(0)) then
@@ -164,7 +177,7 @@ local function on_attach(_, bufnr)
   end
   wk.add({
     {
-	    mode = { "n", "x", "o" },
+      mode = { "n", "x", "o" },
       { "[d", function() run_if_diagnostics(prev_diag_repeat) end, desc = "Prev LSP diagnostic" },
       { "]d", function() run_if_diagnostics(next_diag_repeat) end, desc = "Next LSP diagnostic" },
     },
@@ -229,7 +242,7 @@ local function setup_lsps()
         require("which-key").add({
           {
             buffer = bufnr,
-            {"<leader>lx", function() require("telescope").extensions.yaml_schema.yaml_schema() end, desc = "Select YAML schema"},
+            { "<leader>lx", function() require("telescope").extensions.yaml_schema.yaml_schema() end, desc = "Select YAML schema" },
           }
         })
       end,
@@ -249,7 +262,7 @@ local function setup_lsps()
   }))
   require("telescope").load_extension("yaml_schema")
 
----@diagnostic disable-next-line: unused-function
+  ---@diagnostic disable-next-line: unused-function
   local function clangd_on_attach(client, bufnr)
     on_attach(client, bufnr)
 
@@ -259,15 +272,19 @@ local function setup_lsps()
     require("which-key").add({
       {
         buffer = bufnr,
-        {"<leader>dqd", function() util.run_if_compile_commands(cpp_util.dbg_select) end, desc = "Select program to debug"},
-        {"<leader>dqD", function() util.run_if_compile_commands(cpp_util.run_gtest_at_cursor) end, desc = "Debug gtest at cursor"},
-        {"<F5>", function() util.run_if_compile_commands(cpp_util.dbg_select) end, desc = "Select program to debug"},
+        { "<leader>dqd", function() util.run_if_compile_commands(cpp_util.dbg_select) end,          desc = "Select program to debug" },
+        { "<leader>dqD", function() util.run_if_compile_commands(cpp_util.run_gtest_at_cursor) end, desc = "Debug gtest at cursor" },
+        { "<F5>",        function() util.run_if_compile_commands(cpp_util.dbg_select) end,          desc = "Select program to debug" },
         -- Shift+F5
-        {"<F17>", function()
-          util.run_if_compile_commands(function()
-            cpp_util.dbg_select({ enter_args = true })
-          end)
-        end, desc = "Select program (w/args) to debug"},
+        {
+          "<F17>",
+          function()
+            util.run_if_compile_commands(function()
+              cpp_util.dbg_select({ enter_args = true })
+            end)
+          end,
+          desc = "Select program (w/args) to debug"
+        },
       }
     })
   end
@@ -287,31 +304,31 @@ local function setup_lsps()
     wk.add({
       {
         buffer = bufnr,
-        {"<leader>dqd", function() rlsp("debuggables") end, desc = "Select program to debug"},
-        {"<leader>dqD", function() rlsp("debug") end, desc = "Debug target at cursor"},
-        {"<leader>la", function() rlsp("codeAction") end, desc = "Code action (Rust)"},
-        {"<leader>lrc", function() rlsp("openCargo") end, desc = "Cargo.toml"},
-        {"<leader>lre", function() rlsp("explainError") end, desc = "Explain error"},
-        {"<leader>lrE", function() rlsp("renderDiagnostic") end, desc = "Render diagnostic"},
-        {"<leader>lrf", function() rlsp("flyCheck") end, desc = "Fly check (cargo/clippy)"},
-        {"<leader>lrg", function() rlsp("crateGraph") end, desc = "View crate DAG"},
-        {"<leader>lrm", function() rlsp("expandMacro") end, desc = "Expand macro"},
-        {"<leader>lro", function() rlsp("openDocs") end, desc = "Open docs"},
-        {"<leader>lrp", function() rlsp("parentModule") end, desc = "Parent module"},
-        {"<leader>lrr", function() rlsp("runnables") end, desc = "Runnables select"},
-        {"<leader>lrR", function() rlsp("run") end, desc = "Run target at cursor"},
-        {"<leader>lrs", function() rlsp("syntaxTree") end, desc = "View syntax tree"},
-        {"<leader>lrt", function() rlsp("testables") end, desc = "Testables select"},
-        {"<leader>lrxa", function() vim.cmd.RustEmitAsm() end, desc = "View ASM"},
-        {"<leader>lrxh", function() rlsp({ "view", "hir" }) end, desc = "View HIR"},
-        {"<leader>lrxi", function() vim.cmd.RustEmitIr() end, desc = "View LLVM IR"},
-        {"<leader>lrxl", function() rlsp("logFile") end, desc = "rust-analyzer logs"},
-        {"<leader>lrxm", function() rlsp({ "view", "mir" }) end, desc = "View MIR"},
-        {"J", function() rlsp("joinLines") end, desc = "Join lines"},
-        {"+", function() rlsp({ "hover", "actions" }) end, desc = "Show hover (press twice to focus)"},
-        {"<F5>", function() rlsp({ "debuggables", bang = true }) end, desc = "Run last debuggable"},
+        { "<leader>dqd",  function() rlsp("debuggables") end,                  desc = "Select program to debug" },
+        { "<leader>dqD",  function() rlsp("debug") end,                        desc = "Debug target at cursor" },
+        { "<leader>la",   function() rlsp("codeAction") end,                   desc = "Code action (Rust)" },
+        { "<leader>lrc",  function() rlsp("openCargo") end,                    desc = "Cargo.toml" },
+        { "<leader>lre",  function() rlsp("explainError") end,                 desc = "Explain error" },
+        { "<leader>lrE",  function() rlsp("renderDiagnostic") end,             desc = "Render diagnostic" },
+        { "<leader>lrf",  function() rlsp("flyCheck") end,                     desc = "Fly check (cargo/clippy)" },
+        { "<leader>lrg",  function() rlsp("crateGraph") end,                   desc = "View crate DAG" },
+        { "<leader>lrm",  function() rlsp("expandMacro") end,                  desc = "Expand macro" },
+        { "<leader>lro",  function() rlsp("openDocs") end,                     desc = "Open docs" },
+        { "<leader>lrp",  function() rlsp("parentModule") end,                 desc = "Parent module" },
+        { "<leader>lrr",  function() rlsp("runnables") end,                    desc = "Runnables select" },
+        { "<leader>lrR",  function() rlsp("run") end,                          desc = "Run target at cursor" },
+        { "<leader>lrs",  function() rlsp("syntaxTree") end,                   desc = "View syntax tree" },
+        { "<leader>lrt",  function() rlsp("testables") end,                    desc = "Testables select" },
+        { "<leader>lrxa", function() vim.cmd.RustEmitAsm() end,                desc = "View ASM" },
+        { "<leader>lrxh", function() rlsp({ "view", "hir" }) end,              desc = "View HIR" },
+        { "<leader>lrxi", function() vim.cmd.RustEmitIr() end,                 desc = "View LLVM IR" },
+        { "<leader>lrxl", function() rlsp("logFile") end,                      desc = "rust-analyzer logs" },
+        { "<leader>lrxm", function() rlsp({ "view", "mir" }) end,              desc = "View MIR" },
+        { "J",            function() rlsp("joinLines") end,                    desc = "Join lines" },
+        { "+",            function() rlsp({ "hover", "actions" }) end,         desc = "Show hover (press twice to focus)" },
+        { "<F5>",         function() rlsp({ "debuggables", bang = true }) end, desc = "Run last debuggable" },
         -- Ctrl+F5; same as Visual Studio mapping
-        {"<F29>", function() rlsp({ "runnables", bang = true }) end, desc = "Run last runnable"},
+        { "<F29>",        function() rlsp({ "runnables", bang = true }) end,   desc = "Run last runnable" },
       }
     })
 
@@ -319,7 +336,7 @@ local function setup_lsps()
       {
         buffer = bufnr,
         mode = "v",
-        {"+", function() rlsp({ "hover", "range" }) end, desc = "Show hover (press twice to focus)"},
+        { "+", function() rlsp({ "hover", "range" }) end, desc = "Show hover (press twice to focus)" },
       }
     })
   end
@@ -430,12 +447,12 @@ return {
       },
     },
     {
-        "ray-x/lsp_signature.nvim",
-        event = "VeryLazy",
-        opts = {
-          hint_prefix = "🧐",
-          select_signature_key = "<C-S>",
-        }
+      "ray-x/lsp_signature.nvim",
+      event = "VeryLazy",
+      opts = {
+        hint_prefix = "🧐",
+        select_signature_key = "<C-S>",
+      }
     },
     {
       'mrcjkb/rustaceanvim',
