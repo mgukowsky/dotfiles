@@ -20,7 +20,7 @@ return {
       "ray-x/cmp-treesitter",
 
       -- LuaSnip, to support nvim-cmp
-      "L3MON4D3/LuaSnip", --{ ["do"] = "make install_jsregexp" }
+      "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "rafamadriz/friendly-snippets",
 
@@ -30,7 +30,6 @@ return {
       -- Icons in completion menu
       "onsails/lspkind.nvim",
     },
-    build = "make install_jsregexp",
     -- Run `:CmpStatus` to get information about this plugin
     cmd = { "CmpStatus" },
     event = { "CmdlineEnter", "InsertEnter" },
@@ -165,5 +164,9 @@ return {
       --   }
       -- })
     end,
-  }
+  },
+  {
+    "L3MON4D3/LuaSnip",
+    build = "make install_jsregexp",
+  },
 }
