@@ -16,7 +16,7 @@ local function create_group_overrides(colors)
     ["BreakpointSet"] = { bg = "#762c2c" },
     -- Treesitter nodes
     ["@attribute.cpp"] = { link = "@type.qualifier" }, -- C++ [[attributes]]
-    ["@label.cpp"] = { fg = colors.bright_red },      -- `goto` labels
+    ["@label.cpp"] = { fg = colors.bright_red },       -- `goto` labels
     ["@namespace.cpp"] = { fg = colors.dark_yellow, italic = true },
 
     -- Treesitter update in ~2024 gave some keywords different highlighting; let's make all keywords
@@ -31,9 +31,9 @@ local function create_group_overrides(colors)
     -- LSP semantic tokens (these are specific to clangd; no idea if other LSPs will provide these same values)
     ["@lsp.mod.functionScope.cpp"] = { fg = colors.fg }, -- regular function scope variables should be white
     ["@lsp.type.variable.rust"] = { link = "@lsp.mod.functionScope.cpp" },
-    ["@lsp.mod.static.cpp"] = { fg = colors.lime },        -- Use bright green for statics
-    ["@lsp.type.comment.cpp"] = { fg = colors.comment },      -- Inactive #ifdefs, etc.
-    ["@lsp.type.enum.cpp"] = { fg = colors.orange },       -- Name of an enum...
+    ["@lsp.mod.static.cpp"] = { fg = colors.lime },      -- Use bright green for statics
+    ["@lsp.type.comment.cpp"] = { fg = colors.comment }, -- Inactive #ifdefs, etc.
+    ["@lsp.type.enum.cpp"] = { fg = colors.orange },     -- Name of an enum...
     ["@lsp.type.enum.rust"] = { link = "@lsp.type.enum.cpp" },
     ["@lsp.type.decorator.rust"] = { link = "@attribute.cpp" },
     ["@lsp.type.enumMember.cpp"] = { link = "@constant.cpp" }, -- ...and the enum values
@@ -41,15 +41,15 @@ local function create_group_overrides(colors)
     ["@lsp.type.macro.rust"] = { link = "@lsp.type.macro.cpp" },
     ["@lsp.type.namespace.cpp"] = { link = "@namespace.cpp" },
     ["@lsp.type.namespace.rust"] = { link = "@lsp.type.namespace.cpp" },
-    ["@lsp.typemod.class.deduced.cpp"] = { link = "@type.builtin.cpp" },                     -- `auto` type, etc. N.B. that `auto` may be highlighted differently if it resolves to a type with more specific highlighting rules!
-    ["@lsp.typemod.parameter.functionScope.cpp"] = { link = "Identifier" },                  -- Parameters should have a little highlighting
+    ["@lsp.typemod.class.deduced.cpp"] = { link = "@type.builtin.cpp" },                -- `auto` type, etc. N.B. that `auto` may be highlighted differently if it resolves to a type with more specific highlighting rules!
+    ["@lsp.typemod.parameter.functionScope.cpp"] = { link = "Identifier" },             -- Parameters should have a little highlighting
     ["@lsp.type.parameter.rust"] = { link = "@lsp.typemod.parameter.functionScope.cpp" },
     ["@lsp.typemod.property.classScope.cpp"] = { fg = colors.light_blue, bold = true }, -- Member variables should be bold identifiers
-    ["@lsp.typemod.type.deduced.cpp"] = { link = "@type.builtin.cpp" },                      -- Other uses of `auto`
-    ["@lsp.typemod.type.defaultLibrary.cpp"] = { link = "@type.cpp" },                       -- Types from the standard library shouldn't have special highlighing
-    ["@lsp.typemod.type.functionScope.cpp"] = { link = "@type.cpp" },                        -- Type aliases
-    ["@lsp.typemod.typeParameter.functionScope.cpp"] = { link = "@type.cpp" },               -- Type parameters
-    ["@lsp.typemod.variable.readonly.cpp"] = { link = "@constant.cpp" },                     -- const variables
+    ["@lsp.typemod.type.deduced.cpp"] = { link = "@type.builtin.cpp" },                 -- Other uses of `auto`
+    ["@lsp.typemod.type.defaultLibrary.cpp"] = { link = "@type.cpp" },                  -- Types from the standard library shouldn't have special highlighing
+    ["@lsp.typemod.type.functionScope.cpp"] = { link = "@type.cpp" },                   -- Type aliases
+    ["@lsp.typemod.typeParameter.functionScope.cpp"] = { link = "@type.cpp" },          -- Type parameters
+    ["@lsp.typemod.variable.readonly.cpp"] = { link = "@constant.cpp" },                -- const variables
   }
 
   -- Link certain C highlight groups to their C++ equivalents
@@ -94,7 +94,6 @@ return {
         colors.light_blue = palette.blue1
         colors.lime = "#3AF514"
         colors.orange = palette.red
-
       end,
       on_highlights = function(hl, c)
         local group_overrides = create_group_overrides(c)
@@ -109,7 +108,6 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-
       local vscPalette = require("vscode.colors").get_colors()
 
       require("vscode").setup({
@@ -129,5 +127,48 @@ return {
         }),
       })
     end
+  },
+  {
+    "Shatur/neovim-ayu",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      local palette = require("ayu.colors")
+      palette.generate(false)
+
+      require("ayu").setup({
+        overrides = create_group_overrides({
+          fg = palette.fg,
+          accent_blue = palette.entity,
+          bright_red = "#FF0000",
+          dark_purple = palette.lsp_parameter,
+          dark_yellow = palette.accent,
+          comment = palette.comment,
+          light_blue = palette.regexp,
+          lime = "#3AF514",
+          orange = palette.warning,
+
+        })
+      })
+    end
+  },
+  {
+    "RRethy/base16-nvim",
+    lazy = false,
+    priority = 1000,
+  },
+  {
+    "EdenEast/nightfox.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      options = {
+        styles = {
+          comments = "italic",
+          keywords = "bold",
+          types = "italic,bold",
+        }
+      }
+    }
   }
 }

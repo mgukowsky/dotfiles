@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-  alacritty
+  kitty
 
 # program launcher
 super + @space
@@ -136,7 +136,7 @@ super + ctrl + {Left,Right}
 
 # Ubuntu terminal shortcut
 ctrl + alt + t
-  alacritty
+  kitty
 
 # Dunst notification control (similar to windows notification center shortcut)
 super + a
