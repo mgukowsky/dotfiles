@@ -9,6 +9,7 @@ vim.g.maplocalleader = "\\"
 require("config.opts")
 require("config.mappings")
 require("config.autocommands")
+require("config.profiler")
 
 -- Setup all plugins
 lazy.setup_lazy()
