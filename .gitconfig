@@ -11,11 +11,11 @@
   colorMoved = default
 [difftool "nvimdiff"]
   cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
-[pager]
-  diff = delta
-  log = delta
-  reflog = delta
-  show = delta
+[merge]
+  conflictstyle = diff3
+
+[core]
+  pager = delta
 
 ; Enables `git clone github:org/repo` shorthand
 [url "git@github.com:"]
@@ -28,6 +28,7 @@
   syntax-theme = Monokai Extended
   line-numbers = true
   features = decorations
+  navigate = true
 
 [delta "interactive"]
   keep-plus-minus-markers = false
