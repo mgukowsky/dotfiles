@@ -139,9 +139,15 @@ return {
 
       -- Create the dictionary if it doesn't exist
       -- Beware Lua falsy value rules (only `false` and `nil` are falsy 🙃)
-      if vim.fn.filereadable(DICTFILEPATH) == 0 and vim.fn.executable("aspell") == 1 then
-        print("Creating dictionary file '" .. DICTFILEPATH .. "' with aspell")
-        os.execute("aspell -d en dump master | aspell -l en expand > " .. DICTFILEPATH)
+      if vim.fn.filereadable(DICTFILEPATH) == 0 then
+        if vim.fn.executable("aspell") == 1 then
+          vim.notify("Creating dictionary file '" .. DICTFILEPATH .. "' with aspell")
+          -- N.B. this requires the package `aspell-en` on Arch Linux
+          os.execute("aspell -d en dump master | aspell -l en expand | sort > " .. DICTFILEPATH)
+        else
+          vim.notify("Failed to create " .. DICTFILEPATH .. " because `aspell` is not executable...",
+            vim.log.levels.WARN)
+        end
       end
 
       -- TODO: not working
@@ -149,12 +155,16 @@ return {
         paths = { DICTFILEPATH },
         exact_length = 2,
         first_case_insensitive = true,
-        max_number_items = 10,
+        -- max_number_items = 10,
+        -- external = {
+        --   enable = true,
+        --   command = { "look", "${prefix}", "${path}" },
+        -- },
         -- Show a definition for the completion candidate
-        document = {
-          enable = true,
-          command = { "wn", "${label}", "-over" },
-        },
+        -- document = {
+        --   enable = true,
+        --   command = { "wn", "${label}", "-over" },
+        -- },
       })
 
       -- dict.switcher({
