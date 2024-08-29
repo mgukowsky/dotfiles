@@ -17,9 +17,9 @@
 [core]
   pager = delta
 
-; Enables `git clone github:org/repo` shorthand
+; Enables `git clone gh:org/repo` shorthand
 [url "git@github.com:"]
-    insteadOf = github:
+    insteadOf = gh:
 
 [interactive]
   diffFilter = delta --color-only --features=interactive
