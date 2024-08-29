@@ -21,6 +21,8 @@ vim.diagnostic.config({
   },
 })
 
+local TSSERVER_FTS = { "css", "html", "javascript", "javascriptreact", "typescript", "typescriptreact" }
+
 -- Configuration for vim diagnostics; per
 -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-diagnostic-symbols-in-the-sign-column-gutter
 -- local signs = { Error = "🤬", Warn = "😬", Hint = "🤔", Info = "🤓" }
@@ -355,9 +357,8 @@ local function setup_lsps()
     },
   }
 
-  -- Setup LSPs that don't require any additional configs
-  -- N.B. that we intentionally omit rust_analyzer from this list; it's handled by rustacean.nvim
-  for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "jedi_language_server", "ruby_lsp", "taplo", "tsserver" }) do
+  -- Setup LSPs that don't require any additional configs/aren't managed by other plugins
+  for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "jedi_language_server", "ruby_lsp", "taplo", }) do
     lspconfigs[lsp_name].setup({
       on_attach = on_attach,
       capabilities = get_lsp_caps(),
@@ -366,97 +367,120 @@ local function setup_lsps()
 end
 
 return {
-  "neovim/nvim-lspconfig",
-  config = function()
-    setup_lsps()
-  end,
-  event = { "BufReadPre", "BufNewFile" },
-  dependencies = {
-    "folke/which-key.nvim",
-    "nvim-treesitter/nvim-treesitter",
-    "nvim-telescope/telescope.nvim",
-    "hrsh7th/cmp-nvim-lsp",
-    "b0o/schemastore.nvim",
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      setup_lsps()
+    end,
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "folke/which-key.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-telescope/telescope.nvim",
+      "hrsh7th/cmp-nvim-lsp",
+      "b0o/schemastore.nvim",
 
-    {
-      "folke/lazydev.nvim",
-      ft = "lua", -- only load on lua files
-      opts = {
-        library = {
-          -- See the configuration section for more details
-          -- Load luvit types when the `vim.uv` word is found
-          { path = "luvit-meta/library", words = { "vim%.uv" } },
+      {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+          library = {
+            -- See the configuration section for more details
+            -- Load luvit types when the `vim.uv` word is found
+            { path = "luvit-meta/library", words = { "vim%.uv" } },
+          },
         },
       },
-    },
-    { "Bilal2453/luvit-meta", ft = "lua", lazy = true }, -- optional `vim.uv` typings
-    -- setup for this plugin is handled by the yamlls setup
-    -- "someone-stole-my-name/yaml-companion.nvim",
-    {
-      "nvimdev/lspsaga.nvim",
-      opts = {
-        callhierarchy = {
-          keys = {
-            edit = "<CR>",
-            toggle_or_req = "<Space>",
+      { "Bilal2453/luvit-meta", ft = "lua", lazy = true }, -- optional `vim.uv` typings
+      -- setup for this plugin is handled by the yamlls setup
+      -- "someone-stole-my-name/yaml-companion.nvim",
+      {
+        "nvimdev/lspsaga.nvim",
+        opts = {
+          callhierarchy = {
+            keys = {
+              edit = "<CR>",
+              toggle_or_req = "<Space>",
+            },
           },
-        },
-        code_action = {
-          extend_gitsigns = true,
-          num_shortcut = true,
-          show_server_name = true,
-        },
-        definition = {
-          width = 0.8,
-          height = 0.5,
-          keys = {
-            edit = "<CR>",
+          code_action = {
+            extend_gitsigns = true,
+            num_shortcut = true,
+            show_server_name = true,
           },
-        },
-        diagnostic = {
-          extend_relatedInformation = true,
-        },
-        finder = {
-          keys = {
-            toggle_or_open = "<CR>",
+          definition = {
+            width = 0.8,
+            height = 0.5,
+            keys = {
+              edit = "<CR>",
+            },
           },
-          max_height = 0.8,
-        },
-        implement = {
-          enable = true,
-          sign = true,
-        },
-        lightbulb = {
-          debounce = 3000, -- lightbulb can be noisy and/or cause performance issues, so let's throttle it
-        },
-        outline = {
-          close_after_jump = false,
-          layout = "float",
-          keys = {
-            toggle_or_jump = "<CR>",
+          diagnostic = {
+            extend_relatedInformation = true,
           },
-          max_height = 0.8,
-          win_width = 45,
-        },
-        symbol_in_winbar = {
-          enable = true,
-        },
-        ui = {
-          border = "rounded",
+          finder = {
+            keys = {
+              toggle_or_open = "<CR>",
+            },
+            max_height = 0.8,
+          },
+          implement = {
+            enable = true,
+            sign = true,
+          },
+          lightbulb = {
+            debounce = 3000, -- lightbulb can be noisy and/or cause performance issues, so let's throttle it
+          },
+          outline = {
+            close_after_jump = false,
+            layout = "float",
+            keys = {
+              toggle_or_jump = "<CR>",
+            },
+            max_height = 0.8,
+            win_width = 45,
+          },
+          symbol_in_winbar = {
+            enable = true,
+          },
+          ui = {
+            border = "rounded",
+          },
         },
       },
+      {
+        "ray-x/lsp_signature.nvim",
+        event = "VeryLazy",
+        opts = {
+          hint_prefix = "🧐",
+          select_signature_key = "<C-S>",
+        }
+      },
+      {
+        -- Handles Rust LSP
+        'mrcjkb/rustaceanvim',
+        lazy = false, -- This plugin is already lazy
+      },
     },
-    {
-      "ray-x/lsp_signature.nvim",
-      event = "VeryLazy",
-      opts = {
-        hint_prefix = "🧐",
-        select_signature_key = "<C-S>",
-      }
+  },
+  {
+    -- Handles JS/TS LSP (tsserver)
+    "pmizio/typescript-tools.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "neovim/nvim-lspconfig",
     },
-    {
-      'mrcjkb/rustaceanvim',
-      lazy = false, -- This plugin is already lazy
-    },
+    ft = TSSERVER_FTS,
+    config = function()
+      require("typescript-tools").setup({
+        on_attach = on_attach,
+        settings = {
+          jsx_close_tag = {
+            enable = true,
+            filetypes = TSSERVER_FTS,
+          }
+        },
+      })
+    end
   }
 }
