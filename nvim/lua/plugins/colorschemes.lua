@@ -170,5 +170,30 @@ return {
         }
       }
     }
-  }
+  },
+  {
+    -- N.B. this will highlight certain keywords with a 'glow' effect
+    "lunarvim/synthwave84.nvim",
+    lazy = false,
+    priority = 1000,
+    config = true,
+  },
+  {
+    -- Also includes 'glow' effects
+    "maxmx03/fluoromachine.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      glow = true,
+      -- One of [fluoromachine|retrowave|delta]
+      theme = "fluoromachine",
+      transparent = false,
+    }
+  },
+  {
+    "adamkali/vaporlush",
+    dependencies = {
+      "rktjmp/lush.nvim",
+    },
+  },
 }

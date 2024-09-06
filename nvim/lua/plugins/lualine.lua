@@ -1,12 +1,12 @@
 -- Get YAML schema for current buffer, per https://www.arthurkoziel.com/json-schemas-in-neovim/
 local function get_schema()
-	local schema = require("yaml-companion").get_buf_schema(0)
-	local name = schema.result[1].name
-	if name == "none" then
-		return ""
-	else
-		return "📜" .. name
-	end
+  local schema = require("yaml-companion").get_buf_schema(0)
+  local name = schema.result[1].name
+  if name == "none" then
+    return ""
+  else
+    return "📜" .. name
+  end
 end
 
 return {
@@ -48,6 +48,7 @@ return {
         },
         options = {
           -- theme = lualine_theme
+          -- theme = "fluoromachine"
           theme = "tokyonight"
         },
         sections = {
