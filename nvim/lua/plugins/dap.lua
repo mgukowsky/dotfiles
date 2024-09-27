@@ -85,25 +85,6 @@ return {
       },
       {
         "stevearc/overseer.nvim",
-        opts = {
-          task_list = {
-            default_detail = 2,
-          },
-        },
-        keys = {
-          { "<leader>oc", function() require("overseer").close() end, desc = "Close" },
-          { "<leader>oo", function() require("overseer").open() end,  desc = "Open" },
-          {
-            "<leader>or",
-            function()
-              local overseer = require("overseer")
-              overseer.open()
-              overseer.run_template()
-            end,
-            desc = "Run"
-          },
-          { "<leader>ot", function() require("overseer").toggle() end, desc = "Toggle" },
-        }
       },
     },
     keys = {

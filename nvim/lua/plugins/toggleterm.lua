@@ -5,12 +5,12 @@ return {
     float_opts = {
       border = "double",
     },
-    on_open = function(term)
-      vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
-    end,
   },
   keys = {
     -- Similar to VSCode Ctrl+`
-    { "<leader>`", function() require("toggleterm").toggle() end, desc = "Toggle terminal" }
+    -- "t" is terminal mode, needed to exit terminal; per
+    -- https://www.reddit.com/r/neovim/comments/1bjhadj/comment/kvr43oc
+    { "<leader>`", function() require("toggleterm").toggle() end, mode = { "n", "t" },     desc = "Toggle terminal" },
+    { "<leader>~", "<cmd>TermSelect<cr>",                         desc = "Select terminal" },
   },
 }
