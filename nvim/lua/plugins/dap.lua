@@ -194,6 +194,7 @@ return {
     end
   },
   {
+    -- N.B. that the `debugpy` pip package needs to be installed for this to work
     "mfussenegger/nvim-dap-python",
     ft = "python",
     keys = {

@@ -206,23 +206,25 @@ local function setup_lsps()
 
   -- Server for LanguageTool. The bin `ltex-ls` needs to be present; see
   -- https://www.reddit.com/r/neovim/comments/sdvfwr/comment/hughrfi/
-  lspconfigs.ltex.setup({
-    on_attach = on_attach,
-    capabilities = get_lsp_caps(),
-    -- Settings documented at https://valentjn.github.io/ltex/settings.html
-    settings = {
-      ltex = {
-        language = "en-US",
-        additionalRules = {
-          -- Use ngrams for powerful grammar checking; see
-          -- https://dev.languagetool.org/finding-errors-using-n-gram-data.html
-          -- for more info. N.B. that the ngram data NEEDS to be unzipped and
-          -- MANUALLY placed into the directory specified here!!!
-          languageModel = vim.fn.stdpath("data") .. "/ngrams",
-        },
-      },
-    },
-  })
+  --
+  -- Disabled for now, since it's causing a lot of noise in markdown files
+  -- lspconfigs.ltex.setup({
+  --   on_attach = on_attach,
+  --   capabilities = get_lsp_caps(),
+  --   -- Settings documented at https://valentjn.github.io/ltex/settings.html
+  --   settings = {
+  --     ltex = {
+  --       language = "en-US",
+  --       additionalRules = {
+  --         -- Use ngrams for powerful grammar checking; see
+  --         -- https://dev.languagetool.org/finding-errors-using-n-gram-data.html
+  --         -- for more info. N.B. that the ngram data NEEDS to be unzipped and
+  --         -- MANUALLY placed into the directory specified here!!!
+  --         languageModel = vim.fn.stdpath("data") .. "/ngrams",
+  --       },
+  --     },
+  --   },
+  -- })
 
   -- Schema configs per https://www.arthurkoziel.com/json-schemas-in-neovim/
   local json_lsp_cap = get_lsp_caps()
