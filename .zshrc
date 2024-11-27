@@ -165,6 +165,7 @@ alias lld='lsd -halF'
 alias treed='lsd --tree'
 alias watch='watch --color'
 alias adog='git log --all --decorate --oneline --graph'
+alias xclippy='xclip -selection clipboard'
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
