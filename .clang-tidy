@@ -1,0 +1,27 @@
+---
+Checks: >
+  *,
+  -altera-struct-pack-align,
+  -altera-unroll-loops,
+  -cert-err58-cpp,
+  -cppcoreguidelines-avoid-const-or-ref-data-members,
+  -cppcoreguidelines-macro-usage,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -fuchsia-default-arguments-calls,
+  -fuchsia-default-arguments-declarations,
+  -google-readability-avoid-underscore-in-googletest-name,
+  -google-readability-todo,
+  -hicpp-named-parameter,
+  -llvm-else-after-return,
+  -llvm-header-guard,
+  -llvmlibc*,
+  -misc-non-private-member-variables-in-classes,
+  -modernize-use-nodiscard,
+  -modernize-use-trailing-return-type,
+  -readability-else-after-return,
+  -readability-function-cognitive-complexity,
+  -readability-identifier-length,
+  -readability-named-parameter,
+UseColor: true
+WarningsAsErrors: "*"
