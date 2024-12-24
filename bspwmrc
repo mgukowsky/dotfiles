@@ -15,7 +15,7 @@ startserv sxhkd
 startserv xfsettingsd --replace
 
 # Compositor
-startserv picom -c --backend glx
+# startserv picom -c --backend glx
 
 # Notification manager
 startserv dunst
