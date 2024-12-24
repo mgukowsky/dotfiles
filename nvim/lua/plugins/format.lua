@@ -8,6 +8,7 @@ return {
       require("conform").setup({
         -- Define your formatters
         formatters_by_ft = {
+          cmake = { "cmake_format" },
           python = { "isort", "black" },
           -- "_" is a wildcard that matches all filetypes that don't have a formatter
           -- N.B. that this **WILL** attach to buffers that use the lsp_format fallback
@@ -57,6 +58,7 @@ return {
     event = "VeryLazy",
     config = function()
       require("lint").linters_by_ft = {
+        cmake = { "cmakelint" },
         cpp = { "clangtidy", },
         glsl = { "glslc", },
         python = { "mypy", "ruff", },

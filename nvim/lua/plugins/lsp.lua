@@ -267,6 +267,13 @@ local function setup_lsps()
   }))
   require("telescope").load_extension("yaml_schema")
 
+  local cmake_lsp_caps = get_lsp_caps()
+  cmake_lsp_caps.textDocument.completion.completionItem.snippetSupport = true
+  lspconfigs.neocmake.setup({
+    on_attach = on_attach,
+    capabilities = cmake_lsp_caps
+  })
+
   ---@diagnostic disable-next-line: unused-function
   local function clangd_on_attach(client, bufnr)
     on_attach(client, bufnr)
@@ -361,7 +368,7 @@ local function setup_lsps()
   }
 
   -- Setup LSPs that don't require any additional configs/aren't managed by other plugins
-  for _, lsp_name in pairs({ "cmake", "glsl_analyzer", "jedi_language_server", "ruby_lsp", "taplo", }) do
+  for _, lsp_name in pairs({ "glsl_analyzer", "jedi_language_server", "ruby_lsp", "taplo", }) do
     lspconfigs[lsp_name].setup({
       on_attach = on_attach,
       capabilities = get_lsp_caps(),
