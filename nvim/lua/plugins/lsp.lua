@@ -188,7 +188,8 @@ local function on_attach(_, bufnr)
 end
 
 local function get_lsp_caps()
-  return require('blink.cmp').get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities())
+  -- nvim-cmp; needs to be set as the "capabilities for each lsp"
+  return require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 end
 
 local function setup_lsps()
@@ -386,7 +387,7 @@ return {
       "folke/which-key.nvim",
       "nvim-treesitter/nvim-treesitter",
       "nvim-telescope/telescope.nvim",
-      "saghen/blink.cmp",
+      "hrsh7th/cmp-nvim-lsp",
       "b0o/schemastore.nvim",
 
       {
