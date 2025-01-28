@@ -50,6 +50,7 @@ return {
           -- theme = lualine_theme
           -- theme = "fluoromachine"
           theme = "tokyonight"
+          -- theme = "lackluster"
         },
         sections = {
           lualine_b = {

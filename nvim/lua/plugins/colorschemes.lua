@@ -196,4 +196,10 @@ return {
       "rktjmp/lush.nvim",
     },
   },
+  {
+    "slugbyte/lackluster.nvim",
+    lazy = false,
+    priority = 1000,
+    config = true,
+  },
 }

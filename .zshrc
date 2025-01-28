@@ -365,6 +365,14 @@ function xdocker {
   fi
 }
 
+# venv convenience function
+function vact {
+  if [[ ! -e ./venv ]]; then
+    python3 -m venv venv
+  fi
+  . ./venv/bin/activate
+}
+
 # Map a device type to an xinput ID. N.B. that only the first matching device ID will be returned
 # (i.e. may not work properly in the event of multiple touchpads, etc.).
 # Expects an argument that can be matched against the output of udevadm, e.g "TOUCHPAD" as in "ID_INPUT_TOUCHPAD".
