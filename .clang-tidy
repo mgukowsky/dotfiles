@@ -10,6 +10,7 @@ Checks: >
   -cppcoreguidelines-pro-type-reinterpret-cast,
   -fuchsia-default-arguments-calls,
   -fuchsia-default-arguments-declarations,
+  -fuchsia-statically-constructed-objects,
   -google-readability-avoid-underscore-in-googletest-name,
   -google-readability-todo,
   -hicpp-named-parameter,
