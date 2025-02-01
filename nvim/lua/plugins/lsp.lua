@@ -16,6 +16,11 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.INFO] = "🤓",
     }
   },
+  -- TODO: this will be a nice new feature in 0.11
+  -- For now, handled by the lsp_lines plugins
+  virtual_lines = {
+    only_current_line = true,
+  },
   virtual_text = {
     prefix = "🤯",
     source = true,
@@ -470,6 +475,13 @@ return {
         -- Handles Rust LSP
         'mrcjkb/rustaceanvim',
         lazy = false, -- This plugin is already lazy
+      },
+      {
+        -- Virtual lines for LSP diagnostics
+        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        config = function()
+          require("lsp_lines").setup()
+        end,
       },
     },
   },
