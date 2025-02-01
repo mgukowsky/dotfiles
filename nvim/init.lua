@@ -14,6 +14,9 @@ vim.fn.stdpath = function(value)
   return old_stdpath(value)
 end
 
+-- If false, fallback to using nvim-cmp
+G_USE_BLINK = false
+
 local lazy = require("config.lazy")
 lazy.bootstrap_lazy()
 

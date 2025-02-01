@@ -18,9 +18,7 @@ vim.diagnostic.config({
   },
   -- TODO: this will be a nice new feature in 0.11
   -- For now, handled by the lsp_lines plugins
-  virtual_lines = {
-    only_current_line = true,
-  },
+  virtual_lines = false,
   virtual_text = {
     prefix = "🤯",
     source = true,
@@ -161,6 +159,7 @@ local function on_attach(_, bufnr)
       { "<leader>la", function() vim.cmd("Lspsaga code_action") end,                                 desc = "LSP code action" },
       { "<leader>ld", function() require("telescope.builtin").diagnostics({ bufnr = 0 }) end,        desc = "Diagnostics" },
       { "<leader>li", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Toggle Inlay Hints" },
+      { "<leader>ll", function() require("lsp_lines").toggle() end,                                  desc = "Toggle Diagnostic Virtual Lines" },
       { "<leader>ls", function() require("telescope.builtin").lsp_document_symbols() end,            desc = "Document Symbol search" },
       { "<leader>lw", function() require("telescope.builtin").lsp_workspace_symbols() end,           desc = "Workspace Symbol search" },
 
@@ -193,8 +192,12 @@ local function on_attach(_, bufnr)
 end
 
 local function get_lsp_caps()
-  -- nvim-cmp; needs to be set as the "capabilities for each lsp"
-  return require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  if G_USE_BLINK then
+    return require('blink.cmp').get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities())
+  else
+    -- nvim-cmp; needs to be set as the "capabilities for each lsp"
+    return require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  end
 end
 
 local function setup_lsps()
@@ -392,7 +395,7 @@ return {
       "folke/which-key.nvim",
       "nvim-treesitter/nvim-treesitter",
       "nvim-telescope/telescope.nvim",
-      "hrsh7th/cmp-nvim-lsp",
+      G_USE_BLINK and "saghen/blink.cmp" or "hrsh7th/cmp-nvim-lsp",
       "b0o/schemastore.nvim",
 
       {
@@ -463,7 +466,7 @@ return {
           },
         },
       },
-      {
+      G_USE_BLINK and {} or {
         "ray-x/lsp_signature.nvim",
         event = "VeryLazy",
         opts = {
