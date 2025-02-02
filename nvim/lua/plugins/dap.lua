@@ -151,6 +151,7 @@ return {
       { "<leader>do",  function() require("dap").step_out() end,                              desc = "Step Out" },  -- "finish"
       { "<leader>dp",  function() require("dap").pause() end,                                 desc = "Pause execution" },
       { "<leader>ds",  function() require("dap").step_into() end,                             desc = "Step Into" },
+      { "<leader>dv",  function() require("nvim-dap-virtual-text").toggle() end,              desc = "Toggle Virtual Text" },
       { "<leader>du",  function() require("dap").run_to_cursor() end,                         desc = "Run until current line" }, -- this will temporarily disable breakpoints
       { "<leader>dx",  function() require("dap").terminate() end,                             desc = "Terminate running program" },
 

@@ -159,8 +159,8 @@ local function on_attach(_, bufnr)
       { "<leader>la", function() vim.cmd("Lspsaga code_action") end,                                 desc = "LSP code action" },
       { "<leader>ld", function() require("telescope.builtin").diagnostics({ bufnr = 0 }) end,        desc = "Diagnostics" },
       { "<leader>li", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Toggle Inlay Hints" },
-      { "<leader>ll", function() require("lsp_lines").toggle() end,                                  desc = "Toggle Diagnostic Virtual Lines" },
       { "<leader>ls", function() require("telescope.builtin").lsp_document_symbols() end,            desc = "Document Symbol search" },
+      { "<leader>lv", function() require("lsp_lines").toggle() end,                                  desc = "Toggle Diagnostic Virtual Lines" },
       { "<leader>lw", function() require("telescope.builtin").lsp_workspace_symbols() end,           desc = "Workspace Symbol search" },
 
     }
