@@ -80,6 +80,12 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
+# Set up autocompletion for docker/docker compose, if needed
+if [[ ! -e ~/.oh-my-zsh/completions/_docker ]] && command -v docker >&/dev/null; then
+  mkdir -p ~/.oh-my-zsh/completions
+  docker completion zsh > ~/.oh-my-zsh/completions/_docker
+fi
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -277,10 +283,6 @@ function mkcd {
     mkdir -p $1
   fi
   cd $1
-}
-
-function refresh_ctags  {
-  ctags -R --tag-relative=yes --exclude=.git --exclude=build .
 }
 
 # Creates a proxy device that tunnels serial traffic from a WSL2 Windows host's COM port.
@@ -492,47 +494,6 @@ set -o vi
 
 # Allow expected backspace behavior in vi insert mode
 bindkey "^?" backward-delete-char
-
-MGPROMPT_HAPPY_EMOJIS=(😀 😁 😄 😆 😊 😍 🥰 😚 🤩 🤗 🐵 🐶 🐱 🐼 🐸 😇 🤓 🤠 🥳 🤑 👾 🤖)
-MGPROMPT_HAPPY_EMOJIS_LENGTH=${#MGPROMPT_HAPPY_EMOJIS[@]}
-MGPROMPT_SAD_EMOJIS=(😮 😯 😫 😓 😲 😖 😞 😢 😭 😧 😰 😱 😵 😡 😠 🤬 🤕 🤮 😈 ☠️  💩 🤢 😷)
-MGPROMPT_SAD_EMOJIS_LENGTH=${#MGPROMPT_SAD_EMOJIS[@]}
-
-# Emoji: generate an emoji based on current statuses
-# N.B we add 1 to the index to account for the fact that bash array indices start at 1...
-# Also N.B. we are assuming that the length of the emoji arrays is less than 256!
-generate_emoji() {
-  local emojis emojis_len
-  if [[ $RETVAL -eq 0 ]]; then
-    emojis=("${MGPROMPT_HAPPY_EMOJIS[@]}")
-    emojis_len=$MGPROMPT_HAPPY_EMOJIS_LENGTH
-  else
-    emojis=("${MGPROMPT_SAD_EMOJIS[@]}")
-    emojis_len=$MGPROMPT_SAD_EMOJIS_LENGTH
-  fi
-
-  echo -n ${emojis[$((($(od -A n -t d -N 1 /dev/urandom) % $emojis_len) + 1))]}
-}
-
-# Powerlevel9k stuff
-# Use the generate_emoji function to create a prompt segment
-POWERLEVEL9K_CUSTOM_EMOJI="generate_emoji"
-POWERLEVEL9K_CUSTOM_EMOJI_BACKGROUND='029'
-
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_emoji dir_writable dir vcs vi_mode)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs command_execution_time)
-
-# Always show time taken
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_PRECISION=3
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='238'
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='208'
-
-# Show the vi mode
-POWERLEVEL9K_VI_INSERT_MODE_STRING='I'
-POWERLEVEL9K_VI_COMMAND_MODE_STRING='N'
-POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='003'
-POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='054'
 
 # Source a given script if present
 function source_if_present {
