@@ -1,0 +1,13 @@
+[wsl2]
+memory=48GB
+
+# Boot messages
+debugConsole=true
+
+# Never kill WSL after a certain amount of idle
+vmIdleTimeout=-1
+
+# Allows stuff like mDNS to work in WSL
+# There is an experimental 'dnsTunnelingIpAddress' option that may allow us to keep
+# this as true...
+dnsTunneling=false
