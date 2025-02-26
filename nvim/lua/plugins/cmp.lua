@@ -111,8 +111,6 @@ else
         "saadparwaiz1/cmp_luasnip",
         "rafamadriz/friendly-snippets",
 
-        -- Spellchecking for nvim-cmp
-        "uga-rosa/cmp-dictionary",
         "nvim-lua/plenary.nvim",
         -- Icons in completion menu
         "onsails/lspkind.nvim",
@@ -144,7 +142,6 @@ else
                 nvim_lua = "📜",
                 lazydev = "📜",
                 luasnip = "🤓",
-                dictionary = "📕",
                 treesitter = "🎄",
               },
             }),
@@ -197,7 +194,6 @@ else
             { name = "nvim_lua",   keyword_length = 2 },
             { name = "buffer",     keyword_length = 2 },
             { name = "luasnip",    keyword_length = 3 },
-            { name = "dictionary", keyword_length = 6 },
             -- { name = "nvim_lsp_signature_help" },
             { name = "lazydev",    group_index = 0 },
           }),
@@ -221,45 +217,6 @@ else
             { name = "cmdline", keyword_length = 4 },
           }),
         })
-
-        local DICTFILEPATH = vim.fn.stdpath("data") .. "/en.dict"
-
-        -- Create the dictionary if it doesn't exist
-        -- Beware Lua falsy value rules (only `false` and `nil` are falsy 🙃)
-        if vim.fn.filereadable(DICTFILEPATH) == 0 then
-          if vim.fn.executable("aspell") == 1 then
-            vim.notify("Creating dictionary file '" .. DICTFILEPATH .. "' with aspell")
-            -- N.B. this requires the package `aspell-en` on Arch Linux
-            os.execute("aspell -d en dump master | aspell -l en expand | sort > " .. DICTFILEPATH)
-          else
-            vim.notify("Failed to create " .. DICTFILEPATH .. " because `aspell` is not executable...",
-              vim.log.levels.WARN)
-          end
-        end
-
-        -- TODO: not working
-        require("cmp_dictionary").setup({
-          paths = { DICTFILEPATH },
-          exact_length = 2,
-          first_case_insensitive = true,
-          -- max_number_items = 10,
-          -- external = {
-          --   enable = true,
-          --   command = { "look", "${prefix}", "${path}" },
-          -- },
-          -- Show a definition for the completion candidate
-          -- document = {
-          --   enable = true,
-          --   command = { "wn", "${label}", "-over" },
-          -- },
-        })
-
-        -- dict.switcher({
-        --   -- N.B. that given my locale, vim.opt.spelllang defaults to "en"
-        --   spelllang = {
-        --     en = DICTFILEPATH
-        --   }
-        -- })
       end,
     },
     {
