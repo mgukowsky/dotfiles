@@ -1,0 +1,4 @@
+#!/bin/sh
+# Launch a jupyter notebook with useful libraries and no authentication
+set -eux
+uvx --with pandas --with matplotlib --with seaborn jupyter lab --ServerApp.token='' --ServerApp.password='' --ServerApp.disable_check_xsrf=True
