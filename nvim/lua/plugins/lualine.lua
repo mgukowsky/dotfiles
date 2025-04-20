@@ -15,16 +15,16 @@ return {
     dependencies = {
       'someone-stole-my-name/yaml-companion.nvim',
       'nvim-tree/nvim-web-devicons',
-      'Mofiqul/vscode.nvim',
+      -- 'Mofiqul/vscode.nvim',
       'mfussenegger/nvim-dap',
     },
     config = function()
-      local vscPalette = require("vscode.colors").get_colors()
+      -- local vscPalette = require("vscode.colors").get_colors()
       -- local lualine_theme = require("lualine.themes.vscode")
-      local lualine_theme = require("lualine.themes.vscode")
+      -- local lualine_theme = require("lualine.themes.vscode")
 
-      lualine_theme.insert.a.bg = vscPalette.vscRed
-      lualine_theme.insert.b.fg = vscPalette.vscRed
+      -- lualine_theme.insert.a.bg = vscPalette.vscRed
+      -- lualine_theme.insert.b.fg = vscPalette.vscRed
 
       -- Custom lualine component to show DAP status
       local dap_status_comp = require("lualine.component"):extend()
@@ -78,7 +78,7 @@ return {
             },
             {
               dap_status_comp,
-              color = { fg = vscPalette.vscDarkYellow },
+              -- color = { fg = vscPalette.vscDarkYellow },
             },
           },
           lualine_x = { "encoding", "fileformat", "filetype", get_schema },

@@ -32,7 +32,7 @@ return {
           "vimdoc",
         },
         highlight = {
-          enable = true,
+          enable = not vim.g.vscode,
           additional_vim_regex_highlighting = false,
         },
         -- indent = { enable = true } --TODO: use this?
@@ -77,8 +77,6 @@ return {
           enable = true,
         },
       })
-
-
     end
   },
   {

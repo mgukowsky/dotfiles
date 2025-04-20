@@ -103,31 +103,31 @@ return {
       end
     },
   },
-  {
-    "Mofiqul/vscode.nvim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      local vscPalette = require("vscode.colors").get_colors()
-
-      require("vscode").setup({
-        style = "dark",
-        -- transparent = true,
-        italic_comments = true,
-        group_overrides = create_group_overrides({
-          fg = vscPalette.vscFront,
-          accent_blue = vscPalette.vscAccentBlue,
-          bright_red = vscPalette.vscRed,
-          dark_purple = "#BEB7FF",
-          dark_yellow = vscPalette.vscDarkYellow,
-          comment = vscPalette.vscGray,
-          light_blue = vscPalette.vscLightBlue,
-          lime = "#3AF514",
-          orange = vscPalette.vscOrange,
-        }),
-      })
-    end
-  },
+  -- {
+  --   "Mofiqul/vscode.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     local vscPalette = require("vscode.colors").get_colors()
+  --
+  --     require("vscode").setup({
+  --       style = "dark",
+  --       -- transparent = true,
+  --       italic_comments = true,
+  --       group_overrides = create_group_overrides({
+  --         fg = vscPalette.vscFront,
+  --         accent_blue = vscPalette.vscAccentBlue,
+  --         bright_red = vscPalette.vscRed,
+  --         dark_purple = "#BEB7FF",
+  --         dark_yellow = vscPalette.vscDarkYellow,
+  --         comment = vscPalette.vscGray,
+  --         light_blue = vscPalette.vscLightBlue,
+  --         lime = "#3AF514",
+  --         orange = vscPalette.vscOrange,
+  --       }),
+  --     })
+  --   end
+  -- },
   {
     "Shatur/neovim-ayu",
     lazy = false,

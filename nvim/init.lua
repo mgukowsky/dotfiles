@@ -25,12 +25,20 @@ lazy.bootstrap_lazy()
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = "\\"
 vim.g.maplocalleader = "\\"
+
 require("config.opts")
-require("config.mappings")
 require("config.autocommands")
-require("config.profiler")
+
+if vim.g.vscode then
+  require("config.vscode")
+else
+  require("config.mappings")
+  require("config.profiler")
+end
 
 -- Setup all plugins
 lazy.setup_lazy()
 
-vim.cmd.colorscheme("tokyonight-night")
+if not vim.g.vscode then
+  vim.cmd.colorscheme("tokyonight-night")
+end
