@@ -227,15 +227,16 @@ source /usr/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
+# TODO: Temporarily disabled, as this is causing issues with powerlevel10k
 # nvm setup from AUR package
-if [[ -e /usr/share/nvm/init-nvm.sh ]]; then
-  source /usr/share/nvm/init-nvm.sh
-# but the installer from GitHub does things a little differently...
-elif [[ -e $XDG_CONFIG_HOME/nvm/nvm.sh ]]; then
-  export NVM_DIR="$XDG_CONFIG_HOME/nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
+# if [[ -e /usr/share/nvm/init-nvm.sh ]]; then
+#   source /usr/share/nvm/init-nvm.sh
+# # but the installer from GitHub does things a little differently...
+# elif [[ -e $XDG_CONFIG_HOME/nvm/nvm.sh ]]; then
+#   export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+#   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# fi
 
 # Start the ssh-agent automatically, if needed.
 # From https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login

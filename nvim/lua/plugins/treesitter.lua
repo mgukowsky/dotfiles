@@ -30,6 +30,7 @@ return {
           "typescript",
           "vim",
           "vimdoc",
+          "yaml",
         },
         highlight = {
           enable = true,
@@ -77,8 +78,6 @@ return {
           enable = true,
         },
       })
-
-
     end
   },
   {
