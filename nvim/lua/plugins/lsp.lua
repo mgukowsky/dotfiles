@@ -150,6 +150,7 @@ local function on_attach(_, bufnr)
   wk.add({
     {
       buffer = bufnr,
+      { "K",          function() vim.lsp.buf.hover({ border = "rounded" }) end,                      desc = "Hover Info" },
       { "<leader>]",  function() vim.cmd.popup(LSPMenu) end,                                         desc = "LSP Popup menu" },
       { "<leader>n",  function() vim.cmd("Lspsaga outline") end,                                     desc = "Toggle LSP code outline" },
 
