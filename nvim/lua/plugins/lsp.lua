@@ -150,8 +150,6 @@ local function on_attach(_, bufnr)
   wk.add({
     {
       buffer = bufnr,
-      { "+",          function() vim.cmd("Lspsaga hover_doc") end,                                   desc = "Show hover (press twice to focus)" },
-
       { "<leader>]",  function() vim.cmd.popup(LSPMenu) end,                                         desc = "LSP Popup menu" },
       { "<leader>n",  function() vim.cmd("Lspsaga outline") end,                                     desc = "Toggle LSP code outline" },
 
@@ -345,7 +343,7 @@ local function setup_lsps()
         { "<leader>lrxl", function() rlsp("logFile") end,                      desc = "rust-analyzer logs" },
         { "<leader>lrxm", function() rlsp({ "view", "mir" }) end,              desc = "View MIR" },
         { "J",            function() rlsp("joinLines") end,                    desc = "Join lines" },
-        { "+",            function() rlsp({ "hover", "actions" }) end,         desc = "Show hover (press twice to focus)" },
+        { "K",            function() rlsp({ "hover", "actions" }) end,         desc = "Show hover (press twice to focus)" },
         { "<F5>",         function() rlsp({ "debuggables", bang = true }) end, desc = "Run last debuggable" },
         -- Ctrl+F5; same as Visual Studio mapping
         { "<F29>",        function() rlsp({ "runnables", bang = true }) end,   desc = "Run last runnable" },

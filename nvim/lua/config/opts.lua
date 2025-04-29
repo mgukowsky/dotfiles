@@ -57,10 +57,11 @@ opt.termguicolors = true -- Use UI colors if supported
 opt.timeoutlen = 1000
 opt.ttimeoutlen = 10
 
-opt.title = true      -- Set the title of the window to the file being edited
-opt.updatetime = 1000 -- Update buffers every second
-opt.wrap = true       -- Wrap text
-opt.wildmenu = true   -- Better searching and tab completion for files
+opt.title = true          -- Set the title of the window to the file being edited
+opt.updatetime = 1000     -- Update buffers every second
+opt.wildmenu = true       -- Better searching and tab completion for files
+opt.winborder = 'rounded' -- New in 0.11; sets all floating windows to have rounded borders
+opt.wrap = true           -- Wrap text
 
 -- A few options are managed through global variables
 local g = vim.g -- Corresponds to "g:" variables
