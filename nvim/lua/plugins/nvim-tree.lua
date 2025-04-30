@@ -2,7 +2,7 @@ return {
   'nvim-tree/nvim-tree.lua',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   keys = {
-    {"<C-n>", vim.cmd.NvimTreeToggle, desc = "Toggle NvimTree"}
+    { "<C-n>", vim.cmd.NvimTreeToggle, desc = "Toggle NvimTree" }
   },
   opts = {
     disable_netrw = true,

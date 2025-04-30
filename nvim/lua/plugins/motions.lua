@@ -5,7 +5,7 @@ return {
     opts = {
       modes = {
         char = {
-          autohide = true,
+          -- autohide = true,
         }
       },
       prompt = {

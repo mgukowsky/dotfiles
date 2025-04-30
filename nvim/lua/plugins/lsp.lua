@@ -161,7 +161,11 @@ local function on_attach(_, bufnr)
       { "<leader>ls", function() require("telescope.builtin").lsp_document_symbols() end,            desc = "Document Symbol search" },
       { "<leader>lv", function() require("lsp_lines").toggle() end,                                  desc = "Toggle Diagnostic Virtual Lines" },
       { "<leader>lw", function() require("telescope.builtin").lsp_workspace_symbols() end,           desc = "Workspace Symbol search" },
-
+    },
+    {
+      buffer = bufnr,
+      mode = { "n", "v", "i" },
+      { "<C-s>", function() vim.lsp.buf.signature_help({ border = "rounded" }) end, desc = "Signature help" },
     }
   })
 
@@ -355,7 +359,7 @@ local function setup_lsps()
       {
         buffer = bufnr,
         mode = "v",
-        { "+", function() rlsp({ "hover", "range" }) end, desc = "Show hover (press twice to focus)" },
+        { "K", function() rlsp({ "hover", "range" }) end, desc = "Show hover (press twice to focus)" },
       }
     })
   end
@@ -465,14 +469,14 @@ return {
           },
         },
       },
-      G_USE_BLINK and {} or {
-        "ray-x/lsp_signature.nvim",
-        event = "VeryLazy",
-        opts = {
-          hint_prefix = "🧐",
-          select_signature_key = "<C-S>",
-        }
-      },
+      -- G_USE_BLINK and {} or {
+      --   "ray-x/lsp_signature.nvim",
+      --   event = "VeryLazy",
+      --   opts = {
+      --     hint_prefix = "🧐",
+      --     select_signature_key = "<C-S>",
+      --   }
+      -- },
       {
         -- Handles Rust LSP
         'mrcjkb/rustaceanvim',

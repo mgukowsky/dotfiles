@@ -19,6 +19,7 @@ return {
 
       -- Group descriptions for mappings given as "keys" args in a lazy spec need to be defined here
       wk.add({
+        { "gr",         mode = { "n", "v" },                   group = "LSP Actions" }, -- nvim builtins
         { "<leader>c",  mode = { "n", "v" },                   group = "ChatGPT" },
         { "<leader>d",  group = "Debugger (DAP)" },
         { "<leader>db", group = "Breakpoints" },
