@@ -15,6 +15,8 @@ return {
     { "<leader>hs", function() require("gitsigns").stage_hunk() end,                desc = "Stage hunk" },
     { "<leader>hS", function() require("gitsigns").stage_buffer() end,              desc = "Stage buffer" },
     { "<leader>hu", function() require("gitsigns").reset_hunk() end,                desc = "Reset hunk" },
+    { "]C",         function() require("gitsigns").nav_hunk("last") end,            desc = "Last Hunk" },
+    { "[C",         function() require("gitsigns").nav_hunk("first") end,           desc = "First Hunk" },
 
     -- Hunk text object
     { "ih",         ":<C-U>Gitsigns select_hunk<CR>",                               mode = { "o", "x" },               desc = "Select git hunk" }
@@ -27,7 +29,19 @@ return {
       update_debounce = 1000, -- only update once a second
     })
     local next_hunk_repeat, prev_hunk_repeat =
-        require("nvim-treesitter.textobjects.repeatable_move").make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)
+        require("nvim-treesitter.textobjects.repeatable_move").make_repeatable_move_pair(function()
+          if vim.wo.diff then
+            vim.cmd.normal({ "]c", bang = true })
+          else
+            gs.nav_hunk("next")
+          end
+        end, function()
+          if vim.wo.diff then
+            vim.cmd.normal({ "[c", bang = true })
+          else
+            gs.nav_hunk("prev")
+          end
+        end)
 
     require("which-key").add({
       { "[c", function() prev_hunk_repeat() end, desc = "Prev Git change" },
