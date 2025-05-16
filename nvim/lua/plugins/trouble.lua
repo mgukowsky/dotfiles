@@ -10,7 +10,7 @@ return {
   cmd = "Trouble",
   keys = {
     {
-      "<C-q>",
+      "q",
       function()
         local trouble = require("trouble")
         if trouble.is_open() then
