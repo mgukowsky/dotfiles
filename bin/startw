@@ -1,0 +1,3 @@
+#!/bin/sh
+# Like `startx`, but for Wayland
+exec sway --unsupported-gpu

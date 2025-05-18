@@ -194,7 +194,6 @@ export LESS="--RAW-CONTROL-CHARS"
 [[ -f ~/.LESS_TERMCAP ]] && . ~/.LESS_TERMCAP
 
 export EDITOR=$(which nvim)
-alias vim='nvim'
 export PAGER=$(which less)
 export GIT_PAGER=$(which delta)
 export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat/bat.conf"
