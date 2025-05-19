@@ -1,0 +1,4 @@
+#!/bin/sh
+SSHOT_PATH=$(mktemp -u).png
+slurp -c '#00FF00' | grim -t png -g - - | tee $SSHOT_PATH | wl-copy
+notify-send -a "Screen Capture" -i $SSHOT_PATH -u low "Snip: $SSHOT_PATH"

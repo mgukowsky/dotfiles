@@ -1,0 +1,2 @@
+#!/bin/sh
+slurp -c '#FF00FF' | grim -t png -g - - | tesseract - - 2>/dev/null | wl-copy
