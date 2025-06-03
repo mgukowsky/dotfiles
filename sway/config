@@ -22,6 +22,11 @@ set $menu fuzzel
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg $XDG_CONFIG_HOME/WALLPAPER fill
+exec swaync
+exec systemd-run --collect --no-block --unit="sway-swaync" --description="sway child service: swaync" --user swaync
+exec systemd-run --collect --no-block --unit="sway-xfsettingsd" --description="sway child service: xfsettingsd" --user xfsettingsd --replace
+exec systemd-run --collect --no-block --unit="sway-batsignal" --description="sway child service: batsignal" --user batsignal -w 20 -c 10 -d 5
+
 #
 # Example configuration:
 #

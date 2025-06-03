@@ -1,0 +1,4 @@
+#!/bin/bash
+SSHOT_PATH=/tmp/lockscreenshot
+grim - | magick - -blur 0x5 $SSHOT_PATH
+swaylock -eFL -i $SSHOT_PATH
