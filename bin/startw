@@ -1,3 +1,7 @@
 #!/bin/sh
 # Like `startx`, but for Wayland
+if [[ -n "$WAYLAND_DISPLAY" ]]; then
+  echo "Already running in a Wayland instance" 
+  exit 1
+fi
 exec sway --unsupported-gpu

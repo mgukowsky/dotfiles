@@ -1,0 +1,13 @@
+[Unit]
+Description=Lock Wayland session for user %i
+Before=sleep.target
+
+[Service]
+User=%i
+Type=forking
+Environment=WAYLAND_DISPLAY=wayland-1
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+ExecStart=/usr/bin/wayland-blur-and-lock-screen
+
+[Install]
+WantedBy=sleep.target
