@@ -1,4 +1,9 @@
 #!/bin/bash
+if ! [[ -v WAYLAND_DISPLAY ]]; then
+  echo "Not in a Wayland session..."
+  exit 1
+fi
+
 SSHOT_PATH=/tmp/lockscreenshot
 grim - | magick - -blur 0x5 $SSHOT_PATH
-swaylock -efFL -i $SSHOT_PATH
+swaylock --daemonize --ignore-empty-password --indicator-caps-lock --show-failed-attempts -i $SSHOT_PATH
