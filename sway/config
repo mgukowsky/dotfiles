@@ -246,6 +246,10 @@ smart_borders on
 
 # Key bindings
 
+# Media keys
+bindsym --locked XF86MonBrightnessDown exec adjust-brightness -
+bindsym --locked XF86MonBrightnessUp exec adjust-brightness +
+
 # Emoji picker
 bindsym $mod+period exec BEMOJI_PICKER_CMD="fuzzel -d" bemoji
 
@@ -262,4 +266,5 @@ bindsym $mod+Shift+t exec wayland_text_extract
 # Other settings
 xwayland enable
 
+# Include other goodies/machine-specific configs
 include /etc/sway/config.d/*
