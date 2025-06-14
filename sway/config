@@ -26,7 +26,7 @@ output * bg $XDG_CONFIG_HOME/WALLPAPER fill
 # Child services. N.B. we put all of them within the slice that we created for sway
 exec systemd-run --collect --no-block --unit="swaync" --description="Notification client" --user --slice-inherit --scope swaync
 exec systemd-run --collect --no-block --unit="xfsettingsd" --description="Settings daemon" --user --slice-inherit --scope xfsettingsd --replace
-exec systemd-run --collect --no-block --unit="batsignal" --description="Battery status daemon" --user --slice-inherit --scope batsignal -w 20 -c 10 -d 5
+exec systemd-run --collect --no-block --unit="batsignal" --description="Battery status daemon" --user --slice-inherit --scope batsignal -p -w 20 -c 10 -d 5
 
 #
 # Example configuration:

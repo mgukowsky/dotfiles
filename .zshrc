@@ -151,27 +151,12 @@ if which ruby >/dev/null && which gem >/dev/null; then
     PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
-
 # XDG directories
 export XDG_CONFIG_HOME=${HOME}/.config
 export XDG_CACHE_HOME=${HOME}/.cache
 export XDG_DATA_HOME=${HOME}/.local/share
 export XDG_DATA_DIRS=/usr/local/share:/usr/share
 export XDG_CONFIG_DIRS=/etc/xdg
-
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias ip='ip --color=auto'
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias lld='lsd -halF'
-alias treed='lsd --tree'
-alias watch='watch --color'
-alias adog='git log --all --decorate --oneline --graph'
-alias xclippy='xclip -selection clipboard'
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
@@ -495,6 +480,8 @@ function source_if_present {
     . $1
   fi
 }
+
+source_if_present $XDG_DATA_HOME/sh/aliases.sh
 
 # Pull in additional shell modules; these will need to be setup with symlinks in the
 # appropriate location.

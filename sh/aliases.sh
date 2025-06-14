@@ -1,0 +1,16 @@
+# Define shell aliases here
+
+alias adog='git log --all --decorate --oneline --graph'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias ip='ip --color=auto'
+alias l='ls -CF'
+alias la='ls -A'
+alias ll='ls -alF'
+alias lld='lsd -halF'
+alias ls='ls --color=auto'
+alias treed='lsd --tree'
+alias usystemctl='systemctl --user'
+alias watch='watch --color'
+alias xclippy='xclip -selection clipboard'
