@@ -4,4 +4,9 @@ if [[ -n "$WAYLAND_DISPLAY" ]]; then
   echo "Already running in a Wayland instance" 
   exit 1
 fi
-exec dbus-run-session sway --unsupported-gpu
+
+# Version that doesn't use systemd
+# exec dbus-run-session sway --unsupported-gpu
+
+# Version that uses systemd and creates a new slice
+systemd-run --user --unit="sway-session" --description="Lightweight window manager" --scope --slice=sway-session.slice -E XDG_SESSION_TYPE=wayland -E XDG_CURRENT_DESKTOP=sway sway --unsupported-gpu
