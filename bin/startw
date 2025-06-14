@@ -4,4 +4,4 @@ if [[ -n "$WAYLAND_DISPLAY" ]]; then
   echo "Already running in a Wayland instance" 
   exit 1
 fi
-exec sway --unsupported-gpu
+exec dbus-run-session sway --unsupported-gpu
