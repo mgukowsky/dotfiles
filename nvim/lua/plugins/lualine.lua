@@ -42,7 +42,7 @@ return {
           "fzf",
           "man",
           "nvim-tree",
-          "nvim-dap-ui",
+          -- "nvim-dap-ui",
           "quickfix",
           "trouble",
         },

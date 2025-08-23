@@ -73,7 +73,7 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = {
       -- Specs listed below
-      "rcarriga/nvim-dap-ui",
+      "igorlfs/nvim-dap-view",
       {
         "theHamsta/nvim-dap-virtual-text",
         opts = {
@@ -143,16 +143,20 @@ return {
       { "<leader>dc",  function() require("dap").continue() end,                              desc = "Start/Continue execution" },
 
       { "<leader>dfc", function() require("dap").focus_frame() end,                           desc = "Go to current (active) frame" },
+      -- Alias
+      { "<leader>dff", function() require("dap").focus_frame() end,                           desc = "Go to current (active) frame" },
       { "<leader>dfd", function() require("dap").down() end,                                  desc = "Go down one frame" },
       { "<leader>dfr", function() require("dap").restart_frame() end,                         desc = "Restart execution of the current frame" },
       { "<leader>dfu", function() require("dap").up() end,                                    desc = "Go up one frame" },
 
+      { "<leader>dK",  function() require("dap.ui.widgets").hover() end,                      desc = "Evaluate expression under cursor" }, -- "next"
       { "<leader>dn",  function() require("dap").step_over() end,                             desc = "Step Over" }, -- "next"
       { "<leader>do",  function() require("dap").step_out() end,                              desc = "Step Out" },  -- "finish"
       { "<leader>dp",  function() require("dap").pause() end,                                 desc = "Pause execution" },
       { "<leader>ds",  function() require("dap").step_into() end,                             desc = "Step Into" },
       { "<leader>dv",  function() require("nvim-dap-virtual-text").toggle() end,              desc = "Toggle Virtual Text" },
       { "<leader>du",  function() require("dap").run_to_cursor() end,                         desc = "Run until current line" }, -- this will temporarily disable breakpoints
+      { "<leader>dw",  function() require("dap-view").add_expr() end,                         desc = "Watch the current expression" },
       { "<leader>dx",  function() require("dap").terminate() end,                             desc = "Terminate running program" },
 
       { "<leader>dqq", function() require("telescope").extensions.dap.commands() end,         desc = "Command search" },
@@ -163,37 +167,64 @@ return {
     },
     config = function()
       install_dap_signs()
+      setup_dap()
     end
   },
   {
-    "rcarriga/nvim-dap-ui",
-    dependencies = { "nvim-neotest/nvim-nio" },
+    "igorlfs/nvim-dap-view",
+    dependencies = {
+      {
+        "mfussenegger/nvim-dap",
+      },
+    },
     keys = {
-      { "<leader>dt", function() require("dapui").toggle() end,                    desc = "Toggle DAP UI" },
-      { "<leader>d]", function() require("dapui").eval(nil, { enter = true }) end, desc = "Evaluate variable under cursor/highlight" },
+      { "<leader>dt", function() require("dap-view").toggle() end,                    desc = "Toggle DAP UI" },
     },
     config = function()
-      setup_dap()
-
-      local dapui = require("dapui")
-      dapui.setup()
-
-      -- Setup listeners to trigger/close the UI on debugging events
-      local dap = require("dap")
-      dap.listeners.before.attach.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.launch.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        dapui.close()
-      end
-    end
+      require("dap-view").setup({
+        winbar = {
+          default_section = "scopes",
+          sections = { "watches", "scopes", "exceptions", "breakpoints", "disassembly", "threads", "repl", "sessions" },
+          controls = { enabled = true },
+        },
+        help = { border = "rounded" },
+      })
+    end,
   },
+    {
+      "Jorenar/nvim-dap-disasm",
+      dependencies = "igorlfs/nvim-dap-view",
+      config = true,
+    },
+  -- {
+  --   "rcarriga/nvim-dap-ui",
+  --   dependencies = { "nvim-neotest/nvim-nio" },
+  --   keys = {
+  --     { "<leader>dt", function() require("dapui").toggle() end,                    desc = "Toggle DAP UI" },
+  --     { "<leader>d]", function() require("dapui").eval(nil, { enter = true }) end, desc = "Evaluate variable under cursor/highlight" },
+  --   },
+  --   config = function()
+  --     setup_dap()
+  --
+  --     local dapui = require("dapui")
+  --     dapui.setup()
+  --
+  --     -- Setup listeners to trigger/close the UI on debugging events
+  --     local dap = require("dap")
+  --     dap.listeners.before.attach.dapui_config = function()
+  --       dapui.open()
+  --     end
+  --     dap.listeners.before.launch.dapui_config = function()
+  --       dapui.open()
+  --     end
+  --     dap.listeners.before.event_terminated.dapui_config = function()
+  --       dapui.close()
+  --     end
+  --     dap.listeners.before.event_exited.dapui_config = function()
+  --       dapui.close()
+  --     end
+  --   end
+  -- },
   {
     -- N.B. that the `debugpy` pip package needs to be installed for this to work
     "mfussenegger/nvim-dap-python",

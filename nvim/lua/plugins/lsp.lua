@@ -298,6 +298,15 @@ local function setup_lsps()
         { "<leader>dqd", function() util.run_if_compile_commands(cpp_util.dbg_select) end,          desc = "Select program to debug" },
         { "<leader>dqD", function() util.run_if_compile_commands(cpp_util.run_gtest_at_cursor) end, desc = "Debug gtest at cursor" },
         { "<F5>",        function() util.run_if_compile_commands(cpp_util.dbg_select) end,          desc = "Select program to debug" },
+        {
+          "dqa",
+          function()
+            util.run_if_compile_commands(function()
+              cpp_util.dbg_select({ enter_args = true })
+            end)
+          end,
+          desc = "Select program (w/args) to debug"
+        },
         -- Shift+F5
         {
           "<F17>",
