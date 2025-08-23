@@ -119,9 +119,9 @@ exec systemd-run --collect --no-block --unit="batsignal" --description="Battery 
 # Workspaces:
 #
     # Switch to workspace
-    bindsym $mod+Control+$left workspace next
+    bindsym $mod+Control+$left workspace prev
     bindsym $mod+Control+$right workspace next
-    bindsym $mod+Control+Left workspace next
+    bindsym $mod+Control+Left workspace prev
     bindsym $mod+Control+Right workspace next
     bindsym $mod+1 workspace number 1
     bindsym $mod+2 workspace number 2
