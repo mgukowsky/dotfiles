@@ -466,6 +466,10 @@ function power-saver-mode {
 # Enable vi-style bindings
 set -o vi
 
+# Use local cache for CPM.cmake
+export CPM_SOURCE_CACHE="$XDG_CACHE_HOME/.cpm"
+
+
 # Allow expected backspace behavior in vi insert mode
 bindkey "^?" backward-delete-char
 
