@@ -1,12 +1,14 @@
 local M = {}
 
-M.GDB_PATH = "/usr/bin/gdb"
-M.LLDB_PATH = "/usr/bin/lldb-vscode"
-M.CODELLDB_PATH = "/usr/sbin/codelldb"
-
 -- Find the most recently installed cpptools vscode plugin's DAP binary,
 -- or nil if not installed
 function M.get_cpptools_path()
+  -- First, we may just have the AUR repo available.
+  local aurpath = "/usr/share/cpptools-debug/bin/OpenDebugAD7"
+  if vim.fn.executable(aurpath) then
+    return aurpath
+  end
+
   local cpptools = vim.fn.glob("~/.vscode/extensions/ms-vscode.cpptools*")
 
   local max = nil
@@ -56,7 +58,7 @@ local function make_cpp_configs()
     cfg.type = "cppdbg"
     cfg.linux = {
       MIMode = "gdb",
-      miDebuggerPath = "/usr/bin/gdb",
+      miDebuggerPath = "gdb",
     }
     cfg.osx = {
       MIMode = "lldb",
@@ -74,15 +76,15 @@ local function make_cpp_configs()
       },
     }
     table.insert(cfgs, cfg)
-  elseif vim.fn.executable(M.CODELLDB_PATH) == 1 then
+  elseif vim.fn.executable("codelldb") == 1 then
     local cfg = vim.deepcopy(basecfg)
     cfg.type = "codelldb"
     table.insert(cfgs, cfg)
-  elseif vim.fn.executable(M.LLDB_PATH) == 1 then
+  elseif vim.fn.executable("lldb-vscode") == 1 or vim.fn.executable("lldb") == 1 then
     local cfg = vim.deepcopy(basecfg)
     cfg.type = "lldb"
     table.insert(cfgs, cfg)
-  elseif vim.fn.executable(M.GDB_PATH) == 1 then
+  elseif vim.fn.executable("gdb") == 1 then
     local cfg = vim.deepcopy(basecfg)
     cfg.type = "gdb"
     cfg.setupCommands = {
