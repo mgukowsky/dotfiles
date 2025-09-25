@@ -205,15 +205,16 @@ end
 
 local function setup_lsps()
   -- From nvim-lspconfig plugin
-  local lspconfigs = require("lspconfig")
+  local lspconfigs = vim.lsp.config
 
-  lspconfigs.lua_ls.setup({
+  lspconfigs.lua_ls = {
     on_attach = on_attach,
     capabilities = get_lsp_caps(),
     settings = {
       -- empty; config handled elsewhere by lazydev.nvim
     },
-  })
+  }
+  vim.lsp.enable('lua_ls')
 
   -- Server for LanguageTool. The bin `ltex-ls` needs to be present; see
   -- https://www.reddit.com/r/neovim/comments/sdvfwr/comment/hughrfi/
@@ -240,7 +241,7 @@ local function setup_lsps()
   -- Schema configs per https://www.arthurkoziel.com/json-schemas-in-neovim/
   local json_lsp_cap = get_lsp_caps()
   json_lsp_cap.textDocument.completion.completionItem.snippetSupport = true
-  lspconfigs.jsonls.setup({
+  lspconfigs.jsonls = {
     on_attach = on_attach,
     capabilities = json_lsp_cap,
     settings = {
@@ -249,41 +250,33 @@ local function setup_lsps()
         validate = { enable = true },
       },
     },
-  })
+  }
+  vim.lsp.enable('jsonls')
 
-  lspconfigs.yamlls.setup(require("yaml-companion").setup({
-    lspconfig = {
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-        require("which-key").add({
-          {
-            buffer = bufnr,
-            { "<leader>lx", function() require("telescope").extensions.yaml_schema.yaml_schema() end, desc = "Select YAML schema" },
-          }
-        })
-      end,
-      capabilities = get_lsp_caps(),
-      settings = {
-        yaml = {
-          validate = true,
-          -- Using schemastore seems to not work for this atm...
-          -- schemaStore = {
-          -- 	enable = false,
-          -- 	url = "",
-          -- },
-          -- schemas = require("schemastore").yaml.schemas(),
-        },
+  lspconfigs.yamlls = {
+    on_attach = on_attach,
+    capabilities = get_lsp_caps(),
+    settings = {
+      yaml = {
+        validate = true,
+        -- Using schemastore seems to not work for this atm...
+        -- schemaStore = {
+        -- 	enable = false,
+        -- 	url = "",
+        -- },
+        -- schemas = require("schemastore").yaml.schemas(),
       },
     },
-  }))
-  require("telescope").load_extension("yaml_schema")
+  }
+  vim.lsp.enable('yamlls')
 
   local cmake_lsp_caps = get_lsp_caps()
   cmake_lsp_caps.textDocument.completion.completionItem.snippetSupport = true
-  lspconfigs.neocmake.setup({
+  lspconfigs.neocmake = {
     on_attach = on_attach,
     capabilities = cmake_lsp_caps
-  })
+  }
+  vim.lsp.enable("neocmake")
 
   ---@diagnostic disable-next-line: unused-function
   local function clangd_on_attach(client, bufnr)
@@ -321,10 +314,11 @@ local function setup_lsps()
     })
   end
 
-  lspconfigs.clangd.setup({
+  lspconfigs.clangd = {
     on_attach = clangd_on_attach,
     capabilities = get_lsp_caps(),
-  })
+  }
+  vim.lsp.enable("clangd")
 
   -- Specialization for Rustacean to provide mappings to some of the utility functions
   -- that this library provides us.
@@ -389,10 +383,11 @@ local function setup_lsps()
 
   -- Setup LSPs that don't require any additional configs/aren't managed by other plugins
   for _, lsp_name in pairs({ "glsl_analyzer", "jedi_language_server", "ruby_lsp", "taplo", }) do
-    lspconfigs[lsp_name].setup({
+    lspconfigs[lsp_name] = {
       on_attach = on_attach,
       capabilities = get_lsp_caps(),
-    })
+    }
+    vim.lsp.enable(lsp_name)
   end
 end
 

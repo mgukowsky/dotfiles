@@ -62,6 +62,7 @@ return {
         cpp = { "clangtidy", },
         glsl = { "glslc", },
         python = { "mypy", "ruff", },
+        rust = { "clippy" },
       }
       vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
         callback = function()
