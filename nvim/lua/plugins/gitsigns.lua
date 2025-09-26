@@ -28,24 +28,29 @@ return {
       signs_staged_enable = false,
       update_debounce = 1000, -- only update once a second
     })
-    local next_hunk_repeat, prev_hunk_repeat =
-        require("nvim-treesitter.textobjects.repeatable_move").make_repeatable_move_pair(function()
-          if vim.wo.diff then
-            vim.cmd.normal({ "]c", bang = true })
-          else
-            gs.nav_hunk("next")
-          end
-        end, function()
+    require("which-key").add({
+      {
+        "[c",
+        function()
           if vim.wo.diff then
             vim.cmd.normal({ "[c", bang = true })
           else
             gs.nav_hunk("prev")
           end
-        end)
-
-    require("which-key").add({
-      { "[c", function() prev_hunk_repeat() end, desc = "Prev Git change" },
-      { "]c", function() next_hunk_repeat() end, desc = "Next Git change" },
+        end,
+        desc = "Prev Git change"
+      },
+      {
+        "]c",
+        function()
+          if vim.wo.diff then
+            vim.cmd.normal({ "]c", bang = true })
+          else
+            gs.nav_hunk("next")
+          end
+        end,
+        desc = "Next Git change"
+      },
     })
   end
 }

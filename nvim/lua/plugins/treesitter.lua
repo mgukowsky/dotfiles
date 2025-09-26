@@ -1,6 +1,8 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    version = false, -- lazyvim does this, so we do it too
     build = ":TSUpdate",
     dependencies = {
       "folke/which-key.nvim",
@@ -8,7 +10,7 @@ return {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     config = function()
-      require("nvim-treesitter.configs").setup({
+      require("nvim-treesitter").setup({
         ensure_installed = {
           "asm",
           "bash",
@@ -83,6 +85,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = "VeryLazy",
+    branch = "main",
   },
   {
     "RRethy/nvim-treesitter-endwise",
