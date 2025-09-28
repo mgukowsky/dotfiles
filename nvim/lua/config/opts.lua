@@ -35,6 +35,13 @@ opt.mouse = "a"       -- Mouse support
 opt.number = true     -- Show line numbers
 opt.path:append("**") -- Better searching and tab completion for files
 
+-- Use treesitter for folds
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+-- Don't fold anything by default
+vim.opt.foldlevelstart = 99
+
 -- Commenting this out as it appears to screw with certain popups like the LSP menu
 --opt.pumblend = 15         -- Transparent menus
 

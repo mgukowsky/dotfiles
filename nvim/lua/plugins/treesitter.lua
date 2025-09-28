@@ -8,7 +8,9 @@ return {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     config = function()
-      require("nvim-treesitter").setup({
+      require("nvim-treesitter.configs").setup({
+        auto_install = true, -- Install a missing parser if needed for a buffer
+        ignore_install = {},
         ensure_installed = require("local.vars").TS_PARSERS,
         highlight = {
           enable = true,
