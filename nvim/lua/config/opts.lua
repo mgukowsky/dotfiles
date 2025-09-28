@@ -67,6 +67,9 @@ local g = vim.g -- Corresponds to "g:" variables
 g.t_co = 256    -- Corresponds to vim's `t_Co`
 g.base16colorspace = 256
 
+-- Show healthchecks in a floating window
+g.health = { style = 'float' }
+
 -- Configuration for plugins; mainly managed through global variables
 
 -- Make limelight OK with our transparent background

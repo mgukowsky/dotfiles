@@ -8,30 +8,8 @@ return {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = {
-          "asm",
-          "bash",
-          "c",
-          "cmake",
-          "comment",
-          "cpp",
-          "glsl",
-          "javascript",
-          "json",
-          "lua",
-          "markdown",
-          "markdown_inline",
-          "mermaid",
-          "nasm",
-          "python",
-          "ruby",
-          "rust",
-          "typescript",
-          "vim",
-          "vimdoc",
-          "yaml",
-        },
+      require("nvim-treesitter").setup({
+        ensure_installed = require("local.vars").TS_PARSERS,
         highlight = {
           enable = true,
           additional_vim_regex_highlighting = false,

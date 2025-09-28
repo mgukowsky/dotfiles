@@ -23,17 +23,17 @@ local function setup_dap()
     gdb = {
       id = "gdb",
       type = "executable",
-      command = dap_util.GDB_PATH,
+      command = "gdb",
       args = { "-i", "dap" },
     },
     lldb = {
       id = "lldb",
       type = "executable",
-      command = dap_util.LLDB_PATH,
+      command = "lldb",
     },
     codelldb = {
       executable = {
-        command = dap_util.CODELLDB_PATH,
+        command = "codelldb",
         args = { "--port", "${port}" },
         -- On windows you may have to uncomment this:
         -- detached = false,
@@ -150,8 +150,8 @@ return {
       { "<leader>dfu", function() require("dap").up() end,                                    desc = "Go up one frame" },
 
       { "<leader>dK",  function() require("dap.ui.widgets").hover() end,                      desc = "Evaluate expression under cursor" }, -- "next"
-      { "<leader>dn",  function() require("dap").step_over() end,                             desc = "Step Over" }, -- "next"
-      { "<leader>do",  function() require("dap").step_out() end,                              desc = "Step Out" },  -- "finish"
+      { "<leader>dn",  function() require("dap").step_over() end,                             desc = "Step Over" },                        -- "next"
+      { "<leader>do",  function() require("dap").step_out() end,                              desc = "Step Out" },                         -- "finish"
       { "<leader>dp",  function() require("dap").pause() end,                                 desc = "Pause execution" },
       { "<leader>ds",  function() require("dap").step_into() end,                             desc = "Step Into" },
       { "<leader>dv",  function() require("nvim-dap-virtual-text").toggle() end,              desc = "Toggle Virtual Text" },
@@ -178,7 +178,7 @@ return {
       },
     },
     keys = {
-      { "<leader>dt", function() require("dap-view").toggle() end,                    desc = "Toggle DAP UI" },
+      { "<leader>dt", function() require("dap-view").toggle() end, desc = "Toggle DAP UI" },
     },
     config = function()
       require("dap-view").setup({
@@ -191,11 +191,11 @@ return {
       })
     end,
   },
-    {
-      "Jorenar/nvim-dap-disasm",
-      dependencies = "igorlfs/nvim-dap-view",
-      config = true,
-    },
+  {
+    "Jorenar/nvim-dap-disasm",
+    dependencies = "igorlfs/nvim-dap-view",
+    config = true,
+  },
   -- {
   --   "rcarriga/nvim-dap-ui",
   --   dependencies = { "nvim-neotest/nvim-nio" },
