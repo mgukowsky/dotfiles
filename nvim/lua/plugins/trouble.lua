@@ -1,7 +1,12 @@
 -- Opens a trouble window; will focus if the command is sent twice/the dialog is already open
 local function trouble_toggle(mode)
   local trouble = require("trouble")
-  trouble.open({ mode = mode, focus = trouble.is_open({ mode = mode }) })
+  trouble.open({
+    mode = mode,
+    auto_refresh = false, -- Don't refresh the qflist when the cursor moves
+    -- focus = trouble.is_open({ mode = mode })
+    focus = true,         -- Can just press `q` to exit
+  })
 end
 
 return {

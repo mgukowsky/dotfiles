@@ -28,6 +28,20 @@ au("TextYankPost", {
   end,
 })
 
+au("QuickFixCmdPost", {
+  -- Works well for things like Live Grep and `:silent grep foo %`
+  -- Unfortunately it seems that there's no loclist equivalent :(
+  desc = "Automatically open Trouble Quickfix",
+  callback = function()
+    -- Need to use vim.schedule here to ensure that we call :cclose AFTER this autocommand does its thing,
+    -- since otherwise we would call :cclose in the callback, which would be _before_ the qflist is actually opened!
+    vim.schedule(function()
+      vim.cmd([[cclose]]) -- Close the vanilla qflist in case it opens automatically
+      vim.cmd([[Trouble qflist open]])
+    end)
+  end,
+})
+
 -- Recommended per https://neovim.io/doc/user/lsp.html#lsp-semantic-highlight,
 -- but breaks LSP highlighting
 --
