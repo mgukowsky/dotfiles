@@ -35,10 +35,10 @@ CASE_SENSITIVE="true"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+export UPDATE_ZSH_DAYS=30
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS=true
@@ -81,9 +81,9 @@ plugins=(zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 # Set up autocompletion for docker/docker compose, if needed
-if [[ ! -e ~/.oh-my-zsh/completions/_docker ]] && command -v docker >&/dev/null; then
-  mkdir -p ~/.oh-my-zsh/completions
-  docker completion zsh > ~/.oh-my-zsh/completions/_docker
+if [[ ! -e $ZSH/completions/_docker ]] && command -v docker >&/dev/null; then
+  mkdir -p $ZSH/completions
+  docker completion zsh > $ZSH/completions/_docker
 fi
 
 # User configuration
