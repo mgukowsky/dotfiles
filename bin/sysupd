@@ -1,14 +1,28 @@
-#!/bin/bash
-set -x
+#!/usr/bin/env zsh
+set -e -o pipefail
+
+function print_green() {
+  echo "$(tput bold)$(tput setaf 46) $@ $(tput sgr0)"
+}
+
 if command -v pacman >&/dev/null; then
+  print_green "Running pacman..."
   sudo pacman -Syyu
 fi
 
 if command -v yay >&/dev/null; then
+  print_green "Running yay..."
   yay -Syyu
 fi
 
+if [[ -n "${ZSH}" ]] && [[ -d "${ZSH}" ]]; then
+  print_green "Running oh my zsh updater..."
+  source ~/.zshrc
+  omz update
+fi
+
 if command -v fwupdmgr >&/dev/null; then
+  print_green "Running fwupdmgr..."
   fwupdmgr refresh
   fwupdmgr get-updates
   fwupdmgr update
