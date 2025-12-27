@@ -1,6 +1,8 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false, -- nvim-treesitter main branch does not support lazy-loading
+    branch = "main",
     build = ":TSUpdate",
     dependencies = {
       "folke/which-key.nvim",
@@ -8,64 +10,69 @@ return {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     config = function()
-      require("nvim-treesitter.configs").setup({
-        auto_install = true, -- Install a missing parser if needed for a buffer
-        ignore_install = {},
-        ensure_installed = require("local.vars").TS_PARSERS,
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-        -- indent = { enable = true } --TODO: use this?
-        sync_install = false,
-        textobjects = {
-          move = {
-            enable = true,
-            set_jumps = true, -- set jumps in jumplist
-            goto_next_start = {
-              ["]f"] = { query = "@function.outer", desc = "Next function start" },
-            },
-            goto_next_end = {
-              ["]F"] = { query = "@function.outer", desc = "Next function end" },
-            },
-            goto_previous_start = {
-              ["[f"] = { query = "@function.outer", desc = "Previous function start" },
-            },
-            goto_previous_end = {
-              ["[F"] = { query = "@function.outer", desc = "Previous function end" },
-            },
-          },
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["ab"] = { query = "@block.outer", desc = "Select an entire block" },
-              ["ib"] = { query = "@block.inner", desc = "Select the body of a block" },
-              ["af"] = { query = "@function.outer", desc = "Select an entire function" },
-              ["if"] = { query = "@function.inner", desc = "Select a function body" },
-              ["ac"] = { query = "@class.outer", desc = "Select an entire class" },
-              ["ic"] = { query = "@class.inner", desc = "Select the body of a class" },
-              ["a#"] = { query = "@comment.outer", desc = "Select an entire comment" },
-              ["i#"] = { query = "@comment.inner", desc = "Select the body of a comment" },
-              ["iS"] = { query = "@statement.outer", desc = "Select the current statement" },
-              ["aS"] = { query = "@scope", query_group = "locals", desc = "Select the current scope" },
-            },
-            include_surrounding_whitespace = false,
-          },
-        },
-        -- Turn on nvim-treesitter-endwise
-        endwise = {
-          enable = true,
-        },
+      -- Install parsers that were previously in ensure_installed
+      -- The main branch no longer has auto_install or ensure_installed in setup
+      local ts_parsers = require("local.vars").TS_PARSERS
+      require("nvim-treesitter").install(ts_parsers)
+
+      -- Enable treesitter highlighting for all parser filetypes
+      -- The main branch requires explicit activation via autocommand
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = ts_parsers,
+        callback = function()
+          vim.treesitter.start()
+        end,
+        desc = "Enable treesitter highlighting",
       })
     end
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    dependencies = {
+      "folke/which-key.nvim",
+    },
     event = "VeryLazy",
+    config = function()
+      -- Configure textobjects options (not keymaps)
+      require("nvim-treesitter-textobjects").setup({
+        select = {
+          lookahead = true,
+          include_surrounding_whitespace = false,
+        },
+        move = {
+          set_jumps = true, -- set jumps in jumplist
+        },
+      })
+
+      -- Define keymaps using which-key
+      local ts_select = require("nvim-treesitter-textobjects.select")
+      local ts_move = require("nvim-treesitter-textobjects.move")
+
+      require("which-key").add({
+        -- Select textobjects
+        { "ab", function() ts_select.select_textobject("@block.outer", "textobjects") end,     mode = { "x", "o" },      desc = "Select an entire block" },
+        { "ib", function() ts_select.select_textobject("@block.inner", "textobjects") end,     mode = { "x", "o" },      desc = "Select the body of a block" },
+        { "af", function() ts_select.select_textobject("@function.outer", "textobjects") end,  mode = { "x", "o" },      desc = "Select an entire function" },
+        { "if", function() ts_select.select_textobject("@function.inner", "textobjects") end,  mode = { "x", "o" },      desc = "Select a function body" },
+        { "ac", function() ts_select.select_textobject("@class.outer", "textobjects") end,     mode = { "x", "o" },      desc = "Select an entire class" },
+        { "ic", function() ts_select.select_textobject("@class.inner", "textobjects") end,     mode = { "x", "o" },      desc = "Select the body of a class" },
+        { "a#", function() ts_select.select_textobject("@comment.outer", "textobjects") end,   mode = { "x", "o" },      desc = "Select an entire comment" },
+        { "i#", function() ts_select.select_textobject("@comment.inner", "textobjects") end,   mode = { "x", "o" },      desc = "Select the body of a comment" },
+        { "iS", function() ts_select.select_textobject("@statement.outer", "textobjects") end, mode = { "x", "o" },      desc = "Select the current statement" },
+        { "aS", function() ts_select.select_textobject("@scope", "textobjects") end,           mode = { "x", "o" },      desc = "Select the current scope" },
+
+        -- Movement keymaps
+        { "]f", function() ts_move.goto_next_start("@function.outer", "textobjects") end,      mode = { "n", "x", "o" }, desc = "Next function start" },
+        { "]F", function() ts_move.goto_next_end("@function.outer", "textobjects") end,        mode = { "n", "x", "o" }, desc = "Next function end" },
+        { "[f", function() ts_move.goto_previous_start("@function.outer", "textobjects") end,  mode = { "n", "x", "o" }, desc = "Previous function start" },
+        { "[F", function() ts_move.goto_previous_end("@function.outer", "textobjects") end,    mode = { "n", "x", "o" }, desc = "Previous function end" },
+      })
+    end
   },
   {
     "RRethy/nvim-treesitter-endwise",
     event = "VeryLazy",
+    -- No configuration needed - works automatically
   }
 }

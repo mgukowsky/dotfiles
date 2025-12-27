@@ -170,13 +170,6 @@ local function on_attach(_, bufnr)
   })
 
   -- Movement mappings
-  local next_diag_repeat, prev_diag_repeat = require("nvim-treesitter.textobjects.repeatable_move")
-      .make_repeatable_move_pair(function()
-        require("lspsaga.diagnostic"):goto_next()
-      end, function()
-        require("lspsaga.diagnostic"):goto_prev()
-      end)
-
   local function run_if_diagnostics(fn)
     if vim.tbl_isempty(vim.diagnostic.get(0)) then
       -- Based on the equivalent message shown by gitsigns when there are no hunks
@@ -188,8 +181,8 @@ local function on_attach(_, bufnr)
   wk.add({
     {
       mode = { "n", "x", "o" },
-      { "[d", function() run_if_diagnostics(prev_diag_repeat) end, desc = "Prev LSP diagnostic" },
-      { "]d", function() run_if_diagnostics(next_diag_repeat) end, desc = "Next LSP diagnostic" },
+      { "[d", function() run_if_diagnostics(function() require("lspsaga.diagnostic"):goto_prev() end) end, desc = "Prev LSP diagnostic" },
+      { "]d", function() run_if_diagnostics(function() require("lspsaga.diagnostic"):goto_next() end) end, desc = "Next LSP diagnostic" },
     },
   })
 end
