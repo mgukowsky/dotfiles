@@ -1,0 +1,1 @@
+- When writing C++ code, always target **C++23**
