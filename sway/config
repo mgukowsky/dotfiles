@@ -28,6 +28,9 @@ exec systemd-run --collect --no-block --unit="swaync" --description="Notificatio
 exec systemd-run --collect --no-block --unit="xfsettingsd" --description="Settings daemon" --user --slice-inherit --scope xfsettingsd --replace
 exec systemd-run --collect --no-block --unit="batsignal" --description="Battery status daemon" --user --slice-inherit --scope batsignal -p -w 20 -c 10 -d 5
 
+# Misc. background stuff to do on startup
+exec systemd-run --collect --no-block --unit="bemoji-update" --description="Download latest bemoji symbol sets" --user --slice-inherit -E BEMOJI_PICKER_CMD='echo ❤<fe0f>' bemoji -D all -e
+
 #
 # Example configuration:
 #
@@ -252,7 +255,7 @@ bindsym --locked XF86MonBrightnessDown exec adjust-brightness -
 bindsym --locked XF86MonBrightnessUp exec adjust-brightness +
 
 # Emoji picker
-bindsym $mod+period exec BEMOJI_PICKER_CMD="fuzzel -d" bemoji
+bindsym $mod+period exec BEMOJI_PICKER_CMD="fuzzel -d" bemoji -nt
 
 # Windows-style notification handling
 bindsym $mod+a exec swaync-client -t
