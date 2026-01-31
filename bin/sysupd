@@ -23,7 +23,7 @@ fi
 
 if command -v fwupdmgr >&/dev/null; then
   print_green "Running fwupdmgr..."
-  fwupdmgr refresh
+  fwupdmgr refresh --force
   fwupdmgr get-updates
   fwupdmgr update
 fi
