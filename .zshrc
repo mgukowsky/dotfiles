@@ -343,10 +343,10 @@ function xdocker {
 
 # venv convenience function
 function vact {
-  if [[ ! -e ./venv ]]; then
-    python3 -m venv venv
+  if [[ ! -e ./.venv ]]; then
+    python3 -m venv .venv
   fi
-  . ./venv/bin/activate
+  . ./.venv/bin/activate
 }
 
 # Map a device type to an xinput ID. N.B. that only the first matching device ID will be returned
