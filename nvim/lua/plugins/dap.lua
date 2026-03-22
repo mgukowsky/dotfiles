@@ -54,14 +54,13 @@ local function setup_dap()
     -- }
   }
 
+  local dap_vscode = require("dap.ext.vscode")
   -- Better Json support for nvim-dap, per
   -- https://github.com/stevearc/overseer.nvim/blob/master/doc/third_party.md#dap
-  require("dap.ext.vscode").json_decode = require("overseer.json").decode
-  require("dap.ext.vscode").load_launchjs(nil, {
-    -- N.B. that this will cause multiple "cppdbg: <cfg name>" entries to show up in the
-    -- list of configurations
-    cppdbg = { "c", "cpp", "rust" },
-  })
+  dap_vscode.json_decode = require("overseer.json").decode
+  -- N.B. that this will cause multiple "cppdbg: <cfg name>" entries to show up in the
+  -- list of configurations
+  dap_vscode.type_to_filetypes.cppdbg = { "c", "cpp", "rust" }
 
   -- Per https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#ccrust-via-lldb-vscode
   dap.configurations.c = dap.configurations.cpp
