@@ -16,8 +16,6 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.INFO] = "🤓",
     }
   },
-  -- TODO: this will be a nice new feature in 0.11
-  -- For now, handled by the lsp_lines plugins
   virtual_lines = false,
   virtual_text = {
     prefix = "🤯",
@@ -27,19 +25,9 @@ vim.diagnostic.config({
 
 local TSSERVER_FTS = { "css", "html", "javascript", "javascriptreact", "typescript", "typescriptreact" }
 
--- Configuration for vim diagnostics; per
--- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-diagnostic-symbols-in-the-sign-column-gutter
--- local signs = { Error = "🤬", Warn = "😬", Hint = "🤔", Info = "🤓" }
--- for type, icon in pairs(signs) do
--- 	local hl = "DiagnosticSign" .. type
--- 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
--- end
-
 -- Recommended LSP configuration per https://github.com/neovim/nvim-lspconfig
 local function on_attach(_, bufnr)
   local wk = require("which-key")
-  -- Enable completion recommendations from the LSP
-  vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
 
   -- TODO: can/should these go in the opts file?
   vim.opt.completeopt:remove("preview") -- Don't show the stupid Scratch window
@@ -197,17 +185,11 @@ local function get_lsp_caps()
 end
 
 local function setup_lsps()
-  -- From nvim-lspconfig plugin
-  local lspconfigs = vim.lsp.config
-
-  lspconfigs.lua_ls = {
+  -- Set global defaults for all LSP servers
+  vim.lsp.config('*', {
     on_attach = on_attach,
     capabilities = get_lsp_caps(),
-    settings = {
-      -- empty; config handled elsewhere by lazydev.nvim
-    },
-  }
-  vim.lsp.enable('lua_ls')
+  })
 
   -- Server for LanguageTool. The bin `ltex-ls` needs to be present; see
   -- https://www.reddit.com/r/neovim/comments/sdvfwr/comment/hughrfi/
@@ -234,8 +216,7 @@ local function setup_lsps()
   -- Schema configs per https://www.arthurkoziel.com/json-schemas-in-neovim/
   local json_lsp_cap = get_lsp_caps()
   json_lsp_cap.textDocument.completion.completionItem.snippetSupport = true
-  lspconfigs.jsonls = {
-    on_attach = on_attach,
+  vim.lsp.config('jsonls', {
     capabilities = json_lsp_cap,
     settings = {
       json = {
@@ -243,12 +224,10 @@ local function setup_lsps()
         validate = { enable = true },
       },
     },
-  }
+  })
   vim.lsp.enable('jsonls')
 
-  lspconfigs.yamlls = {
-    on_attach = on_attach,
-    capabilities = get_lsp_caps(),
+  vim.lsp.config('yamlls', {
     settings = {
       yaml = {
         validate = true,
@@ -260,15 +239,14 @@ local function setup_lsps()
         -- schemas = require("schemastore").yaml.schemas(),
       },
     },
-  }
+  })
   vim.lsp.enable('yamlls')
 
   local cmake_lsp_caps = get_lsp_caps()
   cmake_lsp_caps.textDocument.completion.completionItem.snippetSupport = true
-  lspconfigs.neocmake = {
-    on_attach = on_attach,
-    capabilities = cmake_lsp_caps
-  }
+  vim.lsp.config('neocmake', {
+    capabilities = cmake_lsp_caps,
+  })
   vim.lsp.enable("neocmake")
 
   ---@diagnostic disable-next-line: unused-function
@@ -307,10 +285,9 @@ local function setup_lsps()
     })
   end
 
-  lspconfigs.clangd = {
+  vim.lsp.config('clangd', {
     on_attach = clangd_on_attach,
-    capabilities = get_lsp_caps(),
-  }
+  })
   vim.lsp.enable("clangd")
 
   -- Specialization for Rustacean to provide mappings to some of the utility functions
@@ -374,14 +351,9 @@ local function setup_lsps()
     },
   }
 
-  -- Setup LSPs that don't require any additional configs/aren't managed by other plugins
-  for _, lsp_name in pairs({ "glsl_analyzer", "jedi_language_server", "ruby_lsp", "taplo", }) do
-    lspconfigs[lsp_name] = {
-      on_attach = on_attach,
-      capabilities = get_lsp_caps(),
-    }
-    vim.lsp.enable(lsp_name)
-  end
+  -- Enable LSPs that don't require any additional configs/aren't managed by other plugins.
+  -- lua_ls settings are handled by lazydev.nvim.
+  vim.lsp.enable({ "glsl_analyzer", "jedi_language_server", "lua_ls", "ruby_lsp", "taplo" })
 end
 
 return {
