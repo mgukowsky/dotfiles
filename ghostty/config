@@ -1,0 +1,61 @@
+# This is the configuration file for Ghostty.
+#
+# This template file has been automatically created at the following
+# path since Ghostty couldn't find any existing config files on your system:
+#
+#   /home/mgukowsky/.config/ghostty/config
+#
+# The template does not set any default options, since Ghostty ships
+# with sensible defaults for all options. Users should only need to set
+# options that they want to change from the default.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+#
+# Ghostty can reload the configuration while running by using the menu
+# options or the bound key (default: Command + Shift + comma on macOS and
+# Control + Shift + comma on other platforms). Not all config options can be
+# reloaded while running; some only apply to new windows and others may require
+# a full restart to take effect.
+
+# Fonts
+font-family = FiraCode Nerd Font
+font-family-bold = FiraCode Nerd Font
+font-family-italic = VictorMono Nerd Font
+font-family-bold-italic = VictorMono Nerd Font
+font-size = 13.5
+font-feature = -liga
+font-feature = -calt
+
+# Keymaps
+keybind = page_up=scroll_page_up
+keybind = page_down=scroll_page_down
+keybind = home=scroll_to_top
+keybind = end=scroll_to_bottom
+
+# Colors
+background-opacity = 0.8
+background-opacity-cells = true
+
+background = 2d2d2d
+foreground = d3d0c8
+
+palette = 0=#2d2d2d
+palette = 1=#f2777a
+palette = 2=#99cc99
+palette = 3=#ffcc66
+palette = 4=#6699cc
+palette = 5=#cc99cc
+palette = 6=#66cccc
+palette = 7=#d3d0c8
+palette = 8=#74736a
+palette = 9=#f2777a
+palette = 10=#99cc99
+palette = 11=#ffcc66
+palette = 12=#6699cc
+palette = 13=#cc99cc
+palette = 14=#66cccc
+palette = 15=#f2f0ec
