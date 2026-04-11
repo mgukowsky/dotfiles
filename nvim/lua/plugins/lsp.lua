@@ -8,6 +8,8 @@ vim.diagnostic.config({
     border = "rounded",
     source = true,
   },
+  -- Callback to be invoked for ]d, [d, ]D, and [D
+  jump = { on_jump = function(diagnostic, _) if diagnostic then vim.diagnostic.open_float() end end },
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = "🤬",
@@ -147,31 +149,22 @@ local function on_attach(_, bufnr)
       { "<leader>ld", function() require("telescope.builtin").diagnostics({ bufnr = 0 }) end,        desc = "Diagnostics" },
       { "<leader>li", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Toggle Inlay Hints" },
       { "<leader>ls", function() require("telescope.builtin").lsp_document_symbols() end,            desc = "Document Symbol search" },
-      { "<leader>lv", function() require("lsp_lines").toggle() end,                                  desc = "Toggle Diagnostic Virtual Lines" },
-      { "<leader>lw", function() require("telescope.builtin").lsp_workspace_symbols() end,           desc = "Workspace Symbol search" },
+      {
+        "<leader>lv",
+        function()
+          -- Per https://neovim.io/doc/user/diagnostic/#diagnostic-toggle-virtual-lines-example
+          local new_config = not vim.diagnostic.config().virtual_lines
+          vim.diagnostic.config({ virtual_lines = new_config })
+        end,
+        desc = "Toggle Diagnostic Virtual Lines"
+      },
+      { "<leader>lw", function() require("telescope.builtin").lsp_workspace_symbols() end, desc = "Workspace Symbol search" },
     },
     {
       buffer = bufnr,
       mode = { "n", "v", "i" },
       { "<C-s>", function() vim.lsp.buf.signature_help({ border = "rounded" }) end, desc = "Signature help" },
     }
-  })
-
-  -- Movement mappings
-  local function run_if_diagnostics(fn)
-    if vim.tbl_isempty(vim.diagnostic.get(0)) then
-      -- Based on the equivalent message shown by gitsigns when there are no hunks
-      vim.api.nvim_echo({ { 'No diagnostics', 'WarningMsg' } }, false, {})
-    else
-      fn()
-    end
-  end
-  wk.add({
-    {
-      mode = { "n", "x", "o" },
-      { "[d", function() run_if_diagnostics(function() require("lspsaga.diagnostic"):goto_prev() end) end, desc = "Prev LSP diagnostic" },
-      { "]d", function() run_if_diagnostics(function() require("lspsaga.diagnostic"):goto_next() end) end, desc = "Next LSP diagnostic" },
-    },
   })
 end
 
@@ -450,13 +443,6 @@ return {
         -- Handles Rust LSP
         'mrcjkb/rustaceanvim',
         lazy = false, -- This plugin is already lazy
-      },
-      {
-        -- Virtual lines for LSP diagnostics
-        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-        config = function()
-          require("lsp_lines").setup()
-        end,
       },
     },
   },
