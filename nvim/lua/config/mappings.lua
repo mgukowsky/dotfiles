@@ -8,6 +8,10 @@ map("n", "<C-l>", vim.cmd.bn, { desc = "Next buffer" })
 -- Show Lazy UI
 map("n", "<leader>z", function() require("lazy").home() end, { desc = "Lazy UI" })
 
+-- Convert file to HTML
+map("n", "<leader>qh", function() vim.cmd("TOhtml") end, { desc = "Convert to HTML" })
+map("n", "<leader>qu", function() vim.cmd("Undotree") end, { desc = "Undotree" })
+
 -- Use arrows for resizing splits instead of navigation; vim "hard mode" ;)
 map("n", "<Up>", function() vim.cmd.resize(-2) end, { desc = "Resize horizontal up" })
 -- '+2' needs to be passed as a string, otherwise the vim side will interpret this as setting

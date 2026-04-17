@@ -33,4 +33,8 @@ require("config.profiler")
 -- Setup all plugins
 lazy.setup_lazy()
 
+-- nvim opt-in plugins (https://neovim.io/doc/user/plugins/)
+vim.cmd.packadd("nvim.tohtml")
+vim.cmd.packadd("nvim.undotree")
+
 vim.cmd.colorscheme("tokyonight-night")
