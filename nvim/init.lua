@@ -37,4 +37,7 @@ lazy.setup_lazy()
 vim.cmd.packadd("nvim.tohtml")
 vim.cmd.packadd("nvim.undotree")
 
+-- Enable next-gen UI
+require("vim._core.ui2").enable()
+
 vim.cmd.colorscheme("tokyonight-night")
