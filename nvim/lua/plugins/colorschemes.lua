@@ -153,11 +153,6 @@ return {
     end
   },
   {
-    "RRethy/base16-nvim",
-    lazy = false,
-    priority = 1000,
-  },
-  {
     "EdenEast/nightfox.nvim",
     lazy = false,
     priority = 1000,
@@ -202,4 +197,12 @@ return {
     priority = 1000,
     config = true,
   },
+  {
+    "Mofiqul/dracula.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      italic_comment = true,
+    }
+  }
 }

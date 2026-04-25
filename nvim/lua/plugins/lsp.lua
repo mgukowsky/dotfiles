@@ -183,6 +183,8 @@ local function setup_lsps()
     on_attach = on_attach,
     capabilities = get_lsp_caps(),
   })
+  -- All servers opt-in to document color, which shows a preview of a color next to a color code
+  vim.lsp.document_color.enable(true, {}, { style = " " })
 
   -- Server for LanguageTool. The bin `ltex-ls` needs to be present; see
   -- https://www.reddit.com/r/neovim/comments/sdvfwr/comment/hughrfi/

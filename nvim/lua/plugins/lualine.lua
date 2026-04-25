@@ -3,12 +3,12 @@ return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
       'nvim-tree/nvim-web-devicons',
+      'Mofiqul/dracula.nvim',
       'Mofiqul/vscode.nvim',
       'mfussenegger/nvim-dap',
     },
     config = function()
       local vscPalette = require("vscode.colors").get_colors()
-      -- local lualine_theme = require("lualine.themes.vscode")
       local lualine_theme = require("lualine.themes.vscode")
 
       lualine_theme.insert.a.bg = vscPalette.vscRed
@@ -24,6 +24,18 @@ return {
         return require("dap").status()
       end
 
+      -- If there's a lualine theme available for the colorscheme, use it
+      local lualine_colorschemes = { "fluoromachine", "lackluster", "tokyonight" }
+
+      local themestr = "auto"
+      if G_COLORSCHEME == "dracula" then
+        themestr = "dracula-nvim"
+      elseif G_COLORSCHEME == "vscode" then
+        themestr = lualine_theme
+      elseif vim.list_contains(lualine_colorschemes, G_COLORSCHEME) then
+        themestr = G_COLORSCHEME
+      end
+
       require("lualine").setup({
         extensions = {
           "fugitive",
@@ -35,10 +47,7 @@ return {
           "trouble",
         },
         options = {
-          -- theme = lualine_theme
-          -- theme = "fluoromachine"
-          theme = "tokyonight"
-          -- theme = "lackluster"
+          theme = themestr
         },
         sections = {
           lualine_b = {

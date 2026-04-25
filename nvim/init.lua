@@ -14,6 +14,8 @@ vim.fn.stdpath = function(value)
   return old_stdpath(value)
 end
 
+G_COLORSCHEME = "tokyonight-night"
+
 -- If false, fallback to using nvim-cmp
 G_USE_BLINK = false
 
@@ -40,4 +42,4 @@ vim.cmd.packadd("nvim.undotree")
 -- Enable next-gen UI
 require("vim._core.ui2").enable()
 
-vim.cmd.colorscheme("tokyonight-night")
+vim.cmd.colorscheme(G_COLORSCHEME)
