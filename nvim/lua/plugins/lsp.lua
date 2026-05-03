@@ -348,7 +348,7 @@ local function setup_lsps()
 
   -- Enable LSPs that don't require any additional configs/aren't managed by other plugins.
   -- lua_ls settings are handled by lazydev.nvim.
-  vim.lsp.enable({ "glsl_analyzer", "jedi_language_server", "lua_ls", "ruby_lsp", "taplo" })
+  vim.lsp.enable({ "glsl_analyzer", "lua_ls", "ruby_lsp", "taplo", "ty" })
 end
 
 return {
