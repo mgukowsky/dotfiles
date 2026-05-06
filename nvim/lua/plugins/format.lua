@@ -61,7 +61,7 @@ return {
         -- cmake = { "cmakelint" },
         cpp = { "clangtidy", },
         glsl = { "glslc", },
-        python = { "mypy", "ruff", },
+        python = { "mypy", "pylint", "ruff", },
         rust = { "clippy" },
       }
       vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
