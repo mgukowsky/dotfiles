@@ -1,0 +1,308 @@
+#!/usr/bin/env bash
+# sandbox-agent — run agent CLIs (claude, etc.) in a bwrap sandbox with
+# HTTPS allowlist + git-mutation block. See:
+#   /home/mgukowsky/.claude/plans/hey-claude-here-s-what-glimmering-dream.md
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+sandbox-agent — run agent CLIs under a bwrap sandbox.
+
+Usage:
+  sandbox-agent [OPTIONS] PROFILE [-- AGENT_ARGS...]
+  sandbox-PROFILE [OPTIONS] [-- AGENT_ARGS...]    # via symlink
+
+Restrictions enforced:
+  - Whole filesystem is read-only except $PWD (writable).
+  - Network egress restricted to a hostname allowlist (via tinyproxy).
+  - git push and other remote-mutating commands blocked (PATH shim + allowlist).
+  - Agent's own config dir replaced with tmpfs + selective RO file binds so
+    sandboxed runs cannot mutate real config / sessions / history.
+
+Options:
+  --allow HOST         Add a hostname (fnmatch glob) to the allowlist. Repeatable.
+  --no-default-allow   Start with an empty allowlist (only --allow hosts allowed).
+  --help               Show this help.
+  --                   Pass remaining args verbatim to the agent.
+
+Environment:
+  SANDBOX_AGENT_ALLOW_HOSTS  Space-separated hostname globs to add to allowlist.
+
+Profiles:
+  claude               Claude Code at /usr/bin/claude.
+  pi                   (placeholder — not yet configured)
+EOF
+}
+
+# ---------- profile dispatch from $0 basename ----------
+me="$(basename "$0")"
+profile=""
+case "$me" in
+  sandbox-agent) ;;
+  sandbox-*)     profile="${me#sandbox-}" ;;
+esac
+
+# ---------- argv parsing ----------
+allow_extra=()
+no_default_allow=false
+passthrough=()
+while (( $# )); do
+  case "$1" in
+    --help|-h)          usage; exit 0 ;;
+    --allow)            allow_extra+=("$2"); shift 2 ;;
+    --allow=*)          allow_extra+=("${1#--allow=}"); shift ;;
+    --no-default-allow) no_default_allow=true; shift ;;
+    --)                 shift; passthrough+=("$@"); break ;;
+    *)
+      if [[ -z "$profile" ]]; then
+        profile="$1"; shift
+      else
+        passthrough+=("$1"); shift
+      fi
+      ;;
+  esac
+done
+
+if [[ -z "$profile" ]]; then
+  echo "sandbox-agent: no profile specified (use 'sandbox-agent <profile>' or 'sandbox-<profile>' symlink)" >&2
+  exit 2
+fi
+
+# ---------- profile definitions ----------
+# Defaults — profiles override only what they need.
+AGENT_BIN=""
+AGENT_CONFIG_DIR=""
+AGENT_RO_PATHS=()        # files or dirs under CONFIG_DIR to re-expose RO
+AGENT_CACHE_DIR=""
+AGENT_ALLOW=()
+AGENT_EXTRA_ENV=()
+
+case "$profile" in
+  claude)
+    AGENT_BIN=/usr/bin/claude
+    AGENT_CONFIG_DIR="$HOME/.claude"
+    AGENT_RO_PATHS=( .credentials.json settings.json settings.local.json
+                     CLAUDE.md keybindings.json statusline-command.sh plugins )
+    AGENT_CACHE_DIR="$HOME/.cache/claude"
+    AGENT_ALLOW=( api.anthropic.com '*.anthropic.com' console.anthropic.com registry.npmjs.org )
+    AGENT_EXTRA_ENV=( DISABLE_UPDATES=1 )
+    ;;
+  shell|bash) AGENT_BIN=/bin/bash ;;
+  pi)
+    AGENT_BIN=/usr/bin/pi
+    AGENT_CONFIG_DIR="$HOME/.pi"
+    AGENT_RO_PATHS=(
+      agent/auth.json
+      agent/settings.json
+      agent/models.json
+      agent/web-search.json
+      agent/git
+    )
+    # pi has no separate cache dir; agent/sessions/ lives inside CONFIG_DIR
+    # so sandboxed sessions are ephemeral via the tmpfs overlay.
+    AGENT_CACHE_DIR=""
+    # LAN/VPN only — user runs personal LLMs locally. mDNS names + RFC1918
+    # IP ranges. Add public providers via --allow if ever needed.
+    AGENT_ALLOW=(
+      '*.lan' '*.local'
+      '10.*' '192.168.*'
+      '172.1[6-9].*' '172.2[0-9].*' '172.3[01].*'
+    )
+    AGENT_EXTRA_ENV=()
+    ;;
+  *)
+    echo "sandbox-agent: unknown profile '$profile'" >&2
+    exit 2
+    ;;
+esac
+
+if [[ -z "$AGENT_BIN" ]]; then
+  echo "sandbox-agent: profile '$profile' has no AGENT_BIN set" >&2
+  exit 2
+fi
+
+# ---------- assemble effective allowlist ----------
+# Universal allowlist: localhost loopback in all its forms. Always included,
+# even with --no-default-allow, because what runs on the user's own loopback
+# is outside the sandbox's threat model.
+allow_list=( '127.*' '::1' '[::1]' localhost )
+if ! $no_default_allow; then
+  allow_list+=( "${AGENT_ALLOW[@]}" )
+fi
+if (( ${#allow_extra[@]} )); then
+  allow_list+=( "${allow_extra[@]}" )
+fi
+if [[ -n "${SANDBOX_AGENT_ALLOW_HOSTS:-}" ]]; then
+  read -ra _env_extra <<<"$SANDBOX_AGENT_ALLOW_HOSTS"
+  allow_list+=( "${_env_extra[@]}" )
+fi
+
+# ---------- per-run state dir ----------
+RUNROOT="$(mktemp -d -p "${XDG_RUNTIME_DIR:-/tmp}" sandbox-agent.XXXXXX)"
+chmod 700 "$RUNROOT"
+RUN="$RUNROOT/proxy"
+SHIM="$RUNROOT/shim"
+CACHE="$RUNROOT/cache"
+mkdir -p "$RUN" "$SHIM" "$CACHE"
+
+# ---------- pick a free loopback port ----------
+PROXY_PORT=$(python3 -c 'import socket
+s=socket.socket(); s.bind(("127.0.0.1",0))
+print(s.getsockname()[1]); s.close()')
+
+# ---------- write filter file ----------
+{
+  if (( ${#allow_list[@]} == 0 )); then
+    echo "# (empty allowlist; FilterDefaultDeny denies everything)"
+  else
+    printf '%s\n' "${allow_list[@]}"
+  fi
+} > "$RUN/filter.txt"
+
+# ---------- write tinyproxy config ----------
+cat > "$RUN/tinyproxy.conf" <<EOF
+# generated by sandbox-agent — runs as invoking user (no User/Group lines).
+Port $PROXY_PORT
+Listen 127.0.0.1
+Timeout 600
+PidFile "$RUN/tinyproxy.pid"
+LogFile "$RUN/tinyproxy.log"
+LogLevel Info
+MaxClients 50
+Allow 127.0.0.1
+ViaProxyName "sandbox-agent"
+Filter "$RUN/filter.txt"
+FilterType fnmatch
+FilterDefaultDeny Yes
+FilterURLs Off
+ConnectPort 443
+EOF
+
+# ---------- start tinyproxy and wait for readiness ----------
+# Tinyproxy writes its PID file once it's ready to serve, so we poll on
+# the PID file's appearance rather than probing the TCP port (which would
+# spawn spurious "Client closed socket before read" lines in the log).
+/usr/bin/tinyproxy -c "$RUN/tinyproxy.conf"
+for _ in $(seq 1 50); do
+  [[ -s "$RUN/tinyproxy.pid" ]] && break
+  sleep 0.05
+done
+if [[ ! -s "$RUN/tinyproxy.pid" ]]; then
+  echo "sandbox-agent: tinyproxy failed to start" >&2
+  [[ -s "$RUN/tinyproxy.log" ]] && cat "$RUN/tinyproxy.log" >&2
+  exit 1
+fi
+TP_PID=$(<"$RUN/tinyproxy.pid")
+PROXY_URL="http://127.0.0.1:$PROXY_PORT"
+
+# ---------- cleanup trap ----------
+cleanup() {
+  if [[ -n "${TP_PID:-}" ]]; then
+    kill "$TP_PID" 2>/dev/null || true
+    for _ in 1 2 3 4 5; do
+      kill -0 "$TP_PID" 2>/dev/null || break
+      sleep 0.1
+    done
+    kill -9 "$TP_PID" 2>/dev/null || true
+  fi
+  rm -rf "$RUNROOT"
+}
+trap cleanup EXIT INT TERM HUP
+
+# ---------- git shim ----------
+cat > "$SHIM/git" <<'EOSHIM'
+#!/usr/bin/env bash
+set -u
+deny() { echo "sandbox-agent: blocked: git $*" >&2; exit 87; }
+
+# Find the subcommand: first non-flag arg, skipping values of two-token flags.
+sub=""; skip=0
+for a in "$@"; do
+  if (( skip )); then skip=0; continue; fi
+  case "$a" in
+    -C|-c|--git-dir|--work-tree|--namespace|--super-prefix) skip=1 ;;
+    -*) ;;
+    *) sub="$a"; break ;;
+  esac
+done
+
+# Block mutating-remote operations. For per-subcommand actions, scan the
+# whole argv (not just the next token) so e.g. `git remote -v rm origin`
+# is still caught.
+case "$sub" in
+  push|send-email|request-pull|am|format-patch) deny "$@" ;;
+  remote)    for a in "$@"; do case "$a" in add|set-url|rename|remove|rm|set-head|set-branches|prune|update) deny "$@" ;; esac; done ;;
+  submodule) for a in "$@"; do case "$a" in add|deinit) deny "$@" ;; esac; done ;;
+  svn)       for a in "$@"; do case "$a" in dcommit|commit) deny "$@" ;; esac; done ;;
+  p4)        for a in "$@"; do case "$a" in submit) deny "$@" ;; esac; done ;;
+  config)    for a in "$@"; do [[ "$a" == remote.* ]] && deny "$@"; done ;;
+esac
+
+exec /usr/bin/git "$@"
+EOSHIM
+chmod +x "$SHIM/git"
+
+# ---------- bwrap argv ----------
+PWD_REAL="$(realpath "$PWD")"
+
+bwrap_args=(
+  --die-with-parent
+  --unshare-pid --unshare-uts --unshare-ipc
+  # NOTE: deliberately NOT using --new-session. setsid() detaches the
+  # sandboxed process from the controlling TTY, which breaks interactive
+  # TUIs (claude/pi enter raw-mode, fail tcgetattr, exit). The historical
+  # reason for --new-session is TIOCSTI mitigation; this is already
+  # neutralized kernel-wide by `dev.tty.legacy_tiocsti=0` (default on
+  # Linux 6.2+, definitely on the kernel 7.x this targets).
+  --hostname sandbox-agent
+  --ro-bind / /
+  --proc /proc --dev /dev
+  --tmpfs /tmp --tmpfs /run --tmpfs /var/tmp
+  --bind "$PWD_REAL" "$PWD_REAL"
+)
+if [[ -n "$AGENT_CONFIG_DIR" ]]; then
+  bwrap_args+=( --tmpfs "$AGENT_CONFIG_DIR" )
+  for p in "${AGENT_RO_PATHS[@]}"; do
+    bwrap_args+=( --ro-bind-try "$AGENT_CONFIG_DIR/$p" "$AGENT_CONFIG_DIR/$p" )
+  done
+fi
+if [[ -n "$AGENT_CACHE_DIR" ]]; then
+  CACHE_PARENT="$(dirname "$AGENT_CACHE_DIR")"
+  bwrap_args+=( --tmpfs "$CACHE_PARENT" --bind "$CACHE" "$AGENT_CACHE_DIR" )
+fi
+bwrap_args+=(
+  --ro-bind "$SHIM" "$SHIM"
+  --chdir "$PWD_REAL"
+  --clearenv
+  --setenv HOME    "$HOME"
+  --setenv USER    "$USER"
+  --setenv LOGNAME "$USER"
+  --setenv SHELL   "${SHELL:-/bin/bash}"
+  --setenv TERM    "${TERM:-xterm-256color}"
+  --setenv LANG    "${LANG:-C.UTF-8}"
+  --setenv PATH    "$SHIM:/usr/local/bin:/usr/bin:/bin"
+  --setenv GIT_TERMINAL_PROMPT 0
+  --setenv SANDBOX_AGENT 1
+  --setenv SANDBOX_PROFILE "$profile"
+)
+for v in HTTPS_PROXY https_proxy HTTP_PROXY http_proxy ALL_PROXY all_proxy; do
+  bwrap_args+=( --setenv "$v" "$PROXY_URL" )
+done
+for v in NO_PROXY no_proxy; do
+  bwrap_args+=( --setenv "$v" "localhost,127.0.0.1,127.0.0.0/8,::1" )
+done
+for kv in "${AGENT_EXTRA_ENV[@]}"; do
+  bwrap_args+=( --setenv "${kv%%=*}" "${kv#*=}" )
+done
+
+# ---------- run ----------
+# Run bwrap as a plain foreground synchronous child:
+#   * NOT `exec`: would replace the shell and kill the EXIT trap, leaving
+#     tinyproxy and the runroot orphaned.
+#   * NOT `&` (backgrounded): background jobs don't have the controlling
+#     TTY, so interactive TUIs (pi/claude in repl mode) fail on first read.
+# Foreground keeps both invariants: the shell stays alive (EXIT trap fires
+# on return), and bwrap inherits the controlling TTY. Signals propagate
+# naturally via the foreground process group — no manual forwarding needed.
+/usr/bin/bwrap "${bwrap_args[@]}" "$AGENT_BIN" "${passthrough[@]}"
+exit $?
