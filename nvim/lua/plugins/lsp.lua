@@ -332,19 +332,10 @@ local function setup_lsps()
     })
   end
 
-  -- rustacean requires us to setup the Rust LSP separately
-  vim.g.rustaceanvim = {
-    -- Plugin configuration
-    tools = {},
-    -- LSP configuration
-    server = {
-      on_attach = rustacean_on_attach,
-      default_settings = {
-        -- rust-analyzer language server configuration
-        ["rust-analyzer"] = {},
-      },
-    },
-  }
+  vim.lsp.config('rust-analyzer', {
+    on_attach = rustacean_on_attach,
+  })
+  vim.lsp.enable("rust-analyzer")
 
   -- Enable LSPs that don't require any additional configs/aren't managed by other plugins.
   -- lua_ls settings are handled by lazydev.nvim.
