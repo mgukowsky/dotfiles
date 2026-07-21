@@ -24,17 +24,25 @@ local function create_group_overrides(colors)
     ["@keyword.cpp"] = { link = "@keyword.return" },
     ["@operator.cpp"] = { link = "@keyword.cpp" }, -- Includes `&` and `*`
     ["@lsp.type.operator.cpp"] = { link = "@operator.cpp" },
-    ["@operator.rust"] = { link = "@operator.cpp" },
+    -- ["@operator.rust"] = { link = "@operator.cpp" },
     -- ["@punctuation.bracket.cpp"] = { fg = vscPalette.vscDarkYellow }, -- `{}`, `[]`, `()`
     ["@text.uri"] = { fg = colors.accent_blue },
 
     -- LSP semantic tokens (these are specific to clangd; no idea if other LSPs will provide these same values)
     ["@lsp.mod.functionScope.cpp"] = { fg = colors.fg }, -- regular function scope variables should be white
+    ["@lsp.type.label.rust"] = { link = "@label.cpp" },
     ["@lsp.type.variable.rust"] = { link = "@lsp.mod.functionScope.cpp" },
     ["@lsp.mod.static.cpp"] = { fg = colors.lime },      -- Use bright green for statics
+    ["@lsp.mod.static.rust"] = { link = "@lsp.mod.static.cpp" }, -- I _think_ this considers any method in an impl that doesn't receive `self` to be static (a la cpp where a static method doesn't receive a `this` pointer)
+    ["@lsp.type.static.rust"] = { link = "@lsp.mod.static.rust" }, -- This one seems to only match things actually decorated with the `static` keyword... only use this if the previous one is too noisy
+    ["@lsp.mod.consuming.rust"] = { italic = true },      -- Let consuming methods stand out a bit
+    ["@lsp.mod.mutable.rust"] = { bold = true },      -- Ditto for mutable vars/funcs
     ["@lsp.type.comment.cpp"] = { fg = colors.comment }, -- Inactive #ifdefs, etc.
     ["@lsp.type.enum.cpp"] = { fg = colors.orange },     -- Name of an enum...
     ["@lsp.type.enum.rust"] = { link = "@lsp.type.enum.cpp" },
+    ["@lsp.type.enumMember.rust"] = { link = "@lsp.type.enum.rust" },
+    ["@lsp.typemod.enum.defaultLibrary.rust"] = { link = "@lsp.type.enum.rust" }, -- normalize default library highlighting
+    ["@lsp.typemod.enumMember.defaultLibrary.rust"] = { link = "@lsp.type.enumMember.rust" }, -- ditto
     ["@lsp.type.decorator.rust"] = { link = "@attribute.cpp" },
     ["@lsp.type.enumMember.cpp"] = { link = "@constant.cpp" }, -- ...and the enum values
     ["@lsp.type.macro.cpp"] = { fg = colors.dark_purple, bold = true },
@@ -47,6 +55,7 @@ local function create_group_overrides(colors)
     ["@lsp.typemod.property.classScope.cpp"] = { fg = colors.light_blue, bold = true }, -- Member variables should be bold identifiers
     ["@lsp.typemod.type.deduced.cpp"] = { link = "@type.builtin.cpp" },                 -- Other uses of `auto`
     ["@lsp.typemod.type.defaultLibrary.cpp"] = { link = "@type.cpp" },                  -- Types from the standard library shouldn't have special highlighing
+    ["@lsp.typemod.macro.defaultLibrary.rust"] = { link = "@lsp.type.macro.rust" },     -- Types from the standard library shouldn't have special highlighing
     ["@lsp.typemod.type.functionScope.cpp"] = { link = "@type.cpp" },                   -- Type aliases
     ["@lsp.typemod.typeParameter.functionScope.cpp"] = { link = "@type.cpp" },          -- Type parameters
     ["@lsp.typemod.variable.readonly.cpp"] = { link = "@constant.cpp" },                -- const variables
