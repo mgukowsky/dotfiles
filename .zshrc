@@ -486,6 +486,7 @@ function source_if_present {
 }
 
 source_if_present $XDG_DATA_HOME/sh/aliases.sh
+source_if_present $XDG_DATA_HOME/sh/functions.sh
 
 # Pull in additional shell modules; these will need to be setup with symlinks in the
 # appropriate location.
