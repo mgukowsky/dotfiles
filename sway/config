@@ -15,8 +15,6 @@ set $up k
 set $right l
 # Your preferred terminal emulator
 set $term ghostty
-# Your preferred application launcher
-set $menu fuzzel
 
 ### Output configuration
 #
@@ -75,8 +73,8 @@ exec systemd-run --collect --no-block --unit="bemoji-update" --description="Down
     # Kill focused window
     bindsym $mod+w kill
 
-    # Start your launcher
-    bindsym $mod+space exec $menu
+    # Start your launcher (use `systemd-cat` to show logs in journalctl)
+    bindsym $mod+space exec systemd-cat -t wayland-app-launcher launcher-magic
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.

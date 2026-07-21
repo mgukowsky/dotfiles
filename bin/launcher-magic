@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Wrapper around `fuzzel` to dispatch to different behaviors depending on the keypressed used to select an app
+FILE_BROWSER=thunar
+LAUNCHER=fuzzel
+if ! command -v $FILE_BROWSER >&/dev/null; then
+  echo "$FILE_BROWSER not found!"
+  exit 1
+fi
+if ! command -v $LAUNCHER >&/dev/null; then
+  echo "$LAUNCHER not found!"
+  exit 1
+fi
+
+echo "$USER opening '$LAUNCHER'"
+
+# Have fuzzel only print the selection to stdout instead of running it
+SELECTION=$($LAUNCHER --launch-prefix='echo' --mesg 'Enter to select, +Ctrl for sudo, +Alt for file browser')
+# Certain custom keybindings will emit unique error codes
+RC=$?
+
+if [[ -z "$SELECTION" ]]; then
+  echo "$USER did not select a program"
+  exit 0
+fi
+
+case $RC in
+  0)
+    echo "$USER is launching '$SELECTION' normally" 
+    exec $SELECTION
+    ;;
+  10)
+    echo "$USER is launching '$SELECTION' with privileges" 
+    # TODO: borked in GUI; need to launch password dialog?
+    exec sudo $SELECTION
+    ;;
+  11)
+    echo "$USER wants to go to the location of '$SELECTION'" 
+    # Use `set` to parse out the argv's... I assume that this will handle special cases where there's a space in the path
+    # (i.e. something `cut -d' '` wouldn't handle properly)
+    set -- $SELECTION
+    exec $FILE_BROWSER $(which $1)
+    ;;
+  *)
+    echo "$SELECTION Unknown exit code from $LAUNCHER"
+    exit 1
+    ;;
+esac
