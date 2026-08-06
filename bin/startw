@@ -9,4 +9,4 @@ fi
 # exec dbus-run-session sway --unsupported-gpu
 
 # Version that uses systemd and creates a new slice
-systemd-run --user --unit="sway-session" --description="Lightweight window manager" --scope --slice=sway-session.slice -E XDG_SESSION_TYPE=wayland -E XDG_CURRENT_DESKTOP=sway sway --unsupported-gpu
+systemd-run --user --unit="sway-session" --description="Lightweight window manager" --scope --slice=sway-session.slice -E SUDO_ASKPASS=/home/mgukowsky/.local/bin/launcher-sudo -E XDG_SESSION_TYPE=wayland -E XDG_CURRENT_DESKTOP=sway sway --unsupported-gpu

@@ -1,0 +1,2 @@
+#!/bin/sh
+fuzzel --dmenu --password --mesg "Request to launch '$@'" --prompt "🔒 "

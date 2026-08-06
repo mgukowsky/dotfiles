@@ -31,8 +31,7 @@ case $RC in
     ;;
   10)
     echo "$USER is launching '$SELECTION' with privileges" 
-    # TODO: borked in GUI; need to launch password dialog?
-    exec sudo $SELECTION
+    exec sudo -AE $SELECTION
     ;;
   11)
     echo "$USER wants to go to the location of '$SELECTION'" 
