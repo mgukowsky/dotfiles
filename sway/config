@@ -21,13 +21,16 @@ set $term ghostty
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg $XDG_CONFIG_HOME/WALLPAPER fill
 
-# Child services. N.B. we put all of them within the slice that we created for sway
-exec systemd-run --collect --no-block --unit="swaync" --description="Notification client" --user --slice-inherit --scope swaync
-exec systemd-run --collect --no-block --unit="xfsettingsd" --description="Settings daemon" --user --slice-inherit --scope xfsettingsd --replace
-exec systemd-run --collect --no-block --unit="batsignal" --description="Battery status daemon" --user --slice-inherit --scope batsignal -p -w 20 -c 10 -d 5
+# Set env vars for child services
+exec dbus-update-activation-environment --systemd SWAYSOCK SUDO_ASKPASS WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
 
-# Misc. background stuff to do on startup
-exec systemd-run --collect --no-block --unit="bemoji-update" --description="Download latest bemoji symbol sets" --user --slice-inherit -E BEMOJI_PICKER_CMD='echo ❤<fe0f>' bemoji -D all -e
+# Child services. N.B. we put all of them within the slice that we created for sway
+exec launch-sway-daemon "swaync" "Notification client" swaync
+exec launch-sway-daemon "xfsettingsd" "Settings daemon" xfsettingsd --replace
+exec launch-sway-daemon "batsignal" "Battery status daemon" batsignal -p -w 20 -c 10 -d 5
+
+# Misc. background stuff to do on startup (N.B. b/c these are transient, we drop `BindsTo` and add `oneshot`)
+exec systemd-run --user --slice-inherit --property=Type=oneshot --property=After=sway-session.scope --collect --no-block --unit="bemoji-update" --description="Download latest bemoji symbol sets" -E BEMOJI_PICKER_CMD='echo ❤<fe0f>' bemoji -D all -e
 
 #
 # Example configuration:

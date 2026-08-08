@@ -1,0 +1,8 @@
+#!/bin/sh
+UNIT="mg-$1"
+shift
+DESC=$2
+shift
+
+systemd-cat -t $(basename $(realpath $0)) echo "Launching daemon '$UNIT' with description '$DESC' and args '$@'"
+systemd-run --user --slice-inherit --property=BindsTo=sway-session.scope --property=After=sway-session.scope --collect --no-block --unit="$UNIT" --description="$DESC" $@
