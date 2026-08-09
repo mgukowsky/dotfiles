@@ -73,6 +73,9 @@ exec systemd-run --user --slice-inherit --property=Type=oneshot --property=After
     # Start a terminal
     bindsym $mod+Return exec $term
 
+    # Start a file browser
+    bindsym $mod+e exec thunar
+
     # Kill focused window
     bindsym $mod+w kill
 
@@ -162,7 +165,8 @@ exec systemd-run --user --slice-inherit --property=Type=oneshot --property=After
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
     bindsym $mod+f layout tabbed
-    bindsym $mod+e layout toggle split
+    bindsym $mod+Mod1+s layout toggle split
+    bindsym $mod+Mod1+f layout toggle split
 
     # Make the current focus fullscreen
     bindsym $mod+m fullscreen
