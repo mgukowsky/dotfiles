@@ -258,6 +258,9 @@ smart_borders on
 # Media keys
 bindsym --locked XF86MonBrightnessDown exec adjust-brightness -
 bindsym --locked XF86MonBrightnessUp exec adjust-brightness +
+bindsym --locked XF86AudioRaiseVolume exec adjust-volume +
+bindsym --locked XF86AudioLowerVolume exec adjust-volume -
+bindsym --locked XF86AudioMute exec adjust-volume x
 
 # Emoji picker
 bindsym $mod+period exec BEMOJI_PICKER_CMD="fuzzel -d" bemoji -nt

@@ -1,0 +1,46 @@
+#!/bin/bash
+if [[ "$#" -ne 1 || ! "$1" =~ ^[+-x]$ ]]; then
+  echo "Usage: $0 +|-"
+  exit 1
+fi
+
+declare -r SINK="@DEFAULT_AUDIO_SINK@"
+
+case "$1" in
+  "+"|"-")
+    wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%$1
+    ;;
+  "x")
+    wpctl set-mute $SINK toggle
+    ;;
+  *)
+    echo "Unknown argument: '$1'"
+    exit 1
+    ;;
+esac
+
+raw_vol="$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"
+
+# $(( 10#... )) converts a string like 081 to a decimal number (i.e. parses to '81' instead of an
+# invalid octal number)
+level=$(( 10#$(echo $raw_vol | cut -d ' ' -f 2 | tr -d '.') ))
+
+if [[ "$raw_vol" =~ MUTED ]]; then
+  muted="[MUTED]"
+fi
+
+if [[ -v muted ]]; then
+    icon=" "
+elif (( level >= 66 )); then
+    icon="  "
+elif (( level >= 33 )); then
+    icon=" "
+else
+    icon=" "
+fi
+
+# One-liner to hash the string 'volume' to a 16-bit integer. Used to get a consistent ID for the
+# notification to update.
+declare -r NOTIFICATION_ID=$(printf '%d\n' 0x$(printf %s "volume" | md5sum | cut -c1-4))
+
+notify-send -r $NOTIFICATION_ID -h int:value:$level -h string:synchronous:adjust-volume "$icon  Volume: $level%$muted"

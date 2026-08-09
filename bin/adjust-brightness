@@ -14,5 +14,5 @@ brightness=$(brightnessctl get)
 max_brightness=$(brightnessctl max)
 percent=$((brightness * 100 / max_brightness))
 
-# TODO: use better unique ID
-notify-send -r 9991 -h int:value:$percent -h string:synchronous:my-notification " Brightness: $percent%"
+declare -r NOTIFICATION_ID=$(printf '%d\n' 0x$(printf %s "brightness" | md5sum | cut -c1-4))
+notify-send -r $NOTIFICATION_ID -h int:value:$percent -h string:synchronous:my-notification " Brightness: $percent%"
