@@ -256,6 +256,7 @@ smart_borders on
 # Key bindings
 
 # Media keys
+bindsym --locked XF86PowerOff exec swaynag -t warning -m 'You pressed the power button. Do you really want to turn the system off?' -B 'Yes, turn the system off' 'systemctl poweroff'
 bindsym --locked XF86MonBrightnessDown exec adjust-brightness -
 bindsym --locked XF86MonBrightnessUp exec adjust-brightness +
 bindsym --locked XF86AudioRaiseVolume exec adjust-volume +
