@@ -21,6 +21,11 @@ if [[ -n "${ZSH}" ]] && [[ -d "${ZSH}" ]]; then
   omz update
 fi
 
+if command -v rustup >&/dev/null; then
+  print_green "Running rustup update..."
+  rustup update
+fi
+
 if command -v fwupdmgr >&/dev/null; then
   print_green "Running fwupdmgr..."
   fwupdmgr refresh --force
