@@ -7,20 +7,22 @@ fi
 
 # N.B. QT_* env vars are magic to have those apps defer to GTK/Adwaita for styling;
 # per https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications#QGtkStyle
+QT_QPA_PLATFORMTHEME=gtk3
+QT_WAYLAND_DECORATION=adwaita
+
+# Tells sudo which program to launch when not connected to a TTY
+SUDO_ASKPASS=/home/mgukowsky/.local/bin/launcher-sudo
 
 # Do this here b/c all `exec` calls in sway's config file are async. This invocatin
 # ensures that all services pick up the env vars that they need.
-# TODO: SWAYSOCK and WAYLAND_DISPLAY need to be set after sway launches
 dbus-update-activation-environment --systemd \
          DISPLAY \
          EDITOR \
          PATH \
-         QT_QPA_PLATFORMTHEME=gtk3 \
-         QT_WAYLAND_DECORATION=adwaita \
+         QT_QPA_PLATFORMTHEME=$QT_QPA_PLATFORMTHEME \
+         QT_WAYLAND_DECORATION=$QT_WAYLAND_DECORATION \
          SSH_AUTH_SOCK \
-         SUDO_ASKPASS=/home/mgukowsky/.local/bin/launcher-sudo \
-         SWAYSOCK \
-         WAYLAND_DISPLAY \
+         SUDO_ASKPASS=$SUDO_ASKPASS \
          XDG_CURRENT_DESKTOP=sway \
          XDG_SESSION_DESKTOP=sway \
          XDG_SESSION_TYPE=wayland
@@ -34,9 +36,10 @@ systemd-run --user \
   --description="Lightweight window manager" \
   --scope \
   --slice=sway-session.slice \
-  -E QT_QPA_PLATFORMTHEME=gtk3 \
-  -E QT_WAYLAND_DECORATION=adwaita \
-  -E SUDO_ASKPASS=/home/mgukowsky/.local/bin/launcher-sudo \
-  -E XDG_SESSION_TYPE=wayland \
+  -E QT_QPA_PLATFORMTHEME=$QT_QPA_PLATFORMTHEME \
+  -E QT_WAYLAND_DECORATION=$QT_WAYLAND_DECORATION \
+  -E SUDO_ASKPASS=$SUDO_ASKPASS \
   -E XDG_CURRENT_DESKTOP=sway \
+  -E XDG_SESSION_DESKTOP=sway \
+  -E XDG_SESSION_TYPE=wayland \
   sway --unsupported-gpu
