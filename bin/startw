@@ -5,6 +5,13 @@ if [[ -n "$WAYLAND_DISPLAY" ]]; then
   exit 1
 fi
 
+# Do this here b/c all `exec` calls in sway's config file are async. This invocatin
+# ensures that all services pick up the env vars that they need.
+dbus-update-activation-environment --systemd \
+         DISPLAY SWAYSOCK WAYLAND_DISPLAY \
+         XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP=sway \
+         PATH SSH_AUTH_SOCK SUDO_ASKPASS EDITOR ; \
+
 # Version that doesn't use systemd
 # exec dbus-run-session sway --unsupported-gpu
 

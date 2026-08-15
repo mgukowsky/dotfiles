@@ -16,13 +16,13 @@ set $right l
 # Your preferred terminal emulator
 set $term ghostty
 
+# Include other goodies/machine-specific configs.
+include /etc/sway/config.d/*
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg $XDG_CONFIG_HOME/WALLPAPER fill
-
-# Set env vars for child services
-exec dbus-update-activation-environment --systemd SWAYSOCK SUDO_ASKPASS WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
 
 # Child services. N.B. we put all of them within the slice that we created for sway
 exec launch-sway-daemon "swaync" "Notification client" swaync
@@ -267,8 +267,8 @@ bindsym --locked XF86AudioMute exec adjust-volume x
 bindsym $mod+period exec BEMOJI_PICKER_CMD="fuzzel -d" bemoji -nt
 
 # Windows-style notification handling
-bindsym $mod+a exec swaync-client -t
-bindsym $mod+Shift+a exec swaync-client --hide-latest
+bindsym $mod+n exec swaync-client -t
+bindsym $mod+Shift+n exec swaync-client --hide-latest
 
 # Screen snip
 bindsym $mod+Shift+s exec wayland_screensnip
@@ -278,6 +278,3 @@ bindsym $mod+Shift+t exec wayland_text_extract
 
 # Other settings
 xwayland enable
-
-# Include other goodies/machine-specific configs
-include /etc/sway/config.d/*
