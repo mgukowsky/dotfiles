@@ -1,0 +1,12 @@
+#!/bin/sh
+# Based on https://gitlab.com/WhyNotHugo/darkman/-/blob/8fec7499f75bfa40f99adb2198978939f1cb984e/examples/gtk3-theme.sh
+
+case "$1" in
+dark) THEME=Adwaita-dark ;;
+light) THEME=Adwaita ;;
+default) exit 1 ;;
+esac
+
+gsettings set org.gnome.desktop.interface color-scheme "prefer-$1"
+gsettings set org.gnome.desktop.interface gtk-theme "$THEME"
+

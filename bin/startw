@@ -5,15 +5,38 @@ if [[ -n "$WAYLAND_DISPLAY" ]]; then
   exit 1
 fi
 
+# N.B. QT_* env vars are magic to have those apps defer to GTK/Adwaita for styling;
+# per https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications#QGtkStyle
+
 # Do this here b/c all `exec` calls in sway's config file are async. This invocatin
 # ensures that all services pick up the env vars that they need.
+# TODO: SWAYSOCK and WAYLAND_DISPLAY need to be set after sway launches
 dbus-update-activation-environment --systemd \
-         DISPLAY SWAYSOCK WAYLAND_DISPLAY \
-         XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP=sway \
-         PATH SSH_AUTH_SOCK SUDO_ASKPASS EDITOR ; \
+         DISPLAY \
+         EDITOR \
+         PATH \
+         QT_QPA_PLATFORMTHEME=gtk3 \
+         QT_WAYLAND_DECORATION=adwaita \
+         SSH_AUTH_SOCK \
+         SUDO_ASKPASS=/home/mgukowsky/.local/bin/launcher-sudo \
+         SWAYSOCK \
+         WAYLAND_DISPLAY \
+         XDG_CURRENT_DESKTOP=sway \
+         XDG_SESSION_DESKTOP=sway \
+         XDG_SESSION_TYPE=wayland
 
 # Version that doesn't use systemd
 # exec dbus-run-session sway --unsupported-gpu
 
 # Version that uses systemd and creates a new slice
-systemd-run --user --unit="sway-session" --description="Lightweight window manager" --scope --slice=sway-session.slice -E SUDO_ASKPASS=/home/mgukowsky/.local/bin/launcher-sudo -E XDG_SESSION_TYPE=wayland -E XDG_CURRENT_DESKTOP=sway sway --unsupported-gpu
+systemd-run --user \
+  --unit="sway-session" \
+  --description="Lightweight window manager" \
+  --scope \
+  --slice=sway-session.slice \
+  -E QT_QPA_PLATFORMTHEME=gtk3 \
+  -E QT_WAYLAND_DECORATION=adwaita \
+  -E SUDO_ASKPASS=/home/mgukowsky/.local/bin/launcher-sudo \
+  -E XDG_SESSION_TYPE=wayland \
+  -E XDG_CURRENT_DESKTOP=sway \
+  sway --unsupported-gpu
