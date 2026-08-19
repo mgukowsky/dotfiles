@@ -178,7 +178,7 @@ exec systemd-run --user --slice-inherit --property=Type=oneshot --property=After
     bindsym $mod+t floating toggle
 
     # Swap focus between the tiling area and the floating area
-    # bindsym $mod+Shift+t focus mode_toggle
+    bindsym $mod+Mod1+t focus mode_toggle
 
     # Move focus to the parent container
     bindsym $mod+p focus parent
