@@ -21,12 +21,15 @@
 # reloaded while running; some only apply to new windows and others may require
 # a full restart to take effect.
 
+# Spacing
+adjust-cell-height = 25%
+
 # Fonts
 font-family = FiraCode Nerd Font
 font-family-bold = FiraCode Nerd Font
 font-family-italic = VictorMono Nerd Font
 font-family-bold-italic = VictorMono Nerd Font
-font-size = 13.5
+font-size = 12
 font-feature = -liga
 font-feature = -calt
 
