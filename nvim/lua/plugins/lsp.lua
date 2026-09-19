@@ -315,8 +315,9 @@ local function setup_lsps()
         { "<leader>lrxi", function() vim.cmd.RustEmitIr() end,                 desc = "View LLVM IR" },
         { "<leader>lrxl", function() rlsp("logFile") end,                      desc = "rust-analyzer logs" },
         { "<leader>lrxm", function() rlsp({ "view", "mir" }) end,              desc = "View MIR" },
-        { "J",            function() rlsp("joinLines") end,                    desc = "Join lines" },
-        { "K",            function() rlsp({ "hover", "actions" }) end,         desc = "Show hover (press twice to focus)" },
+        -- These two mappings don't work too well IMHO, and the default mappings work just as well anyway
+        -- { "J",            function() rlsp("joinLines") end,                    desc = "Join lines" },
+        -- { "K",            function() rlsp({ "hover", "actions" }) end,         desc = "Show hover (press twice to focus)" },
         { "<F5>",         function() rlsp({ "debuggables", bang = true }) end, desc = "Run last debuggable" },
         -- Ctrl+F5; same as Visual Studio mapping
         { "<F29>",        function() rlsp({ "runnables", bang = true }) end,   desc = "Run last runnable" },
