@@ -8,11 +8,19 @@
 [pull]
 	rebase = false
 [diff]
+  tool = nvimdiff
   colorMoved = default
-[difftool "nvimdiff"]
-  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[difftool]
+  prompt = false
 [merge]
-  conflictstyle = diff3
+  tool = nvimdiff2
+  conflictStyle = zdiff3
+[mergetool]
+  keepBackup = false
+  prompt = false
+  hideResolved = true
+[mergetool "nvimdiff2"]
+  trustExitCode = false
 
 [core]
   pager = delta
