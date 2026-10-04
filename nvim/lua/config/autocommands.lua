@@ -20,6 +20,14 @@ au("FileType", {
   end,
 })
 
+au("FileType", {
+  desc = "Show line numbers in help files",
+  pattern = "help",
+  callback = function()
+    vim.opt_local.number = true
+  end,
+})
+
 au("TextYankPost", {
   desc = "Highlight on yank",
   pattern = "*",
