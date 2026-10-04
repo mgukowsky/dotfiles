@@ -303,7 +303,7 @@ local function setup_lsps()
         { "<leader>lrE",  function() rlsp("renderDiagnostic") end,             desc = "Render diagnostic" },
         { "<leader>lrf",  function() rlsp("flyCheck") end,                     desc = "Fly check (cargo/clippy)" },
         { "<leader>lrg",  function() rlsp("crateGraph") end,                   desc = "View crate DAG" },
-        { "<leader>lrm",  function() rlsp("expandMacro") end,                  desc = "Expand macro" },
+        { "<leader>lrm",  function() rlsp({ "expandMacro", "float" }) end,     desc = "Expand macro" },
         { "<leader>lro",  function() rlsp("openDocs") end,                     desc = "Open docs" },
         { "<leader>lrp",  function() rlsp("parentModule") end,                 desc = "Parent module" },
         { "<leader>lrr",  function() rlsp("runnables") end,                    desc = "Runnables select" },
@@ -436,7 +436,21 @@ return {
       {
         -- Handles Rust LSP
         'mrcjkb/rustaceanvim',
+        branch = "main",
         lazy = false, -- This plugin is already lazy
+        -- Annoyingly, this plugin needs to have its configuration loaded into a global before
+        -- the plugin loads. Per the Lazy plugin spec, this is the recommended way to set this up.
+        init = function()
+          vim.g.rustaceanvim = {
+            tools = {
+              executor = "toggleterm",
+              float_win_config = {
+                auto_focus = true,
+                border = "rounded",
+              },
+            }
+          }
+        end
       },
     },
   },
