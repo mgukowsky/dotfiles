@@ -5,6 +5,7 @@
 input=$(cat)
 
 model=$(echo "$input" | jq -r '.model.display_name // .model.id // "?"')
+effort=$(echo "$input" | jq -r '.effort.level // empty')
 used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 five_hr=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
 seven_day=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
@@ -32,6 +33,16 @@ elif [ -n "$session_id" ]; then
   fi
 else
   session_label=""
+fi
+
+# Append effort level to the model name, e.g. "Opus 5.5 (Medium)".
+# `effort` is absent when the model doesn't support the effort parameter.
+if [ -n "$effort" ]; then
+  case "$effort" in
+    xhigh) effort_label="XHigh" ;;
+    *)     effort_label="${effort^}" ;;
+  esac
+  model="$model ($effort_label)"
 fi
 
 # Build optional quota string
