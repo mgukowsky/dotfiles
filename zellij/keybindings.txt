@@ -1,0 +1,51 @@
+zellij key bindings                                             (q to close)
+
+Press the prefix C-a, then one of the keys below (Esc or Enter cancels).
+
+Panes
+  "            Split pane top/bottom
+  %            Split pane left/right
+  h j k l      Move to the pane left/below/above/right (arrow keys too)
+  o            Move to the next pane
+  ;            Move to the last active pane
+  { }          Swap the pane with the previous/next pane
+  z            Toggle pane zoom
+  !            Break the pane out into a new tab
+  x            Close the pane
+  T            Rename the pane
+  M-Arrow      Resize the pane (C-Arrow too)
+  Space        Cycle pane layouts
+
+Tabs (tmux windows)
+  c            New tab
+  1 ... 9      Go to tab 1 ... 9
+  n p          Next/previous tab
+  ,            Rename the tab
+  &            Close the tab
+
+Session
+  d            Detach
+  s w          Session manager (switch sessions and tabs)
+  [            Copy mode
+  PageUp       Copy mode, scrolled up a page
+  C-a          Send C-a to the program
+  ?            Show this list
+
+Copy mode (C-a [)
+  j k          Scroll down/up a line (C-e C-y, J K, C-Down C-Up too)
+  d u          Scroll down/up half a page (C-d C-u too)
+  C-f C-b      Scroll down/up a page (PageDown PageUp, l h too)
+  g G          Jump to the top/bottom
+  / ?          Search (s too); then n/N for the next/previous match, and
+               c, w, o to toggle case sensitivity, wrapping, whole words
+  e            Edit the scrollback in $EDITOR
+  [ ]          Jump to the previous/next prompt *
+  m            Select the command and output at the scroll position *
+  c            Copy the last command's output *
+  q            Exit copy mode (Esc, Enter, C-c too)
+
+  * needs shell integration (OSC 133 prompt markers)
+
+Mouse
+  Drag to select text (copied on release), scroll to enter copy mode,
+  C-scroll to resize panes.

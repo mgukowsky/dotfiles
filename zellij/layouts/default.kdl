@@ -1,0 +1,10 @@
+// zellij's built-in default layout (`zellij setup --dump-layout default`), with
+// the tab bar moved from the top of the screen to the bottom, and the status bar
+// (keybinding hints) removed. Keep in sync with the `ui` template in
+// ./default.swap.kdl
+layout {
+    pane
+    pane size=1 borderless=true {
+        plugin location="tab-bar"
+    }
+}

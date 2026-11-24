@@ -1,0 +1,149 @@
+// My zellij configuration, migrated from my tmux config (../.tmux.conf).
+//
+// Only settings that differ from zellij's defaults live here; run
+// `zellij setup --dump-config` to see the defaults. The layout (just the tab bar,
+// at the bottom) lives in ./layouts/.
+
+keybinds {
+    // Like tmux, Ctrl-a (the prefix) is the only key intercepted; all other
+    // Ctrl/Alt keys pass through to programs. These are zellij's default mode
+    // switches (Ctrl-p, Ctrl-t, etc.), lock, quit, and Alt shortcuts.
+    //
+    // NB: this is a `shared` block (all modes) rather than top-level `unbind`s,
+    // since zellij only reads the first top-level `unbind`, and applies it
+    // after every mode's binds (which would undo the tmux mode resize keys).
+    shared {
+        unbind "Ctrl g" "Ctrl p" "Ctrl t" "Ctrl n" "Ctrl h" "Ctrl s" "Ctrl o" "Ctrl q"
+        unbind "Alt h" "Alt j" "Alt k" "Alt l" "Alt Left" "Alt Down" "Alt Up" "Alt Right"
+        unbind "Alt f" "Alt n" "Alt i" "Alt o" "Alt p" "Alt Shift p" "Alt [" "Alt ]"
+        unbind "Alt =" "Alt +" "Alt -"
+    }
+
+    // Use Ctrl-a to enter tmux mode (i.e. the prefix) instead of default Ctrl-b
+    shared_except "tmux" {
+        bind "Ctrl a" { SwitchToMode "Tmux"; }
+    }
+
+    // ...and free up Ctrl-b, except in scroll/search mode where it pages up
+    shared_except "scroll" "search" {
+        unbind "Ctrl b"
+    }
+
+    tmux {
+        // Ctrl-a Ctrl-a sends a literal Ctrl-a through to the pane (send-prefix)
+        bind "Ctrl a" { Write 1; SwitchToMode "Normal"; }
+
+        // zellij's defaults for these stay in tmux mode afterwards; tmux doesn't
+        bind "o" { FocusNextPane; SwitchToMode "Normal"; }
+        bind "Space" { NextSwapLayout; SwitchToMode "Normal"; }
+
+        // tmux defaults that zellij's tmux mode lacks
+        bind "1" { GoToTab 1; SwitchToMode "Normal"; }
+        bind "2" { GoToTab 2; SwitchToMode "Normal"; }
+        bind "3" { GoToTab 3; SwitchToMode "Normal"; }
+        bind "4" { GoToTab 4; SwitchToMode "Normal"; }
+        bind "5" { GoToTab 5; SwitchToMode "Normal"; }
+        bind "6" { GoToTab 6; SwitchToMode "Normal"; }
+        bind "7" { GoToTab 7; SwitchToMode "Normal"; }
+        bind "8" { GoToTab 8; SwitchToMode "Normal"; }
+        bind "9" { GoToTab 9; SwitchToMode "Normal"; }
+        bind "!" { BreakPane; SwitchToMode "Normal"; }
+        bind "&" { CloseTab; SwitchToMode "Normal"; }
+        bind ";" { FocusLastPane; SwitchToMode "Normal"; }
+        bind "{" { MovePaneBackwards; SwitchToMode "Normal"; }
+        bind "}" { MovePane; SwitchToMode "Normal"; }
+        bind "T" { SwitchToMode "RenamePane"; }
+        bind "s" "w" {
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            }
+            SwitchToMode "Normal"
+        }
+        bind "PageUp" { SwitchToMode "Scroll"; PageScrollUp; }
+        bind "Alt Up" "Ctrl Up" { Resize "Increase Up"; SwitchToMode "Normal"; }
+        bind "Alt Down" "Ctrl Down" { Resize "Increase Down"; SwitchToMode "Normal"; }
+        bind "Alt Left" "Ctrl Left" { Resize "Increase Left"; SwitchToMode "Normal"; }
+        bind "Alt Right" "Ctrl Right" { Resize "Increase Right"; SwitchToMode "Normal"; }
+
+        // Like tmux's list-keys, show the key bindings (q to close). zellij has
+        // no built-in equivalent, so keybindings.txt is a hand-written list;
+        // keep it in sync with this file
+        bind "?" {
+            Run "sh" "-c" "exec less \"${ZELLIJ_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zellij}/keybindings.txt\"" {
+                floating true
+                close_on_exit true
+                name "Key bindings"
+                x "10%"
+                y "10%"
+                width "80%"
+                height "80%"
+            }
+            SwitchToMode "Normal"
+        }
+    }
+
+    // tmux's vi copy-mode keys that zellij's scroll mode lacks (search mode is
+    // a separate mode in zellij, so these are shared with it)
+    shared_among "scroll" "search" {
+        bind "q" { ScrollToBottom; SwitchToMode "Normal"; }
+        bind "g" { ScrollToTop; }
+        bind "G" { ScrollToBottom; }
+        bind "Ctrl d" { HalfPageScrollDown; }
+        bind "Ctrl u" { HalfPageScrollUp; }
+        bind "Ctrl e" "J" "Ctrl Down" { ScrollDown; }
+        bind "Ctrl y" "K" "Ctrl Up" { ScrollUp; }
+        bind "/" "?" { SwitchToMode "EnterSearch"; SearchInput 0; }
+    }
+    search {
+        bind "N" { Search "up"; }
+    }
+
+    // Cancelling a rename goes back to normal mode instead of zellij's tab/pane
+    // modes, which are otherwise unreachable now
+    renametab {
+        bind "Esc" { UndoRenameTab; SwitchToMode "Normal"; }
+    }
+    renamepane {
+        bind "Esc" { UndoRenamePane; SwitchToMode "Normal"; }
+    }
+}
+
+// Better scrollback history length
+scroll_buffer_size 50000
+
+// No pane titles (i.e. the shell's title/current directory) above each split;
+// panes are just separated by borders, like tmux
+pane_frames false
+
+// Not migrated from tmux:
+//
+// - `prefix p`/`prefix ]` (paste-buffer): zellij has no paste buffer or paste
+//   action. Copies go to the system clipboard via OSC 52, so paste with the
+//   terminal's paste key instead. `prefix p` keeps zellij's default (previous
+//   tab).
+// - copy-mode-vi `v`/`y`: zellij's scroll mode can't select text from the
+//   keyboard. Select with the mouse (copies on release), or press `e` in scroll
+//   mode to open the scrollback in $EDITOR and yank from there.
+// - `-r` (repeat) on `prefix h/j/k/l` and the resize keys: zellij has no
+//   repeat timeout, so each move/resize needs the prefix again. Resizing also
+//   moves in zellij's fixed steps rather than 1 or 5 cells.
+// - `prefix x` and `prefix &` close the pane/tab without asking to confirm.
+// - `prefix ?` (in copy mode) searches like `/`; afterwards `n` searches down
+//   and `N` up, regardless of which key started the search.
+// - tmux defaults with no zellij equivalent: `prefix $ ( ) L ' . : / f i m M
+//   q r t ~ = # - C D E g`, `prefix M-1..M-7/M-n/M-o/M-p/C-o/C-z`, and tmux
+//   3.8's floating pane keys (`prefix Tab/S-Tab/*/@`).
+// - escape-time: zellij has no equivalent setting.
+// - update-environment: no equivalent; panes inherit the environment of the
+//   session at creation time.
+// - allow-passthrough: no generic equivalent, but zellij forwards the OSC
+//   10/11 color queries this was enabled for (see below).
+// - Pane border/message/mode colors: would require a full custom theme.
+//   Clock mode and display-panes don't exist in zellij.
+//
+// Covered by zellij defaults (so intentionally not set here): the rest of
+// tmux's prefix keys (zellij's tmux mode), vi j/k/Ctrl-f/Ctrl-b scrolling,
+// 1-based tab numbering, terminal title updates, truecolor, undercurl
+// (styled_underlines), mouse support, OSC 52 clipboard, focus events, and
+// OSC 10/11 color queries (forwarded to the terminal).
