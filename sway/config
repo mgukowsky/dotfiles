@@ -24,6 +24,9 @@ include /etc/sway/config.d/*
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg $XDG_CONFIG_HOME/WALLPAPER fill
 
+# 60.001 = 371.37 MHz pixel clock / (3040x2036 total px); EDID's 10 kHz clock steps can't hit exactly 60
+output eDP-1 mode 2880x1920@60.001Hz adaptive_sync on
+
 # Per https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
 exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
 
