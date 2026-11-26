@@ -17,18 +17,8 @@ return {
         sort = { "alphanum", "mod" },
       })
 
-      -- Group descriptions for mappings given as "keys" args in a lazy spec need to be defined here
-      wk.add({
-        { "gr",         mode = { "n", "v" },                   group = "LSP Actions" }, -- nvim builtins
-        { "<leader>c",  mode = { "n", "v" },                   group = "AI Agent" },
-        { "<leader>d",  group = "Debugger (DAP)" },
-        { "<leader>db", group = "Breakpoints" },
-        { "<leader>df", group = "Frames" },
-        { "<leader>dq", group = "DAP commands" },
-        { "<leader>h",  group = "Git Hunk operations" },
-        { "<leader>o",  group = "Overseer runner (tasks.json)" },
-        { "<leader>q",  group = "Extended functionality" },
-      })
+      -- Group names live in a shared table so the VSCode which-key menu can use them too
+      wk.add(require("local.vars").KEY_GROUPS)
     end
   }
 }

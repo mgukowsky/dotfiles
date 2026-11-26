@@ -191,3 +191,6 @@ map_all({
   { "<leader>dqf", "workbench.debug.action.focusCallStackView", desc = "List frames" },
   { "<leader>dqv", "workbench.debug.action.focusVariablesView", desc = "List variables" },
 })
+
+-- which-key style menu for <leader> and `g` mappings (requires the jellydn.vscode-whichkey extension)
+require("local.vscode_whichkey").setup()

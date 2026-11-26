@@ -144,7 +144,7 @@ local function on_attach(_, bufnr)
       { "<leader>]",  function() vim.cmd.popup(LSPMenu) end,                                         desc = "LSP Popup menu" },
       { "<leader>n",  function() vim.cmd("Lspsaga outline") end,                                     desc = "Toggle LSP code outline" },
 
-      { "<leader>l",  group = "LSP functions" },
+      -- The "<leader>l" group name is defined in local/vars.lua
       { "<leader>la", function() vim.cmd("Lspsaga code_action") end,                                 desc = "LSP code action" },
       { "<leader>ld", function() require("telescope.builtin").diagnostics({ bufnr = 0 }) end,        desc = "Diagnostics" },
       { "<leader>li", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Toggle Inlay Hints" },
