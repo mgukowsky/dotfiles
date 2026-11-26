@@ -27,6 +27,14 @@ function M.setup_lazy()
       -- import your plugins
       { import = "plugins" },
     },
+    defaults = {
+      -- When embedded in VSCode (via vscode-neovim), only load plugins whose spec opts in with the custom
+      -- `vscode = true` field. Using `cond` rather than `enabled` means the other plugins stay installed (they're
+      -- still needed by terminal nvim), they just aren't loaded. N.B. a plugin with its own `cond` ignores this default.
+      cond = function(plugin)
+        return not G_IS_VSCODE or plugin.vscode == true
+      end,
+    },
     -- Configure any other settings here. See the documentation for more details.
     -- colorscheme that will be used when installing plugins.
     -- install = { colorscheme = { "habamax" } },

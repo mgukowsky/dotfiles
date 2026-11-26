@@ -1,0 +1,16 @@
+{
+  // Run vscode-neovim in its own extension host so other extensions can't stall input
+  // (recommended by https://github.com/vscode-neovim/vscode-neovim#performance)
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  // Ctrl keys sent to nvim in normal mode. This REPLACES the extension's default list, so the defaults are repeated
+  // here, plus:
+  //  - "n": <C-n> file explorer (nvim-tree mapping)
+  //  - "q": <C-q> toggle panel (Trouble mapping); also stops <C-q> quitting VSCode while in normal mode
+  // N.B. <C-p> and <C-s> are intentionally NOT forwarded so VSCode's native Quick Open and Save keep working
+  "vscode-neovim.ctrlKeysForNormalMode": [
+    "a", "b", "c", "d", "e", "f", "h", "i", "j", "k", "l", "m", "n", "o", "q", "r", "t", "u", "v", "w", "x", "y", "z",
+    "/", "]", "right", "left", "up", "down", "backspace", "delete"
+  ]
+}

@@ -2,6 +2,7 @@ return {
   {
     "folke/flash.nvim",
     event = "VeryLazy",
+    vscode = true, -- flash.nvim has built-in vscode-neovim support
     opts = {
       modes = {
         char = {

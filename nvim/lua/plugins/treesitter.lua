@@ -4,8 +4,11 @@ return {
     lazy = false, -- nvim-treesitter main branch does not support lazy-loading
     branch = "main",
     build = ":TSUpdate",
+    -- Parsers are needed in VSCode for the textobjects/flash treesitter motions (vscode-neovim sets the buffer filetype
+    -- from the VSCode language ID, so parsers attach as usual)
+    vscode = true,
     dependencies = {
-      "folke/which-key.nvim",
+      -- N.B. endwise is insert-mode only, so it won't load in VSCode (insert mode is handled by VSCode itself)
       "RRethy/nvim-treesitter-endwise",
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
@@ -14,6 +17,11 @@ return {
       -- The main branch no longer has auto_install or ensure_installed in setup
       local ts_parsers = require("local.vars").TS_PARSERS
       require("nvim-treesitter").install(ts_parsers)
+
+      -- VSCode does its own highlighting
+      if G_IS_VSCODE then
+        return
+      end
 
       -- Enable treesitter highlighting for all parser filetypes
       -- The main branch requires explicit activation via autocommand
@@ -29,10 +37,8 @@ return {
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     branch = "main",
-    dependencies = {
-      "folke/which-key.nvim",
-    },
     event = "VeryLazy",
+    vscode = true,
     config = function()
       -- Configure textobjects options (not keymaps)
       require("nvim-treesitter-textobjects").setup({
@@ -45,29 +51,36 @@ return {
         },
       })
 
-      -- Define keymaps using which-key
+      -- Define keymaps. These use plain vim.keymap.set (rather than which-key) so that they also work in VSCode, where
+      -- which-key isn't loaded; which-key still picks up the `desc` of each mapping in the TUI.
       local ts_select = require("nvim-treesitter-textobjects.select")
       local ts_move = require("nvim-treesitter-textobjects.move")
 
-      require("which-key").add({
-        -- Select textobjects
-        { "ab", function() ts_select.select_textobject("@block.outer", "textobjects") end,     mode = { "x", "o" },      desc = "Select an entire block" },
-        { "ib", function() ts_select.select_textobject("@block.inner", "textobjects") end,     mode = { "x", "o" },      desc = "Select the body of a block" },
-        { "af", function() ts_select.select_textobject("@function.outer", "textobjects") end,  mode = { "x", "o" },      desc = "Select an entire function" },
-        { "if", function() ts_select.select_textobject("@function.inner", "textobjects") end,  mode = { "x", "o" },      desc = "Select a function body" },
-        { "ac", function() ts_select.select_textobject("@class.outer", "textobjects") end,     mode = { "x", "o" },      desc = "Select an entire class" },
-        { "ic", function() ts_select.select_textobject("@class.inner", "textobjects") end,     mode = { "x", "o" },      desc = "Select the body of a class" },
-        { "a#", function() ts_select.select_textobject("@comment.outer", "textobjects") end,   mode = { "x", "o" },      desc = "Select an entire comment" },
-        { "i#", function() ts_select.select_textobject("@comment.inner", "textobjects") end,   mode = { "x", "o" },      desc = "Select the body of a comment" },
-        { "iS", function() ts_select.select_textobject("@statement.outer", "textobjects") end, mode = { "x", "o" },      desc = "Select the current statement" },
-        { "aS", function() ts_select.select_textobject("@scope", "textobjects") end,           mode = { "x", "o" },      desc = "Select the current scope" },
+      local function sel(lhs, query, desc)
+        vim.keymap.set({ "x", "o" }, lhs, function() ts_select.select_textobject(query, "textobjects") end,
+          { desc = desc })
+      end
+      local function mv(lhs, fn, query, desc)
+        vim.keymap.set({ "n", "x", "o" }, lhs, function() ts_move[fn](query, "textobjects") end, { desc = desc })
+      end
 
-        -- Movement keymaps
-        { "]f", function() ts_move.goto_next_start("@function.outer", "textobjects") end,      mode = { "n", "x", "o" }, desc = "Next function start" },
-        { "]F", function() ts_move.goto_next_end("@function.outer", "textobjects") end,        mode = { "n", "x", "o" }, desc = "Next function end" },
-        { "[f", function() ts_move.goto_previous_start("@function.outer", "textobjects") end,  mode = { "n", "x", "o" }, desc = "Previous function start" },
-        { "[F", function() ts_move.goto_previous_end("@function.outer", "textobjects") end,    mode = { "n", "x", "o" }, desc = "Previous function end" },
-      })
+      -- Select textobjects
+      sel("ab", "@block.outer", "Select an entire block")
+      sel("ib", "@block.inner", "Select the body of a block")
+      sel("af", "@function.outer", "Select an entire function")
+      sel("if", "@function.inner", "Select a function body")
+      sel("ac", "@class.outer", "Select an entire class")
+      sel("ic", "@class.inner", "Select the body of a class")
+      sel("a#", "@comment.outer", "Select an entire comment")
+      sel("i#", "@comment.inner", "Select the body of a comment")
+      sel("iS", "@statement.outer", "Select the current statement")
+      sel("aS", "@scope", "Select the current scope")
+
+      -- Movement keymaps
+      mv("]f", "goto_next_start", "@function.outer", "Next function start")
+      mv("]F", "goto_next_end", "@function.outer", "Next function end")
+      mv("[f", "goto_previous_start", "@function.outer", "Previous function start")
+      mv("[F", "goto_previous_end", "@function.outer", "Previous function end")
     end
   },
   {

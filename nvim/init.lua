@@ -19,6 +19,11 @@ G_COLORSCHEME = "tokyonight-night"
 -- If false, fallback to using nvim-cmp
 G_USE_BLINK = false
 
+-- True when nvim is embedded in VSCode via the vscode-neovim extension, which sets `g:vscode` before this file runs.
+-- In this mode VSCode owns the UI, insert mode, LSP, etc., so only text-editing plugins are loaded
+-- (see `defaults.cond` in config/lazy.lua) and many mappings are redirected to VSCode commands (see config/vscode.lua).
+G_IS_VSCODE = vim.g.vscode ~= nil
+
 local lazy = require("config.lazy")
 lazy.bootstrap_lazy()
 
@@ -28,12 +33,21 @@ lazy.bootstrap_lazy()
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 require("config.opts")
-require("config.mappings")
+if G_IS_VSCODE then
+  require("config.vscode")
+else
+  require("config.mappings")
+end
 require("config.autocommands")
 require("config.profiler")
 
 -- Setup all plugins
 lazy.setup_lazy()
+
+-- Everything below is only relevant to the TUI
+if G_IS_VSCODE then
+  return
+end
 
 -- nvim opt-in plugins (https://neovim.io/doc/user/plugins/)
 vim.cmd.packadd("nvim.tohtml")

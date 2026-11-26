@@ -84,26 +84,32 @@ g.limelight_conceal_guifg = "DarkGray"
 -- Show quote characters in JSON files
 g.vim_json_conceal = 0
 
--- Use OSC 52 for clipboard, per `:h clipboard-osc52`
+if G_IS_VSCODE then
+  -- Embedded nvim has no terminal, so OSC 52 escape sequences would go nowhere. vscode-neovim defines a provider
+  -- backed by VSCode's clipboard API (before init.lua runs), which also works over Remote-SSH/WSL/containers.
+  g.clipboard = g.vscode_clipboard
+else
+  -- Use OSC 52 for clipboard, per `:h clipboard-osc52`
 
--- OSC 52 paste is currently broken and will cause nvim to hang, so we need this workaround
--- per https://github.com/neovim/neovim/issues/28611#issuecomment-2147744670
-local function paste_workaround()
-  local content = vim.fn.getreg('"')
-  return vim.split(content, '\n')
+  -- OSC 52 paste is currently broken and will cause nvim to hang, so we need this workaround
+  -- per https://github.com/neovim/neovim/issues/28611#issuecomment-2147744670
+  local function paste_workaround()
+    local content = vim.fn.getreg('"')
+    return vim.split(content, '\n')
+  end
+
+  local osc52 = require('vim.ui.clipboard.osc52')
+  g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = osc52.copy('+'),
+      ['*'] = osc52.copy('*'),
+    },
+    paste = {
+      -- ['+'] = osc52.paste('+'),
+      -- ['*'] = osc52.paste('*'),
+      ['+'] = function() return paste_workaround() end,
+      ['*'] = function() return paste_workaround() end,
+    },
+  }
 end
-
-local osc52 = require('vim.ui.clipboard.osc52')
-g.clipboard = {
-  name = 'OSC 52',
-  copy = {
-    ['+'] = osc52.copy('+'),
-    ['*'] = osc52.copy('*'),
-  },
-  paste = {
-    -- ['+'] = osc52.paste('+'),
-    -- ['*'] = osc52.paste('*'),
-    ['+'] = function() return paste_workaround() end,
-    ['*'] = function() return paste_workaround() end,
-  },
-}
