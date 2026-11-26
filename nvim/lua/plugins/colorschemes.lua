@@ -109,6 +109,8 @@ return {
         for k, v in pairs(group_overrides) do
           hl[k] = v
         end
+        -- Snacks.dim defaults to DiagnosticUnnecessary, which is too close to the comment color
+        hl.SnacksDim = { fg = "#2a2e42" }
       end
     },
   },
