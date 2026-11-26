@@ -14,9 +14,11 @@
 --  - F5/F9/F10/F11/Shift+F11 are never sent to nvim; VSCode's native debug bindings already match the nvim-dap ones
 --  - <C-p> is not forwarded to nvim by default, so VSCode's native Quick Open handles it (it's mapped below anyway, in
 --    case `vscode-neovim.ctrlKeysForNormalMode` is ever changed to forward it)
+--  - <C-n> (nvim-tree toggle) is a VSCode keybinding in vscode/keybindings.json, since toggling depends on whether the
+--    explorer is visible/focused, which only VSCode knows
 --
 -- N.B. Ctrl-key mappings only reach nvim if the key is listed in `vscode-neovim.ctrlKeysForNormalMode`; see
--- vscode/settings.json in the dotfiles repo (<C-n> and <C-q> are added there).
+-- vscode/settings.json in the dotfiles repo (<C-q> is added there).
 
 local vscode = require("vscode")
 
@@ -142,9 +144,8 @@ map_all({
   { "<leader>hu", "git.revertSelectedRanges",               desc = "Reset hunk" },
 
   ---------------------------------------------------------------------------------------------------------------------
-  -- nvim-tree.lua, toggleterm.nvim, overseer.nvim
+  -- toggleterm.nvim, overseer.nvim (nvim-tree's <C-n> lives in vscode/keybindings.json)
   ---------------------------------------------------------------------------------------------------------------------
-  { "<C-n>",      "workbench.view.explorer",                desc = "File explorer" },
   { "<leader>`",  "workbench.action.terminal.toggleTerminal", desc = "Toggle terminal" },
   { "<leader>~",  "workbench.action.quickOpenTerm",         desc = "Select terminal" },
   { "<leader>oc", "workbench.action.closePanel",            desc = "Close" },

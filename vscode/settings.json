@@ -6,11 +6,11 @@
   },
   // Ctrl keys sent to nvim in normal mode. This REPLACES the extension's default list, so the defaults are repeated
   // here, plus:
-  //  - "n": <C-n> file explorer (nvim-tree mapping)
   //  - "q": <C-q> toggle panel (Trouble mapping); also stops <C-q> quitting VSCode while in normal mode
-  // N.B. <C-p> and <C-s> are intentionally NOT forwarded so VSCode's native Quick Open and Save keep working
+  // N.B. <C-p> and <C-s> are intentionally NOT forwarded so VSCode's native Quick Open and Save keep working, and <C-n>
+  // (file explorer toggle) is handled in keybindings.json
   "vscode-neovim.ctrlKeysForNormalMode": [
-    "a", "b", "c", "d", "e", "f", "h", "i", "j", "k", "l", "m", "n", "o", "q", "r", "t", "u", "v", "w", "x", "y", "z",
+    "a", "b", "c", "d", "e", "f", "h", "i", "j", "k", "l", "m", "o", "q", "r", "t", "u", "v", "w", "x", "y", "z",
     "/", "]", "right", "left", "up", "down", "backspace", "delete"
   ]
 }

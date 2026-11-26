@@ -1,0 +1,17 @@
+[
+  // <C-n>: toggle the file explorer, like nvim-tree's :NvimTreeToggle. This is a VSCode keybinding rather than an nvim
+  // mapping because only VSCode knows whether the explorer is visible, and keys typed while the explorer has focus
+  // never reach nvim.
+  {
+    // Show (and focus) the explorer from the editor, unless it's already the visible sidebar view
+    "key": "ctrl+n",
+    "command": "workbench.view.explorer",
+    "when": "editorTextFocus && neovim.init && neovim.mode == normal && !(sideBarVisible && activeViewlet == 'workbench.view.explorer')"
+  },
+  {
+    // Hide the explorer, whether focus is in the editor or in the sidebar (but not while typing in e.g. a rename box)
+    "key": "ctrl+n",
+    "command": "workbench.action.closeSidebar",
+    "when": "sideBarVisible && activeViewlet == 'workbench.view.explorer' && (editorTextFocus && neovim.init && neovim.mode == normal || sideBarFocus && !inputFocus)"
+  }
+]
